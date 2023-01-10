@@ -1,4 +1,15 @@
 {
+  "name": "messenger",
+  "version": "0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "parcel": "^2.8.2"
   }

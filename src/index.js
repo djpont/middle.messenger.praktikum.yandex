@@ -1,6 +1,13 @@
-// src/index.js
+// import '/static/index.css';
+import Routing from "./routing";
 
-import {sum} from './modules/sum';
+const root = document.getElementById('root');
+// const pathname=document.location.pathname;
+//
+// if(pathname!=='/login'){
+// 	document.location.href='/login';
+// }
+//
+// Routing(pathname);
 
-const root = document.querySelector('#root');
-root.textContent = sum(17, -1).toString();
+Routing('/login', root);

@@ -1,0 +1,8 @@
+.window {
+	min-width: 100px;
+	min-height: 100px;
+	background: #b6ac9c;
+}
+.window .header{
+	background: #949494;
+}

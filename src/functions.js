@@ -17,6 +17,10 @@ export const joinDom = (...domElements) => {
 	return dom;
 }
 
-// export const joinHTML = (...elements) => {
-// 	return elements.join('');
-// }
+export const joinHTML = (elements, addParentDiv=false) => {
+	let html= elements.join('');
+	if(addParentDiv){
+		html=`<div>${html}</div>`;
+	}
+	return html;
+}

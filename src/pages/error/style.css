@@ -1,0 +1,11 @@
+.error {
+	min-width: 100px;
+	min-height: 100px;
+	background: #b6ac9c;
+}
+.error .title{
+	background: #949494;
+}
+.error .subtitle{
+	background: #949494;
+}

@@ -13,15 +13,20 @@ export default class Window extends Component{
 			content,
 			title,
 			subtitle
-		})).firstChild;
+		}));
 		super(document, 'div.window');
 	}
 	content = () =>{
-		const getDocument = (element) => {
+		const appendToParent = (element, parent) => {
 			if(element instanceof HTMLElement){
-				return element;
+				parent.append(element);
+				return;
 			}else if(element instanceof Component){
-				return element.document();
+				parent.append(element.document());
+				return;
+			}else if(typeof element === 'string'){
+				parent.innerHTML+=element;
+				return;
 			}
 			console.error('getDocument не понял что делать с элементом', element);
 		}
@@ -29,16 +34,17 @@ export default class Window extends Component{
 		const append = (...el) => {
 			if(Array.isArray(el)){
 				for(const oneEl of el){
-					documentElement.append(getDocument(oneEl));
+					appendToParent(oneEl, documentElement);
 				}
 			}else{
-				documentElement.append(getDocument(el));
+				appendToParent(el, documentElement);
 			}
 		}
 		return {
 			insertHTML: (html_code) => documentElement.innerHTML+=html_code,
+			clearHTML: () => documentElement.innerHTML='',
 			append,
-			element: () => documentElement
+			element: () => documentElement,
 		}
 	};
 }

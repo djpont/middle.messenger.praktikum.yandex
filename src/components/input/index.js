@@ -14,7 +14,7 @@ export default class Input extends Component{
 			type,
 			value,
 			label
-		})).firstChild;
+		}));
 		super(document, 'input')
 	}
 }

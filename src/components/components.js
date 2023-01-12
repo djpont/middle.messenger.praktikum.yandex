@@ -1,5 +1,6 @@
 export const generateDom = (html_code) => {
-	return  document.createRange().createContextualFragment(html_code);
+	const dom =  document.createRange().createContextualFragment(html_code);
+	return dom.firstChild;
 }
 
 export class Component{

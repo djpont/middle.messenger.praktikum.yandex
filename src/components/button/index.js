@@ -6,16 +6,27 @@ import {Component, generateDom} from "../components";
 
 Handlebars.registerPartial('button', tpl);
 
+export const button = (id, value) => {
+	return tpl({ id, value });
+};
+
 export default class Button extends Component{
+	
+	#currentAction
+	
 	constructor(id, value) {
-		const document = generateDom(tpl({
+		const document = generateDom(button(
 			id,
 			value
-		})).firstChild;
+		));
 		super(document, `button`);
 	}
-	test = () => {
-		console.log('test');
-	}
 	
+	action = (callback) => {
+		if(this.#currentAction){
+			this.document().removeEventListener('click', this.#currentAction);
+		}
+		this.document().addEventListener('click', callback);
+		this.#currentAction=callback;
+	}
 }

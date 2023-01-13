@@ -3,8 +3,8 @@
   "version": "0.1",
   "description": "",
   "scripts": {
-    "dev": "parcel static/index.html",
-    "build": "parcel build index.html"
+    "start": "parcel static/index.html",
+    "build": "parcel build static/index.html"
   },
   "keywords": [],
   "author": "",

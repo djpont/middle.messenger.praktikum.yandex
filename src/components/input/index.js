@@ -1,20 +1,11 @@
-import Handlebars from 'handlebars';
-//import Handlebars from 'handlebars/dist/handlebars.runtime';
-import tpl from './tpl.hbs';
+import tpl_full from './tpl_full.hbs';
+import tpl_only_input from './tpl_only_input.hbs';
 import './style.css';
-import {Component, generateDom} from "../components";
 
-Handlebars.registerPartial('input', tpl);
+export const input = (id, type='text', value='') => {
+	return tpl_only_input({ id, type, value });
+};
 
-
-export default class Input extends Component{
-	constructor(id, type = 'text', label = '', value = '') {
-		const document = generateDom(tpl({
-			id,
-			type,
-			value,
-			label
-		}));
-		super(document, 'input')
-	}
-}
+export const inputWithLabel = (id, type='text', value='', label='', isStacked=false) => {
+	return tpl_full({ id, type, value, label, isStacked });
+};

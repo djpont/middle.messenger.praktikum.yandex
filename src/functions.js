@@ -1,14 +1,5 @@
 
-
-// export const clearDom = (element) => {
-// 	element.innerHTML = '';
-// }
-//
-// export const changeDom = (element, dom) => {
-// 	clearDom(element);
-// 	element.append(dom);
-// }
-
+// Функция объединения дом элементов в единый фрагмент
 export const joinDom = (...domElements) => {
 	const dom = document.createDocumentFragment();
 	for(const el of domElements){
@@ -17,6 +8,7 @@ export const joinDom = (...domElements) => {
 	return dom;
 }
 
+// Функция объединения html кода в одну строку
 export const joinHTML = (elements, addParentDiv=false) => {
 	let html= elements.join('');
 	if(addParentDiv){

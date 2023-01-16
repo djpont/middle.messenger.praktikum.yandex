@@ -1,5 +1,50 @@
 html, body {
-	background-color: #fff;
+	background-color: #008080;
 	margin: 0;
 	padding: 0;
+	font-family: "Arial", serif;
+}
+#pages_links{
+	padding-left: 10px;
+	& li{
+		display: inline-block;
+		margin:0 5px;
+		& a{
+			color:#fff;
+		}
+	}
+}
+
+.has3dBorder{
+	box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+}
+
+
+/* Fix for buttons padding when pressed */
+button:not(:disabled):active,
+input[type="submit"]:not(:disabled):active,
+input[type="reset"]:not(:disabled):active {
+	/*vertical-align: -1px;
+	margin-bottom: -1px;
+	padding: 1px 0 0 2px;
+	position: relative;
+	top: -0.5px;*/
+	padding-top:0;
+}
+input[type=email],
+input[type=password],
+input[type=text],
+select{
+	height: 22px;
+}
+.title-bar,
+.window,
+button,
+input,
+label,
+option,
+select,
+textarea,
+ul.tree-view{
+	font-family: "Arial", serif !important;
 }

@@ -4,6 +4,7 @@ export default class User {
 	#id;
 	#login;
 	#avatar;
+	#nickname;
 	
 	// noinspection JSMismatchedCollectionQueryUpdate
 	static #users=[];
@@ -12,6 +13,7 @@ export default class User {
 	constructor(id, login, avatar='') {
 		this.#id=id;
 		this.#login=login;
+		this.#nickname=`${login.charAt(0).toUpperCase()}${login.substr(1).toLowerCase()}`;
 		this.#avatar=avatar;
 		User.#users.push(this);
 	}
@@ -20,6 +22,7 @@ export default class User {
 		return {
 			id:this.#id,
 			login:this.#login,
+			nickname:this.#nickname,
 			avatar:this.#avatar
 		}
 	}

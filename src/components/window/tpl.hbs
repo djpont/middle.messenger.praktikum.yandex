@@ -1,15 +1,15 @@
-<div class="window" id="{{id}}">
-	<div class="header">
-		{{#if title}}
-			<div class="title">{{title}}</div>
+<div class="window {{windowClassName}}" id="{{id}}">
+	<div class="title-bar">
+		<div class="title-bar-text">{{title}}</div>
+		{{#if controls}}
+		<div class="title-bar-controls">
+			{{#if controls.close}}
+			<button aria-label="Close" id="{{id}}_windowCloseButton"></button>
+			{{/if}}
+		</div>
 		{{/if}}
 	</div>
-	<div class="content">
-		{{#if subtitle}}
-			<div class="subtitle">{{subtitle}}</div>
-		{{/if}}
-		{{#if content}}
-			{{{content}}}
-		{{/if}}
+	<div class="window-body">
+
 	</div>
 </div>

@@ -1,18 +1,13 @@
-import Handlebars from 'handlebars';
-//import Handlebars from 'handlebars/dist/handlebars.runtime';
 import tpl from './tpl.hbs';
-import './style.css';
 import {Component, generateDom} from "../components";
 
-// Handlebars.registerPartial('window', tpl);
-
 export default class Window extends Component{
-	constructor(id, content, title = '', subtitle = '') {
+	constructor(id, windowClassName, title = '', controls=false) {
 		const document=generateDom(tpl({
 			id,
-			content,
+			windowClassName,
 			title,
-			subtitle
+			controls
 		}));
 		super(document, 'div.window');
 	}
@@ -30,7 +25,7 @@ export default class Window extends Component{
 			}
 			console.error('getDocument не понял что делать с элементом', element);
 		}
-		const documentElement = this.subElement(':scope > div.content');
+		const documentElement = this.subElement(':scope > div.window-body');
 		const append = (...el) => {
 			if(Array.isArray(el)){
 				for(const oneEl of el){
@@ -41,7 +36,7 @@ export default class Window extends Component{
 			}
 		}
 		return {
-			insertHTML: (html_code) => documentElement.innerHTML+=html_code,
+			// insertHTML: (html_code) => documentElement.innerHTML+=html_code,
 			clearHTML: () => documentElement.innerHTML='',
 			append,
 			element: () => documentElement,

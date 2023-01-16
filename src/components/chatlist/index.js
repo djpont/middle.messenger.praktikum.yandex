@@ -1,16 +1,10 @@
-import Handlebars from 'handlebars';
-//import Handlebars from 'handlebars/dist/handlebars.runtime';
-import tpl from './tpl.hbs';
+import tpl_chatlist from './tpl_chatlist.hbs';
 import tpl_chat_preview from './tpl_chat_preview.hbs';
 import './style.css';
 import {Component, generateDom} from "../components";
-// import Chat from "/src/modules/chat";
-// import ChatFeed from '/src/components/chat-feed';
 
-Handlebars.registerPartial('chat_preview', tpl_chat_preview);
-
-export const chat_preview = (name, time, text='rtrt', unreadCount = 0) => {
-	const data = {name, time, text, unreadCount};
+export const chat_preview = (name, time, avatar, text='', unreadCount = 0) => {
+	const data = {name, time, avatar, text, unreadCount};
 	return tpl_chat_preview(data);
 };
 
@@ -18,14 +12,26 @@ class Preview extends Component {
 	#chat;
 	
 	constructor(chat) {
+		const avatar=chat.data().avatar;
+		const name=chat.data().title;
 		const lastMessage=chat.getLastMessage().data();
-		const chatName=chat.data().title;
-		const lastMessageText=chat.getLastMessage().data().text;
-		const lastMessageTime=new Date(chat.getLastMessage().data().datetime).toTimeString().slice(0, 5);
+		const lastMessageText=lastMessage.text;
+		const lastMessageTime=new Date(lastMessage.datetime).toTimeString().slice(0, 5);
 		const unreadCount=1;
-		const document = generateDom(chat_preview(chatName, lastMessageTime,lastMessageText, unreadCount));
+		const document = generateDom(chat_preview(name, lastMessageTime,avatar, lastMessageText, unreadCount));
 		super(document, `*`);
 		this.#chat = chat;
+	}
+	
+	getChat = () => {
+		return this.#chat;
+	}
+	
+	makeSelected = () => {
+		this.document().classList.add('active');
+	}
+	makeUnselected = () => {
+		this.document().classList.remove('active');
 	}
 }
 
@@ -35,7 +41,7 @@ export default class Chatlist extends Component {
 	
 	constructor() {
 		const data = {};
-		const document = generateDom(tpl(data));
+		const document = generateDom(tpl_chatlist(data));
 		super(document, `.chatlist`);
 		this.#previews = [];
 	}
@@ -44,15 +50,25 @@ export default class Chatlist extends Component {
 		const preview = new Preview(chat);
 		this.#previews.push(preview);
 		this.document().append(preview.document());
+		preview.document().addEventListener('click', () => {
+			this.openChat(chat);
+		});
 	}
 	
-	attachFeedWindow = (chatFeed) => {
+	attachFeed = (chatFeed) => {
 		this.#attachedFeed=chatFeed;
 	}
 	
 	openChat = (chat) => {
 		if(this.#attachedFeed){
 			this.#attachedFeed.attachChat(chat);
+			this.#previews.forEach((preview) => {
+				if(preview.getChat()===chat){
+					preview.makeSelected();
+				}else{
+					preview.makeUnselected();
+				}
+			});
 		}else{
 			console.error('Нет привязанного окна')
 		}

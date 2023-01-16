@@ -1,8 +1,17 @@
-<div class="preview">
-	<div class="name">{{name}}</div>
-	<div class="time">{{time}}</div>
-	<div class="last_message">{{text}}</div>
-	{{#if unreadCount}}
-		<div class="unread_count">{{unreadCount}}</div>
-	{{/if}}
-</div>
+<button class="chatPreview {{#if unreadCount}}hasUnread{{/if}}">
+	<div class="container">
+		<div class="avatar has3dBorder" style="background-image: url('{{avatar}}')"></div>
+		<div class="text">
+			<div class="name">
+				{{name}}
+				{{#if unreadCount}}
+					<span class="unread_count">({{unreadCount}})</span>
+				{{/if}}
+			</div>
+			<div class="lastMessage">
+				<span class="time">{{time}}</span>
+				<span class="text">{{text}}</span>
+			</div>
+		</div>
+	</div>
+</button>

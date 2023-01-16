@@ -1,17 +1,12 @@
-import Handlebars from 'handlebars';
-//import Handlebars from 'handlebars/dist/handlebars.runtime';
-import tpl from './tpl.hbs';
+import tpl_chatfeed from './tpl_chatfeed.hbs';
 import tpl_message from './tpl_message.hbs';
 import './style.css';
 import {Component, generateDom} from "../components";
 import Chat from "/src/modules/chat";
 import User from "/src/modules/user";
-// import Message from "../../modules/message";
 
-Handlebars.registerPartial('message', tpl);
-
-export const message = (text, time, className) => {
-	return tpl_message({text, time, className});
+export const message = ({nickname, time, text, className}) => {
+	return tpl_message({nickname, text, time, className});
 };
 
 export default class ChatFeed extends Component {
@@ -23,29 +18,36 @@ export default class ChatFeed extends Component {
 			data.chatName = chat.data().title;
 			data.avatar = chat.data().avatar;
 		}
-		const document = generateDom(tpl(data));
+		const document = generateDom(tpl_chatfeed(data));
 		super(document, `.feed`);
 		this.#chat = false;
 	}
 	
 	attachChat = (chat) => {
+		this.document().classList.remove('hidden');
 		this.#chat = chat;
 		const data = chat.data();
-		this.subElement('.header .avatar').innerText = data.avatar;
+		this.clearMessages();
+		this.subElement('.header .avatar').style.backgroundImage = `url('${data.avatar}')`;
 		this.subElement('.header .chatName').innerText = data.title;
 		this.subElement('.newMessage .text').value = '';
-		this.fillMessages(0);
+		this.fillMessages();
 	}
 	
-	fillMessages(fromDateTime = 0) {
+	clearMessages(){
+		this.element().innerHTML='';
+	}
+	
+	fillMessages() {
 		this.#chat.data().messages.forEach(msg => {
-			const unixTime = new Date(msg.data().datetime).getTime();
-			if (unixTime > fromDateTime) {
-				let classname;
-				classname = (msg.data().user === User.getMyUser()) ? 'out' : 'in';
-				const messageHtml = message(msg.data().text, msg.data().time, classname);
-				this.element().append(generateDom(messageHtml));
-			}
+			const nickname = msg.data().user.data().nickname;
+			const classname = (msg.data().user === User.getMyUser()) ? 'out' : 'in';
+			const messageHtml = message({
+				nickname:nickname,
+				text:msg.data().text,
+				time:msg.data().time,
+				className: classname});
+			this.element().append(generateDom(messageHtml));
 		})
 	}
 	

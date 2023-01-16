@@ -1,33 +1,33 @@
-// import {joinDom} from '/src/functions';
+import tpl from './tpl.hbs';
 import Window from "/src/components/window";
-import Field from "/src/components/field";
-import Button from '/src/components/button';
-import Input from "../../components/input";
+import {button} from '/src/components/button';
+import {inputWithLabel} from "../../components/input";
+import "./style.css";
+import {generateDom} from "../../components/components";
 
 export default (rootElement) => {
+	
+	// Генерируем окно
 	const page = new Window(
 		'sign-in',
-		'',
-		'Добро пожаловать в Мессенджер',
-		'Введите имя и пароль для входа'
+		'sign-in',
+		'WinChat 98 - Электронные диалоги', //'Добро пожаловать в Мессенджер'
 	);
 	rootElement.append(page.document());
 	
-	const input_login = new Input('login', 'text','Логин:');
-	const input_password = new Input('password', 'password','Пароль:');
-	const button_submit = new Button('btn1', 'Вход');
-	const button_register = new Button('btn2', 'Регистрация');
 	
-	const buttons_block = new Field([
-		button_submit,
-		button_register
-	]);
-	const inputs_block = new Field([
-		input_login,
-		input_password
-	]);
+	// Генерируем контент окна по шаблону
+	const document=generateDom(tpl({
+		loginLine:inputWithLabel('login', 'text', '', 'Логин:', false),
+		passwordLine:inputWithLabel('password', 'text', '', 'Пароль:', false),
+		buttonSubmit:button('submit', 'Вход'),
+		buttonRegister:button('registration', 'Регистрация')
+	}));
+	page.content().append(document);
 	
-	page.content().append(inputs_block, buttons_block);
-	// console.log(window_login.document());
-	
+	// Находим инпуты и кнопки на будущее
+	const inputLogin = page.subElement('input#login');
+	const inputPassword = page.subElement('input#password');
+	const buttonSubmit = page.subElement('button#submit');
+	const buttonRegister = page.subElement('button#registration');
 }

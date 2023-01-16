@@ -1,0 +1,50 @@
+div.window.profile {
+	width: 360px;
+	margin: auto;
+	
+	& div.window-body{
+		padding:5px 5px 10px 5px;
+		
+		& div.profile-container{
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: start;
+			align-items: flex-start;
+			align-content: flex-start;
+			
+			& div.avatar {
+				width: 128px;
+				min-height: 128px;
+				padding-top: 11px;
+				text-align: center;
+				
+				& input.avatar {
+					display: block;
+					width: 128px;
+					height: 128px;
+					pointer-events: none;
+					margin: 0 auto 7px;
+					background-repeat: no-repeat;
+					background-size: 100% 100%;
+				}
+			}
+			
+			& div.info{
+				padding:0 0 0 10px;
+				flex-grow: 1;
+			}
+			
+		}
+		
+		& div.buttons {
+			text-align:center;
+			padding-top: 11px;
+			& button{
+				margin-bottom: 7px;
+				&:not(:last-child){
+					margin-right: 7px;
+				}
+			}
+		}
+	}
+}

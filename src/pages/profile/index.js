@@ -41,6 +41,8 @@ export default (rootElement) => {
 		page.content().append(document);
 		const buttonEdit = page.subElement('button#edit');
 		buttonEdit.addEventListener('click', openEdit);
+		const buttonChangePassword = page.subElement('button#changePassword');
+		buttonChangePassword.addEventListener('click', openChangePassword);
 	}
 	
 	// Метод генерации контента при редактировании профиля
@@ -50,12 +52,33 @@ export default (rootElement) => {
 			infoLines:[
 				inputWithLabel('email', 'email', '', 'Почта:', true),
 				inputWithLabel('login', 'text', '', 'Логин:', true),
-				inputWithLabel('name', 'text', '', 'Имя:', true),
-				inputWithLabel('surname', 'text', '', 'Фамилия:', true),
-				inputWithLabel('nickname', 'text', '', 'Имя в чате:', true),
+				inputWithLabel('first_name', 'text', '', 'Имя:', true),
+				inputWithLabel('second_name', 'text', '', 'Фамилия:', true),
+				inputWithLabel('display_name', 'text', '', 'Имя в чате:', true),
 				inputWithLabel('phone', 'text', '', 'Телефон:', true),
 			],
-			buttonChangeAvatar:button('changeAvatar', 'Изменить аватар'),
+			buttonChangeAvatar:button('avatar', 'Изменить аватар'),
+			buttons:[
+				button('save', 'Сохранить'),
+				button('back', 'Назад')
+			]
+		}));
+		page.content().clearHTML();
+		page.content().append(document);
+		const buttonBack = page.subElement('button#back');
+		buttonBack.addEventListener('click', openWatch);
+	}
+	
+	
+	// Метод генерации контента при изменении пароля
+	const openChangePassword = () => {
+		const document=generateDom(tpl_profile({
+			avatar:myAvatar,
+			infoLines:[
+				inputWithLabel('oldPassword', 'text', '', 'Старый пароль:', true),
+				inputWithLabel('newPassword', 'password', '', 'Новый пароль:', true),
+				inputWithLabel('newPassword2', 'password', '', 'Новый пароль ещё раз:', true),
+			],
 			buttons:[
 				button('save', 'Сохранить'),
 				button('back', 'Назад')

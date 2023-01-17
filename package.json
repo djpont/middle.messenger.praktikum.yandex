@@ -3,7 +3,7 @@
   "version": "0.1",
   "description": "",
   "scripts": {
-    "start": "parcel static/index.html",
+    "start": "parcel static/index.html -p 3000",
     "build": "parcel build static/index.html"
   },
   "keywords": [],
@@ -21,5 +21,8 @@
     "drafts": {
       "nesting": true
     }
+  },
+  "engine": {
+    "node": ">=12.0.0"
   }
 }

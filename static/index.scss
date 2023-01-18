@@ -1,0 +1,77 @@
+:root {
+	--backgroundColor: #008080;
+	--3dBorderColorA: #fff;
+	--3dBorderColorB: #808080;
+	--3dBorderColorC: #dfdfdf;
+	--3dBorderColorD: #0a0a0a;
+	--navLinkColor: #fff;
+	--chatBackground: #fff;
+	--chatUnreadCounter: #0442a9;
+	--messageTextIncoming: #000;
+	--messageTextOutgoing: #0033ff;
+}
+
+@mixin qwerty{
+	color:#f00;
+}
+
+html, body {
+	background-color: var(--backgroundColor);
+	margin: 0;
+	padding: 0;
+	font-family: "Arial", serif;
+}
+
+#pages_links {
+	padding-left: 10px;
+	
+	& li {
+		display: inline-block;
+		margin: 0 5px;
+		
+		& a {
+			@include qwerty;
+			/*color: var(--navLinkColor);
+			font-size: 3rem;*/
+		}
+	}
+}
+
+.has3dBorder {
+	box-shadow: inset -1px -1px var(--3dBorderColorA),
+	inset 1px 1px var(--3dBorderColorB),
+	inset -2px -2px var(--3dBorderColorC),
+	inset 2px 2px var(--3dBorderColorD);
+}
+
+
+/* Fix for buttons padding when pressed */
+button:not(:disabled):active,
+input[type="submit"]:not(:disabled):active,
+input[type="reset"]:not(:disabled):active {
+	/*vertical-align: -1px;
+	margin-bottom: -1px;
+	padding: 1px 0 0 2px;
+	position: relative;
+	top: -0.5px;*/
+	padding-top: 0;
+}
+
+input[type=email],
+input[type=password],
+input[type=text],
+select {
+	height: 22px;
+}
+
+.title-bar,
+.window,
+button,
+input,
+label,
+option,
+select,
+textarea,
+ul.tree-view {
+	font-family: "Arial", serif !important;
+}

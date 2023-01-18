@@ -38,7 +38,7 @@
 	
 	& div.feed{
 		min-height:200px;
-		background: #fff;
+		background: var(--chatBackground);
 		padding: 5px 7px;
 		flex-grow: 1;
 	}
@@ -75,10 +75,10 @@
 
 .message{
 	&.in{
-		color: #000;
+		color: var(--messageTextIncoming);
 	}
 	&.out{
-		color: #0033ff;
+		color: var(--messageTextOutgoing);
 	}
 	&:not(:last-child){
 		margin-bottom: 7px;

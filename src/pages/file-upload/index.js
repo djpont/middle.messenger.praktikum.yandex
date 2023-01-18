@@ -1,7 +1,7 @@
 import tpl from './tpl.hbs';
 import Window from "/src/components/window";
 import {generateDom} from "../../components/components";
-import './style.css';
+import './style.scss';
 
 export default (rootElement, user) => {
 	const page = new Window(

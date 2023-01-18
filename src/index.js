@@ -52,4 +52,3 @@ User.setMyUser(myUser);
 // Находим элемент, куда будем рисовать контент и запускаем роутинг
 const root = document.getElementById('root');
 Routing(document.location.pathname, root);
-

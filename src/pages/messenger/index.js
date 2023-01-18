@@ -1,6 +1,6 @@
 import tpl_messenger from './tpl_messenger.hbs';
 import Chat from "/src/modules/chat";
-import './style.css';
+import './style.scss';
 
 import {generateDom} from "../../components/components";
 

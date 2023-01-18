@@ -3,7 +3,7 @@ import Window from "/src/components/window";
 import {button} from '/src/components/button';
 import {inputWithLabel} from "../../components/input";
 import {generateDom} from "../../components/components";
-import './style.css';
+import './style.scss';
 
 export default (rootElement) => {
 	

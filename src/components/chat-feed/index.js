@@ -1,6 +1,6 @@
 import tpl_chatfeed from './tpl_chatfeed.hbs';
 import tpl_message from './tpl_message.hbs';
-import './style.css';
+import './style.scss';
 import {Component, generateDom} from "../components";
 import Chat from "/src/modules/chat";
 import User from "/src/modules/user";
@@ -50,5 +50,4 @@ export default class ChatFeed extends Component {
 			this.element().append(generateDom(messageHtml));
 		})
 	}
-	
 }

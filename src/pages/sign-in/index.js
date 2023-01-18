@@ -2,11 +2,11 @@ import tpl from './tpl.hbs';
 import Window from "/src/components/window";
 import {button} from '/src/components/button';
 import {inputWithLabel} from "../../components/input";
-import "./style.css";
+import "./style.scss";
 import {generateDom} from "../../components/components";
 
 export default (rootElement) => {
-	
+
 	// Генерируем окно
 	const page = new Window(
 		'sign-in',
@@ -14,8 +14,8 @@ export default (rootElement) => {
 		'WinChat 98 - Электронные диалоги', //'Добро пожаловать в Мессенджер'
 	);
 	rootElement.append(page.document());
-	
-	
+
+
 	// Генерируем контент окна по шаблону
 	const document=generateDom(tpl({
 		loginLine:inputWithLabel('login', 'text', '', 'Логин:', false),
@@ -24,7 +24,7 @@ export default (rootElement) => {
 		buttonRegister:button('registration', 'Регистрация')
 	}));
 	page.content().append(document);
-	
+
 	// Находим инпуты и кнопки на будущее
 	const inputLogin = page.subElement('input#login');
 	const inputPassword = page.subElement('input#password');

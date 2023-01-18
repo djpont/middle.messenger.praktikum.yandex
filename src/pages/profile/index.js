@@ -1,9 +1,9 @@
 import tpl_profile from './tpl_profile.hbs';
+import './style.scss';
 import Window from "/src/components/window";
 import {button} from '/src/components/button';
 import {inputWithLabel} from "/src/components/input";
 import {generateDom} from "../../components/components";
-import './style.css';
 import User from "../../modules/user";
 
 export default (rootElement) => {

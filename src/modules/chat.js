@@ -55,5 +55,4 @@ export default class Chat {
 	getLastMessage = () => {
 		return this.#messages[this.#messages.length-1];
 	}
-	
 }

@@ -1,5 +1,6 @@
 import errorFromTemplate from "./error";
-import './style.css';
+// import './style.scss';
+import '/src/pages/error/style.scss';
 import {button} from "/src/components/button";
 
 export default (rootElement) => {

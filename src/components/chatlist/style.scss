@@ -4,7 +4,10 @@ button.chatPreview {
 	position: relative;
 	width: 100%;
 	&.active{
-		box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+		/*box-shadow: inset -1px -1px #ffffff,
+		inset 1px 1px #0a0a0a,
+		inset -2px -2px #dfdfdf,
+		inset 2px 2px #808080;*/
 	}
 	&:not(:last-child){
 		margin-bottom: 3px;
@@ -37,7 +40,7 @@ button.chatPreview {
 			white-space: nowrap;
 			& div.name{
 				& span.unread_count{
-					color: #0442a9;
+					color: var(--chatUnreadCounter);
 				}
 			}
 			& div.lastMessage{

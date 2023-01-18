@@ -1,5 +1,5 @@
 import errorFromTemplate from "./error";
-import './style.css';
+import './style.scss';
 
 export default (rootElement) => {
 	const data={

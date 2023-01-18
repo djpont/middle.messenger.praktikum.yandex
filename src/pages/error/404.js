@@ -4,7 +4,11 @@ import '/src/pages/error/style.scss';
 import {button} from "/src/components/button";
 
 export default (rootElement) => {
-	const closeButton = button('close','Закрыть');
+	const closeButton = button({
+		id: 'close',
+		name: 'close',
+		value: 'Закрыть'
+	});
 	const data={
 		id:'error_404',
 		title:'Ошибка',

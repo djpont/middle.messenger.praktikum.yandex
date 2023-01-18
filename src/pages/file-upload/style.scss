@@ -5,5 +5,9 @@ div.window.file-upload {
 	
 	& div.file-upload-container{
 		text-align: center;
+
+		& input.file{
+			display:none;
+		}
 	}
 }

@@ -2,5 +2,10 @@
 	{{#if label}}
 	<label for="{{id}}">{{label}}</label>
 	{{/if}}
-	<input type="{{type}}" id="{{id}}" value="{{value}}">
+	<input
+		type="{{type}}"
+		id="{{id}}"
+		value="{{value}}"
+		{{#if name}} name="{{name}}" {{/if}}
+	>
 </div>

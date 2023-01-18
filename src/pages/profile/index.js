@@ -32,9 +32,23 @@ export default (rootElement) => {
 				`Телефон: ${'+79999999999'}`
 			],
 			buttons:[
-				button('edit', 'Изменить данные'),
-				button('changePassword', 'Изменить пароль'),
-				button('close', 'Закрыть')
+				button({
+					id:'edit',
+					name:'edit',
+					type:'button',
+					value:'Изменить данные'
+				}),
+				button({
+					id:'changePassword',
+					name:'changePassword',
+					type:'button',
+					value:'Изменить пароль'}),
+				button({
+					id:'close',
+					name:'close',
+					type:'button',
+					value:'Закрыть'
+				})
 			]
 		}));
 		page.content().clearHTML();
@@ -50,17 +64,67 @@ export default (rootElement) => {
 		const document=generateDom(tpl_profile({
 			avatar:myAvatar,
 			infoLines:[
-				inputWithLabel('email', 'email', '', 'Почта:', true),
-				inputWithLabel('login', 'text', '', 'Логин:', true),
-				inputWithLabel('first_name', 'text', '', 'Имя:', true),
-				inputWithLabel('second_name', 'text', '', 'Фамилия:', true),
-				inputWithLabel('display_name', 'text', '', 'Имя в чате:', true),
-				inputWithLabel('phone', 'text', '', 'Телефон:', true),
+				inputWithLabel({
+					id:'email',
+					type:'email',
+					name:'email',
+					label:'Почта:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'login',
+					type:'text',
+					name:'login',
+					label:'Логин:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'first_name',
+					type:'text',
+					name:'first_name',
+					label:'Имя:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'second_name',
+					type:'text',
+					name:'second_name',
+					label:'Фамилия:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'display_name',
+					type:'text',
+					name:'display_name',
+					label:'Имя в чате:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'phone',
+					type:'text',
+					name:'phone',
+					label:'Телефон:',
+					isStacked:true
+				}),
 			],
-			buttonChangeAvatar:button('avatar', 'Изменить аватар'),
+			buttonChangeAvatar:button({
+				id:'avatar',
+				name:'avatar',
+				value:'Изменить аватар'
+			}),
 			buttons:[
-				button('save', 'Сохранить'),
-				button('back', 'Назад')
+				button({
+					id:'save',
+					type:'submit',
+					name:'save',
+					value:'Сохранить'
+				}),
+				button({
+					id:'back',
+					type:'button',
+					name:'back',
+					value:'Назад'
+				})
 			]
 		}));
 		page.content().clearHTML();
@@ -75,13 +139,41 @@ export default (rootElement) => {
 		const document=generateDom(tpl_profile({
 			avatar:myAvatar,
 			infoLines:[
-				inputWithLabel('oldPassword', 'text', '', 'Старый пароль:', true),
-				inputWithLabel('newPassword', 'password', '', 'Новый пароль:', true),
-				inputWithLabel('newPassword2', 'password', '', 'Новый пароль ещё раз:', true),
+				inputWithLabel({
+					id:'oldPassword',
+					type:'password',
+					name:'oldPassword',
+					label:'Старый пароль:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'newPassword',
+					type:'password',
+					name:'newPassword',
+					label:'Новый пароль:',
+					isStacked:true
+				}),
+				inputWithLabel({
+					id:'newPassword2',
+					type:'password',
+					name:'newPassword2',
+					label:'Новый пароль ещё раз:',
+					isStacked:true
+				}),
 			],
 			buttons:[
-				button('save', 'Сохранить'),
-				button('back', 'Назад')
+				button({
+					id:'save',
+					name:'save',
+					type:'submit',
+					value:'Сохранить'
+				}),
+				button({
+					id:'back',
+					name:'back',
+					type:'button',
+					value:'Назад'
+				})
 			]
 		}));
 		page.content().clearHTML();

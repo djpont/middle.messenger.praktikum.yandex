@@ -2,14 +2,16 @@
 	<div class="header">
 		<div class="avatar has3dBorder">{{avatar}}</div>
 		<div class="chatName">{{chatName}}</div>
-		<button class="options">Опции</button>
+		<button class="options" type="button">Опции</button>
 	</div>
 	<div class="feed has3dBorder"></div>
-	<div class="newMessage">
-		<input id="message" type="text" class="text" value="">
-		<div class="buttons">
-			<button class="send">Отправить</button>
-			<button class="attach">Файл</button>
+	<form action="">
+		<div class="newMessage">
+			<input id="message" type="text" class="text" name="message" value="">
+			<div class="buttons">
+				<button class="send" type="submit">Отправить</button>
+				<button class="attach" type="button">Файл</button>
+			</div>
 		</div>
-	</div>
+	</form>
 </div>

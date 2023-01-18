@@ -18,16 +18,68 @@ export default (rootElement) => {
 	
 	// Генерируем контент по шаблону
 	const document=generateDom(tpl({
-		nameLine:inputWithLabel('name', 'text', '', 'Имя:', true),
-		surnameLine:inputWithLabel('surname', 'text', '', 'Фамилия:', true),
-		emailLine:inputWithLabel('email', 'email', '', 'Адрес электронной почты:', true),
-		phoneLine:inputWithLabel('phone', 'text', '', 'Телефон:', true),
-		loginLine:inputWithLabel('login', 'text', '', 'Логин:', true),
-		passwordLine1:inputWithLabel('password1', 'password', '', 'Пароль:', true),
-		passwordLine2:inputWithLabel('password2', 'password', '', 'Пароль ещё раз:', true),
+		nameLine:inputWithLabel({
+			id:'name',
+			type:'text',
+			name:'name',
+			label:'Имя:',
+			isStacked:true
+		}),
+		surnameLine:inputWithLabel({
+			id:'surname',
+			type:'text',
+			name:'surname',
+			label:'Фамилия:',
+			isStacked:true
+		}),
+		emailLine:inputWithLabel({
+			id:'email',
+			type:'email',
+			name:'email',
+			label:'Адрес электронной почты:',
+			isStacked:true
+		}),
+		phoneLine:inputWithLabel({
+			id:'phone',
+			type:'text',
+			name:'phone',
+			label:'Телефон:',
+			isStacked:true
+		}),
+		loginLine:inputWithLabel({
+			id:'login',
+			type:'text',
+			name:'login',
+			label:'Логин:',
+			isStacked:true
+		}),
+		passwordLine1:inputWithLabel({
+			id:'password1',
+			type:'password',
+			name:'password',
+			label:'Пароль:',
+			isStacked:true
+		}),
+		passwordLine2:inputWithLabel({
+			id:'password2',
+			type:'password',
+			name:'password2',
+			label:'Пароль ещё раз:',
+			isStacked:true
+		}),
 		
-		buttonSubmit:button('submit', 'ОК'),
-		buttonCancel:button('registration', 'Отмена')
+		buttonSubmit:button({
+			id:'submit',
+			name:'submit',
+			type:'submit',
+			value:'Регистрация'
+		}),
+		buttonCancel:button({
+			id:'cancel',
+			name:'cancel',
+			type:'button',
+			value:'Отмена'
+		})
 	}));
 	page.content().append(document);
 	

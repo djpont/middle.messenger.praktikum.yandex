@@ -1,5 +1,5 @@
 import tpl from './tpl.hbs';
 
-export const button = (id, value) => {
-	return tpl({ id, value });
+export const button = ({id, name, type, value}) => {
+	return tpl({ id, name, type, value });
 };

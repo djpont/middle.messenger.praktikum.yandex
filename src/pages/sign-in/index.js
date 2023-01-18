@@ -18,10 +18,32 @@ export default (rootElement) => {
 
 	// Генерируем контент окна по шаблону
 	const document=generateDom(tpl({
-		loginLine:inputWithLabel('login', 'text', '', 'Логин:', false),
-		passwordLine:inputWithLabel('password', 'text', '', 'Пароль:', false),
-		buttonSubmit:button('submit', 'Вход'),
-		buttonRegister:button('registration', 'Регистрация')
+		loginLine:inputWithLabel({
+			id:'login',
+			name:'login',
+			type:'text',
+			label:'Логин:',
+			isStacked: false
+		}),
+		passwordLine:inputWithLabel({
+			id:'password',
+			type:'password',
+			name:'password',
+			label:'Пароль:',
+			isStacked:false
+		}),
+		buttonSubmit:button({
+			id:'submit',
+			name:'submit',
+			type:'submit',
+			value:'Вход'
+		}),
+		buttonRegister:button({
+			id:'registration',
+			name:'registration',
+			type:'button',
+			value:'Регистрация'
+		})
 	}));
 	page.content().append(document);
 

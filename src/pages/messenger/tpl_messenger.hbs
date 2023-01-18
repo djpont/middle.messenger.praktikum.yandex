@@ -5,15 +5,17 @@
 			<div class="container">
 				<div class="avatar has3dBorder" style="background-image: url('{{profile.avatar}}')"></div>
 				<div class="nickname">{{profile.nickname}}</div>
-				<button class="details">Детали</button>
+				<button class="details" type="button">Детали</button>
 			</div>
 		</fieldset>
 		<fieldset class="searchField">
 			<legend>Поиск по диалогам</legend>
-			<div class="container">
-				<input type="text" class="inputSearch">
-				<button class="buttonSearch">Найти</button>
-			</div>
+			<form action="">
+				<div class="container">
+					<input type="text" class="inputSearch">
+					<button class="buttonSearch" type="submit">Найти</button>
+				</div>
+			</form>
 		</fieldset>
 		<fieldset class="chatsListField">
 			<legend>Диалоги</legend>

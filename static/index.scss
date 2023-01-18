@@ -11,8 +11,11 @@
 	--messageTextOutgoing: #0033ff;
 }
 
-@mixin qwerty{
-	color:#f00;
+@mixin has3dBorder{
+	box-shadow: inset -1px -1px var(--3dBorderColorA),
+	inset 1px 1px var(--3dBorderColorB),
+	inset -2px -2px var(--3dBorderColorC),
+	inset 2px 2px var(--3dBorderColorD);
 }
 
 html, body {
@@ -30,18 +33,13 @@ html, body {
 		margin: 0 5px;
 		
 		& a {
-			@include qwerty;
-			/*color: var(--navLinkColor);
-			font-size: 3rem;*/
+			color: var(--navLinkColor);
 		}
 	}
 }
 
 .has3dBorder {
-	box-shadow: inset -1px -1px var(--3dBorderColorA),
-	inset 1px 1px var(--3dBorderColorB),
-	inset -2px -2px var(--3dBorderColorC),
-	inset 2px 2px var(--3dBorderColorD);
+	@include has3dBorder;
 }
 
 

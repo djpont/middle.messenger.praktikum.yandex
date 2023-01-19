@@ -1,14 +1,26 @@
 {
+  "include": [
+	"src",
+	"declaration.d.ts"
+  ],
   "compilerOptions": {
-	"outDir": "dist", 			// dist
-	"target": "es2016", 		// es2016
-	"declaration": false, 		// false
 	"module": "commonjs", 		// commonjs
- 
+	"target": "es2016", 		// es2016
+	"sourceMap": true,			// true
+	"moduleResolution": "Node",
+	"baseUrl": "./",
+	"paths": {
+	  "~*": ["./*"]
+	},
 	"noImplicitAny": false, 	// true
 	"noUnusedLocals": false,		// true
 	"noUnusedParameters": false,	// true
-	"sourceMap": false,			// true
-	"strictNullChecks": false	// true
-  }
+	"strictNullChecks": false,	// true
+	"outDir": "dist", 			// dist
+	"declaration": false, 		// false
+	"isolatedModules": false
+  },
+  "exclude": [
+	"node_modules"
+  ]
 }

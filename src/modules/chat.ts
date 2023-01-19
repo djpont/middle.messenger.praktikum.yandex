@@ -7,9 +7,9 @@ export default class Chat {
 	#avatar;
 	#users;
 	#messages;
-	
+
 	static #chats = [];
-	
+
 	constructor(id, title, avatar = '', users = [], messages = []) {
 		this.#users = [];
 		this.#messages = [];
@@ -27,7 +27,7 @@ export default class Chat {
 		}
 		Chat.#chats.push(this);
 	}
-	
+
 	data = () => {
 		return {
 			id: this.#id,
@@ -37,13 +37,13 @@ export default class Chat {
 			messages: this.#messages
 		}
 	}
-	
+
 	addUser = (user) => Chat.#chats.push(user);
-	
+
 	static getChatById = (id) => Chat.#chats.find((chat) => chat.#id === id);
-	
+
 	static getChatsList = () => Chat.#chats;
-	
+
 	addMessage = (id, user, datetime, text, status) => {
 		if (this.#users.includes(user)) {
 			this.#messages.push(new Message(id, this, user, datetime, text, status));
@@ -51,7 +51,7 @@ export default class Chat {
 			console.error(`User отсутствует в чате`,);
 		}
 	}
-	
+
 	getLastMessage = () => {
 		return this.#messages[this.#messages.length-1];
 	}

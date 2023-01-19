@@ -1,9 +1,10 @@
 import tpl_chatfeed from './tpl_chatfeed.hbs';
 import tpl_message from './tpl_message.hbs';
 import './style.scss';
-import {Component, generateDom} from "../components";
-import Chat from "/src/modules/chat";
-import User from "/src/modules/user";
+
+import {Component, generateDom} from "~src/components/components";
+import Chat from "~src/modules/chat";
+import User from "~src/modules/user";
 
 export const message = ({nickname, time, text, className}) => {
 	return tpl_message({nickname, text, time, className});

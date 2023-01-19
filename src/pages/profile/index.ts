@@ -1,10 +1,10 @@
 import tpl_profile from './tpl_profile.hbs';
 import './style.scss';
-import Window from "/src/components/window";
-import {button} from '/src/components/button';
-import {inputWithLabel} from "/src/components/input";
-import {generateDom} from "../../components/components";
-import User from "../../modules/user";
+import Window from "~src/components/window";
+import {button} from "~src/components/button";
+import {inputWithLabel} from "~src/components/input";
+import {generateDom} from "~src/components/components";
+import User from "~src/modules/user";
 
 export default (rootElement) => {
 	

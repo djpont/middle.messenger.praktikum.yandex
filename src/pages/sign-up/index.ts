@@ -1,8 +1,8 @@
 import tpl from './tpl.hbs';
-import Window from "/src/components/window";
-import {button} from '/src/components/button';
-import {inputWithLabel} from "../../components/input";
-import {generateDom} from "../../components/components";
+import Window from "~src/components/window";
+import {button} from "~src/components/button";
+import {inputWithLabel} from "~src/components/input";
+import {generateDom} from "~src/components/components";
 import './style.scss';
 
 export default (rootElement) => {

@@ -1,7 +1,7 @@
 import tpl_chatlist from './tpl_chatlist.hbs';
 import tpl_chat_preview from './tpl_chat_preview.hbs';
 import './style.scss';
-import {Component, generateDom} from "../components";
+import {Component, generateDom} from "~src/components/components";
 
 export const chat_preview = (name, time, avatar, text='', unreadCount = 0) => {
 	const data = {name, time, avatar, text, unreadCount};

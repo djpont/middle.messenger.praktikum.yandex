@@ -1,5 +1,5 @@
 import tpl from './tpl.hbs';
-import {Component, generateDom} from "../components";
+import {Component, generateDom} from "~src/components/components";
 
 export default class Window extends Component{
 	constructor(id, windowClassName, title = '', controls=false) {

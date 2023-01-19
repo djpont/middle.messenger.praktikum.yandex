@@ -1,14 +1,14 @@
 // import '/static/index.css';
 import Routing from "./routing";
-import Chat from "./modules/chat";
-import User from "./modules/user";
-import {messageStatuses} from "./modules/message";
+import Chat from "~src/modules/chat";
+import User from "~src/modules/user";
+import {messageStatuses} from "~src/modules/message";
 
-import avatar100 from '/static/images/user100.webp';
-import avatar101 from '/static/images/user101.webp';
-import avatar102 from '/static/images/user102.webp';
-import avatar103 from '/static/images/user103.webp';
-import avatar104 from '/static/images/user104.webp';
+import avatar100 from '~static/images/user100.webp';
+import avatar101 from '~static/images/user101.webp';
+import avatar102 from '~static/images/user102.webp';
+import avatar103 from '~static/images/user103.webp';
+import avatar104 from '~static/images/user104.webp';
 
 // Текущий пользователь
 const myUser = new User(100, 'djpont', avatar100);

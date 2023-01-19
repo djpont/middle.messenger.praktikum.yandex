@@ -1,13 +1,13 @@
 import tpl_messenger from './tpl_messenger.hbs';
-import Chat from "/src/modules/chat";
 import './style.scss';
 
-import {generateDom} from "../../components/components";
+import {generateDom} from "~src/components/components";
 
-import Window from "../../components/window";
-import ChatFeed from "/src/components/chat-feed";
-import ChatList from "/src/components/chatlist";
-import User from "/src/modules/user";
+import Window from "~src/components/window";
+import Chat from "~src/modules/chat";
+import ChatFeed from "~src/components/chat-feed";
+import ChatList from "~src/components/chatlist";
+import User from "~src/modules/user";
 
 export default (rootElement) => {
 	

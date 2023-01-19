@@ -1,7 +1,6 @@
 import errorFromTemplate from "./error";
-// import './style.scss';
-import '/src/pages/error/style.scss';
-import {button} from "/src/components/button";
+import './style.scss';
+import {button} from "~src/components/button";
 
 export default (rootElement) => {
 	const closeButton = button({

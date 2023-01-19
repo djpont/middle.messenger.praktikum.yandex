@@ -1,0 +1,18 @@
+<form action="">
+	<div class="profile-container">
+		<div class="avatar">
+			<input class="avatar" type="text" name="avatar" readonly style="background-image: url('{{avatar}}')">
+			{{{buttonChangeAvatar}}}
+		</div>
+		<div class="info">
+			{{#each infoLines}}
+				<p>{{{this}}}</p>
+			{{/each}}
+		</div>
+	</div>
+	<div class="buttons">
+		{{#each buttons}}
+			{{{this}}}
+		{{/each}}
+	</div>
+</form>

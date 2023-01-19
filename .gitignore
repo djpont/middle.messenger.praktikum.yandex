@@ -1,0 +1,11 @@
+/node_modules/
+/dist/
+/.parcel-cache/
+/.github/
+/.idea/
+.idea/
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/*/.DS_Store

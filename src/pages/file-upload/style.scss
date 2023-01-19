@@ -1,0 +1,13 @@
+div.window.file-upload {
+	width: 260px;
+	padding:5px 5px 10px 5px;
+	margin: auto;
+	
+	& div.file-upload-container{
+		text-align: center;
+
+		& input.file{
+			display:none;
+		}
+	}
+}

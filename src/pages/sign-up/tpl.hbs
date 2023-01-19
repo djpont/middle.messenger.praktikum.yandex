@@ -6,13 +6,9 @@
 		<div>
 			<p>Введите логин и пароль для регистрации.</p>
 			<div class="inputs">
-				{{{nameLine}}}
-				{{{surnameLine}}}
-				{{{emailLine}}}
-				{{{phoneLine}}}
-				{{{loginLine}}}
-				{{{passwordLine1}}}
-				{{{passwordLine2}}}
+				{{#each infoLines}}
+					{{{this}}}
+				{{/each}}
 			</div>
 			<div class="buttons">
 				{{{buttonSubmit}}}

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+	"outDir": "dist", 			// dist
+	"target": "es2016", 		// es2016
+	"declaration": false, 		// false
+	"module": "commonjs", 		// commonjs
+ 
+	"noImplicitAny": false, 	// true
+	"noUnusedLocals": false,		// true
+	"noUnusedParameters": false,	// true
+	"sourceMap": false,			// true
+	"strictNullChecks": false	// true
+  }
+}

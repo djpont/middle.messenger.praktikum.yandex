@@ -6,8 +6,8 @@ import messenger from "./pages/messenger";
 import profile from "./pages/profile";
 import file_upload from "./pages/file-upload";
 
-export default (route, rootElement) => {
-	const pages = {
+export default (route: string, rootElement: HTMLElement): void => {
+	const pages: Record<string, Function> = {
 		'/sign-in': page_sign_in,
 		'/sign-up': page_sign_up,
 		'/404': page_404,

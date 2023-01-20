@@ -1,24 +1,29 @@
-export const generateDom = (html_code): HTMLElement => {
+export const generateDom = (html_code: string): HTMLElement => {
 	const dom =  document.createRange().createContextualFragment(html_code);
 	return dom.firstChild as HTMLElement;
 }
 
 export class Component{
-	#mainElementSelector;
-	#document;
+	private _mainElementSelector: string;
+	private _document: HTMLElement;
+
 	constructor(document: HTMLElement, mainElementSelector: string) {
-		this.#document=document;
-		this.#mainElementSelector=mainElementSelector;
+		this._document=document;
+		this._mainElementSelector=mainElementSelector;
 	}
+
 	document = (): HTMLElement => {
-		return this.#document;
+		return this._document;
 	}
+
 	element = (): HTMLElement => {
-		return this.#document.querySelector(this.#mainElementSelector);
+		return this._document.querySelector(this._mainElementSelector);
 	}
+
 	subElements = (selector: string): HTMLElement[] => {
 		return Array.from(this.document().querySelectorAll(selector));
 	}
+
 	subElement = (selector: string): HTMLElement => {
 		return this.subElements(selector)[0];
 	}

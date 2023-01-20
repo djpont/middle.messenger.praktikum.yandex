@@ -12,7 +12,7 @@
 	"paths": {
 	  "~*": ["./*"]
 	},
-	"noImplicitAny": false, 	// true
+	"noImplicitAny": true, 	// true
 	"noUnusedLocals": false,		// true
 	"noUnusedParameters": false,	// true
 	"strictNullChecks": false,	// true

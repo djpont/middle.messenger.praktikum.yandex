@@ -3,8 +3,8 @@ import Window from "~src/components/window";
 import {generateDom} from "~src/components/components";
 import './style.scss';
 
-export default (rootElement, user) => {
-    const page = new Window({
+export default (rootElement: HTMLElement) => {
+    const page: Window = new Window({
             id: 'file-upload',
             className: 'file-upload',
             title: 'Загрузка файла',
@@ -15,7 +15,7 @@ export default (rootElement, user) => {
     ;
     rootElement.append(page.document());
 
-    const document = generateDom(tpl({}));
+    const document: HTMLElement = generateDom(tpl({}));
     page.content().append(document);
 
 }

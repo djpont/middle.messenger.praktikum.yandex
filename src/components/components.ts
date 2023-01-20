@@ -17,7 +17,7 @@ export class Component{
 	}
 
 	element = (): HTMLElement => {
-		return this._document.querySelector(this._mainElementSelector);
+		return this.subElement(this._mainElementSelector);
 	}
 
 	subElements = (selector: string): HTMLElement[] => {
@@ -25,6 +25,10 @@ export class Component{
 	}
 
 	subElement = (selector: string): HTMLElement => {
-		return this.subElements(selector)[0];
+		const elements = this.subElements(selector);
+		if(elements.length===0){
+			throw new Error(`Элемент ${selector} не найден`);
+		}
+		return elements[0];
 	}
 }

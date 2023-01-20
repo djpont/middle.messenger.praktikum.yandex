@@ -8,17 +8,17 @@ export enum messageStatus {
 
 export type messageData = {
     id: string,
-    chat?: Chat,
+    chat?: Chat | null,
     user: User,
     datetime: string,
-    time?:string
+    time?: string
     text: string,
     status?: messageStatus,
 }
 
 export default class Message {
     private _id: string;
-    private _chat: Chat;
+    private _chat: Chat | null;
     private _user: User;
     private _datetime: string;
     private _text: string;
@@ -27,8 +27,9 @@ export default class Message {
     private static _messages: Message[] = [];
 
     constructor(data: messageData) {
-        const {id,
-            chat,
+        const {
+            id,
+            chat = null,
             user,
             datetime,
             text,

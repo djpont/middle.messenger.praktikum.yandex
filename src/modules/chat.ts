@@ -4,9 +4,9 @@ import User from "~src/modules/user";
 export type chatData = {
 	id: string,
 	title: string,
-	avatar?: string,
-	users?: User[],
-	messages?: Message[]
+	avatar: string,
+	users: User[],
+	messages: Message[]
 }
 
 export default class Chat {
@@ -51,7 +51,13 @@ export default class Chat {
 
 	// addUser = (user: User): number => this.users.push(user);
 
-	static getChatById = (id: string): Chat => Chat.chats.find((chat: Chat) => chat.data().id === id);
+	static getChatById = (id: string): Chat => {
+		const chat = Chat.chats.find((chat: Chat) => chat.data().id === id);
+		if(chat===undefined){
+			throw new Error(`Чат ${id} не найден`);
+		}
+		return chat;
+	}
 
 	static getChatsList = (): Chat[] => Chat.chats;
 

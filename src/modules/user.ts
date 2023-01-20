@@ -4,7 +4,7 @@ export type userData = {
     id: string,
     login: string,
     avatar: string,
-    nickname?: string
+    nickname: string
 }
 
 export default class User {
@@ -39,7 +39,13 @@ export default class User {
 
     static getMyUser = (): User => this._myUser;
 
-    static getUserById = (id: string): User => User._users.find((user: User) => user._id === id);
+    static getUserById = (id: string): User => {
+        const user = User._users.find((user: User) => user._id === id);
+        if(user === undefined){
+            throw new Error(`Пользователь ${id} не найден`);
+        }
+        return user;
+    }
     static getUserByLogin = (login: string) => User._users.find((user: User) => user._login.toLowerCase() === login.toLowerCase());
 
     static getUsersList = (): User[] => User._users;

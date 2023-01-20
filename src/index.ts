@@ -15,20 +15,22 @@ import avatar104 from '~static/images/user104.webp';
 const myUser = new User({
     id: '100',
     login: 'djpont',
+    nickname: 'djpont',
     avatar: avatar100
 });
 User.setMyUser(myUser);
 
 // Список пользователей для чатов
 [
-    {id: '101', login: 'RainbowSmile', avatar: avatar101},
-    {id: '102', login: 'SuperStar7', avatar: avatar102},
-    {id: '103', login: 'Sunshine_Girl', avatar: avatar103},
-    {id: '104', login: 'Cyber_King', avatar: avatar104}]
-    .map(({id, login, avatar}) => {
+    {id: '101', login: 'RainbowSmile', nickname: 'RainbowSmile', avatar: avatar101},
+    {id: '102', login: 'SuperStar7', nickname: 'SuperStar7', avatar: avatar102},
+    {id: '103', login: 'Sunshine_Girl', nickname: 'Sunshine_Girl', avatar: avatar103},
+    {id: '104', login: 'Cyber_King', nickname: 'Cyber_King', avatar: avatar104}]
+    .map(({id, login, nickname, avatar}) => {
         new User({
             id,
             login,
+            nickname,
             avatar
         });
     });
@@ -41,14 +43,15 @@ User.setMyUser(myUser);
         id: '503',
         title: 'Чат3',
         avatar: avatar103,
-        users: [myUser, User.getUserById('103'), User.getUserById('104'), User.getUserById('105')]
+        users: [myUser, User.getUserById('102'), User.getUserById('103'), User.getUserById('104')]
     },
 ].map(({id, title, avatar, users}) => {
     new Chat({
         id,
         title,
         avatar,
-        users
+        users,
+        messages:[]
     });
 });
 
@@ -93,5 +96,8 @@ User.setMyUser(myUser);
 });
 
 // Находим элемент, куда будем рисовать контент и запускаем роутинг
-const root: HTMLElement = document.getElementById('root');
+const root = document.getElementById('root');
+if(root===null){
+    throw new Error(`Корневой элемент не найден`)
+}
 Routing(document.location.pathname, root);

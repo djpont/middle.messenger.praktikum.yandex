@@ -48,8 +48,8 @@ export default (rootElement: HTMLElement) => {
     page.content().append(document);
 
     // Находим инпуты и кнопки на будущее
-    const inputLogin: HTMLElement = page.subElement('input#login');
-    const inputPassword: HTMLElement = page.subElement('input#password');
-    const buttonSubmit: HTMLElement = page.subElement('button#submit');
-    const buttonRegister: HTMLElement = page.subElement('button#registration');
+    // const inputLogin: HTMLElement = page.subElement('input#login');
+    // const inputPassword: HTMLElement = page.subElement('input#password');
+    // const buttonSubmit: HTMLElement = page.subElement('button#submit');
+    // const buttonRegister: HTMLElement = page.subElement('button#registration');
 }

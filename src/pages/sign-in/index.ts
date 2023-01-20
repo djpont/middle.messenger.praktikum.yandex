@@ -8,11 +8,11 @@ import {generateDom} from "~src/components/components";
 export default (rootElement) => {
 
 	// Генерируем окно
-	const page = new Window(
-		'sign-in',
-		'sign-in',
-		'WinChat 98 - Электронные диалоги', //'Добро пожаловать в Мессенджер'
-	);
+	const page = new Window({
+		id: 'sign-in',
+		className: 'sign-in',
+		title: 'WinChat 98 - Электронные диалоги'
+	});
 	rootElement.append(page.document());
 
 

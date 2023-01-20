@@ -1,11 +1,24 @@
 import tpl from './tpl.hbs';
 import {Component, generateDom} from "~src/components/components";
 
+type windowConstructorData = {
+	id?:string,
+	className?:string,
+	title?:string,
+	controls?:Record<string, boolean>
+}
+
 export default class Window extends Component{
-	constructor(id, windowClassName, title = '', controls=false) {
+	constructor(data:windowConstructorData) {
+		const {
+			id='',
+			className='',
+			title='',
+			controls={}
+		} = data;
 		const document=generateDom(tpl({
 			id,
-			windowClassName,
+			className,
 			title,
 			controls
 		}));

@@ -4,17 +4,18 @@ import {generateDom} from "~src/components/components";
 import './style.scss';
 
 export default (rootElement, user) => {
-	const page = new Window(
-		'file-upload',
-		'file-upload',
-		'Загрузка файла',
-		{
-			close:true
-		}
-	);
-	rootElement.append(page.document());
-	
-	const document=generateDom(tpl({}));
-	page.content().append(document);
-	
+    const page = new Window({
+            id: 'file-upload',
+            className: 'file-upload',
+            title: 'Загрузка файла',
+            controls: {
+                close: true
+            }
+        })
+    ;
+    rootElement.append(page.document());
+
+    const document = generateDom(tpl({}));
+    page.content().append(document);
+
 }

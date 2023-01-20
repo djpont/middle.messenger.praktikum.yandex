@@ -8,12 +8,14 @@ import './style.scss';
 export default (rootElement) => {
 	
 	// Генерируем окно
-	const page = new Window(
-		'sign-up',
-		'sign-up',
-		'WinChat 98 - Регистрация',// 'Регистрация в Мессенджере',
-		{close: true}
-	);
+	const page = new Window({
+		id: 'sign-up',
+		className: 'sign-up',
+		title: 'WinChat 98 - Регистрация',
+		controls: {
+			close: true
+		}
+	});
 	rootElement.append(page.document());
 	
 	// Генерируем контент по шаблону

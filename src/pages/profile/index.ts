@@ -9,12 +9,14 @@ import User from "~src/modules/user";
 export default (rootElement) => {
 	
 	// Генерируем окно
-	const page = new Window(
-		'profile',
-		'profile',
-		'Профиль пользователя',
-		{close:true}
-	);
+	const page = new Window({
+		id: 'profile',
+		className: 'profile',
+		title: 'Профиль пользователя',
+		controls: {
+			close: true
+		}
+	});
 	rootElement.append(page.document());
 	
 	const myAvatar=User.getMyUser().data().avatar;

@@ -13,13 +13,8 @@ export const message = ({nickname, time, text, className}) => {
 export default class ChatFeed extends Component {
 	#chat;
 	
-	constructor(chat = {}) {
-		const data = {};
-		if (chat instanceof Chat) {
-			data.chatName = chat.data().title;
-			data.avatar = chat.data().avatar;
-		}
-		const document = generateDom(tpl_chatfeed(data));
+	constructor() {
+		const document = generateDom(tpl_chatfeed());
 		super(document, `.feed`);
 		this.#chat = false;
 	}
@@ -31,7 +26,10 @@ export default class ChatFeed extends Component {
 		this.clearMessages();
 		this.subElement('.header .avatar').style.backgroundImage = `url('${data.avatar}')`;
 		this.subElement('.header .chatName').innerText = data.title;
-		this.subElement('.newMessage .text').value = '';
+		const newMessageElement = this.subElement('.newMessage .text');
+		if(newMessageElement instanceof HTMLInputElement){
+			newMessageElement.value = '';
+		}
 		this.fillMessages();
 	}
 	

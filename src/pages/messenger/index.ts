@@ -12,14 +12,14 @@ import User from "~src/modules/user";
 export default (rootElement) => {
 	
 	// Генерируем окно
-	const page = new Window(
-		'messenger',
-		'messenger',
-		'WinChat 98 - Электронные диалоги',
-		{
-			close:true
+	const page = new Window({
+		id: 'messenger',
+		className: 'messenger',
+		title: 'WinChat 98 - Электронные диалоги',
+		controls: {
+			close: true
 		}
-	);
+	});
 	rootElement.append(page.document());
 	
 	// Генерируем содержимое окна по шаблону

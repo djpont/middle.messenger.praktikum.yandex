@@ -1,4 +1,4 @@
-import Message, {messageStatus, messageData} from "./message";
+import Message, {messageData} from "./message";
 import User from "~src/modules/user";
 
 export type chatData = {
@@ -22,15 +22,15 @@ export default class Chat {
 		const {
 			id,
 			title,
-			avatar='',
-			users=[],
-			messages=[]
+			avatar = '',
+			users = [],
+			// messages=[]
 		} = data;
 		this._users = [];
 		this._messages = [];
 		this._id = id;
 		this._title = title;
-		this._avatar=avatar;
+		this._avatar = avatar;
 		if (users.length > 0) {
 			for (const user of users) {
 				this._users.push(user);
@@ -53,7 +53,7 @@ export default class Chat {
 
 	static getChatById = (id: string): Chat => {
 		const chat = Chat.chats.find((chat: Chat) => chat.data().id === id);
-		if(chat===undefined){
+		if (chat === undefined) {
 			throw new Error(`Чат ${id} не найден`);
 		}
 		return chat;
@@ -63,8 +63,8 @@ export default class Chat {
 
 	addMessage = (data: messageData): void => {
 		if (this._users.includes(data.user)) {
-			if(!data.chat){
-				data.chat=this;
+			if (!data.chat) {
+				data.chat = this;
 			}
 			this._messages.push(new Message(data));
 		} else {
@@ -73,6 +73,6 @@ export default class Chat {
 	}
 
 	getLastMessage = (): Message => {
-		return this._messages[this._messages.length-1];
+		return this._messages[this._messages.length - 1];
 	}
 }

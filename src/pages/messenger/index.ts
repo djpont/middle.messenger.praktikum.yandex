@@ -9,40 +9,40 @@ import ChatFeed from "~src/components/chat-feed";
 import ChatList from "~src/components/chatlist";
 import User from "~src/modules/user";
 
-export default (rootElement: HTMLElement) => {
+export default (rootElement: HTMLElement): void => {
 
-    // Генерируем окно
-    const page: Window = new Window({
-        id: 'messenger',
-        className: 'messenger',
-        title: 'WinChat 98 - Электронные диалоги',
-        controls: {
-            close: true
-        }
-    });
-    rootElement.append(page.document());
+	// Генерируем окно
+	const page: Window = new Window({
+		id: 'messenger',
+		className: 'messenger',
+		title: 'WinChat 98 - Электронные диалоги',
+		controls: {
+			close: true
+		}
+	});
+	rootElement.append(page.document());
 
-    // Генерируем содержимое окна по шаблону
-    const document: HTMLElement = generateDom(tpl_messenger({
-        profile: User.getMyUser().data()
-    }));
-    page.content().append(document);
+	// Генерируем содержимое окна по шаблону
+	const document: HTMLElement = generateDom(tpl_messenger({
+		profile: User.getMyUser().data()
+	}));
+	page.content().append(document);
 
-    // Создаём экземпляр списка чатов и прииваиваем ему дом элемент для отображения чата
-    const chatList: ChatList = new ChatList();
-    page.subElement('fieldset.chatsListField div.container').append(chatList.document());
-    Chat.getChatsList().forEach(chat => chatList.addChat(chat));
+	// Создаём экземпляр списка чатов и прииваиваем ему дом элемент для отображения чата
+	const chatList: ChatList = new ChatList();
+	page.subElement('fieldset.chatsListField div.container').append(chatList.document());
+	Chat.getChatsList().forEach(chat => chatList.addChat(chat));
 
-    // Создаём экземпляк ленты сообщений
-    const chatFeed: ChatFeed = new ChatFeed();
-    page.subElement('div.chatFeedHolder').append(chatFeed.document());
+	// Создаём экземпляк ленты сообщений
+	const chatFeed: ChatFeed = new ChatFeed();
+	page.subElement('div.chatFeedHolder').append(chatFeed.document());
 
-    // Дружим список чатов и ленту сообщений
-    chatList.attachFeed(chatFeed);
+	// Дружим список чатов и ленту сообщений
+	chatList.attachFeed(chatFeed);
 
-    // Открываем первый чат в ленте сообщений
-    if (Chat.getChatsList().length > 0) {
-        chatList.openChat(Chat.getChatsList()[0]);
-    }
+	// Открываем первый чат в ленте сообщений
+	if (Chat.getChatsList().length > 0) {
+		chatList.openChat(Chat.getChatsList()[0]);
+	}
 
 }

@@ -2,11 +2,11 @@
 	<div class="title-bar">
 		<div class="title-bar-text">{{title}}</div>
 		{{#if controls}}
-		<div class="title-bar-controls">
-			{{#if controls.close}}
-			<button aria-label="Close" id="{{id}}_windowCloseButton"></button>
-			{{/if}}
-		</div>
+			<div class="title-bar-controls">
+				{{#if controls.close}}
+					<button aria-label="Close" id="{{id}}_windowCloseButton"></button>
+				{{/if}}
+			</div>
 		{{/if}}
 	</div>
 	<div class="window-body">

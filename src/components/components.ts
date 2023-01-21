@@ -1,15 +1,15 @@
 export const generateDom = (html_code: string): HTMLElement => {
-	const dom =  document.createRange().createContextualFragment(html_code);
+	const dom = document.createRange().createContextualFragment(html_code);
 	return dom.firstChild as HTMLElement;
 }
 
-export class Component{
+export class Component {
 	private _mainElementSelector: string;
 	private _document: HTMLElement;
 
 	constructor(document: HTMLElement, mainElementSelector: string) {
-		this._document=document;
-		this._mainElementSelector=mainElementSelector;
+		this._document = document;
+		this._mainElementSelector = mainElementSelector;
 	}
 
 	document = (): HTMLElement => {
@@ -26,7 +26,7 @@ export class Component{
 
 	subElement = (selector: string): HTMLElement => {
 		const elements = this.subElements(selector);
-		if(elements.length===0){
+		if (elements.length === 0) {
 			throw new Error(`Элемент ${selector} не найден`);
 		}
 		return elements[0];

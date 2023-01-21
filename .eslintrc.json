@@ -1,0 +1,23 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"plugins": [
+		"@typescript-eslint"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": "latest"
+	},
+	"env": {
+		"es6": true
+	},
+	"rules": {
+		"max-len": [2, 100],
+		"max-params": [2, 3],
+		"no-unused-vars": 0,
+		"@typescript-eslint/no-unused-vars": ["error"]
+	}
+}

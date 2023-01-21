@@ -5,13 +5,15 @@ div.window.messenger {
 	margin: auto;
 	box-sizing: border-box;
 
-	& div.window-body {
+	/* stylelint-disable selector-class-pattern */
+	div.window-body {
 		padding: 0;
 		height: calc(100% - 36px);
 		position: relative;
 		box-sizing: border-box;
+		/* stylelint-enable selector-class-pattern */
 
-		& div.messenger-container {
+		div.messengerContainer {
 			margin: 0;
 			padding: 0;
 			display: flex;
@@ -21,10 +23,9 @@ div.window.messenger {
 			align-content: flex-start;
 			height: 100%;
 
-			& div.sidebar {
+			div.sidebar {
 				min-width: 230px;
 				width: 35%;
-				/*flex-grow: 1;*/
 				margin-right: 11px;
 				display: flex;
 				flex-flow: column nowrap;
@@ -32,65 +33,59 @@ div.window.messenger {
 				align-items: stretch;
 				align-content: flex-start;
 
-				& fieldset.profileField {
+				fieldset.profileField {
 					margin-bottom: 7px;
 
-					& div.container {
+					div.container {
 						display: flex;
 						flex-flow: row nowrap;
 						justify-content: start;
 						align-items: center;
 						align-content: flex-start;
 
-						& div.avatar {
+						div.avatar {
 							background-repeat: no-repeat;
 							background-size: 100% 100%;
 							width: 32px;
 							height: 32px;
 						}
 
-						& div.nickname {
+						div.nickname {
 							padding-left: 7px;
 							font-weight: bold;
 							flex-grow: 1;
 						}
 
-						& button.details {
+						button.details {
 							min-width: 60px;
 						}
 					}
 				}
 
-				& fieldset.searchField {
+				fieldset.searchField {
 					margin-bottom: 7px;
 
-					& div.container {
+					div.container {
 						display: flex;
 						flex-flow: row nowrap;
 						justify-content: start;
 						align-items: flex-start;
 						align-content: flex-start;
 
-						& input.inputSearch {
+						input.inputSearch {
 							flex-grow: 1;
 							margin-right: 7px;
 						}
 					}
 				}
 
-				& fieldset.chatsListField {
+				fieldset.chatsListField {
 					overflow-y: auto;
 					flex-grow: 1;
-
-					& div.container {
-
-					}
-
 				}
-
 			}
 
-			& div.chatFeedHolder {
+			div.chatFeedHolder {
 				position: relative;
 				flex-grow: 1;
 				height: 100%;

@@ -9,8 +9,8 @@ export default (rootElement: HTMLElement): void => {
 
 	// Генерируем окно
 	const page: Window = new Window({
-		id: 'sign-up',
-		className: 'sign-up',
+		id: 'signUp',
+		className: 'signUp',
 		title: 'WinChat 98 - Регистрация',
 		controls: {
 			close: true

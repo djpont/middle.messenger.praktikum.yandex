@@ -8,31 +8,33 @@
 	--chatBackground: #fff;
 	--chatUnreadCounter: #0442a9;
 	--messageTextIncoming: #000;
-	--messageTextOutgoing: #0033ff;
+	--messageTextOutgoing: #03f;
 }
 
-@mixin has3dBorder{
-	box-shadow: inset -1px -1px var(--3dBorderColorA),
-	inset 1px 1px var(--3dBorderColorB),
-	inset -2px -2px var(--3dBorderColorC),
-	inset 2px 2px var(--3dBorderColorD);
+@mixin has3dBorder {
+	box-shadow:
+		inset -1px -1px var(--3dBorderColorA),
+		inset 1px 1px var(--3dBorderColorB),
+		inset -2px -2px var(--3dBorderColorC),
+		inset 2px 2px var(--3dBorderColorD);
 }
 
-html, body {
+html,
+body {
 	background-color: var(--backgroundColor);
 	margin: 0;
 	padding: 0;
-	font-family: "Arial", serif;
+	font-family: Arial, serif;
 }
 
-#pages_links {
+#pagesLinks {
 	padding-left: 10px;
-	
-	& li {
+
+	li {
 		display: inline-block;
 		margin: 0 5px;
-		
-		& a {
+
+		a {
 			color: var(--navLinkColor);
 		}
 	}
@@ -42,22 +44,22 @@ html, body {
 	@include has3dBorder;
 }
 
-
+/* stylelint-disable */
 /* Fix for buttons padding when pressed */
 button:not(:disabled):active,
-input[type="submit"]:not(:disabled):active,
-input[type="reset"]:not(:disabled):active {
-	/*vertical-align: -1px;
+input[type='submit']:not(:disabled):active,
+input[type='reset']:not(:disabled):active {
+	/* vertical-align: -1px;
 	margin-bottom: -1px;
 	padding: 1px 0 0 2px;
 	position: relative;
-	top: -0.5px;*/
+	top: -0.5px; */
 	padding-top: 0;
 }
 
-input[type=email],
-input[type=password],
-input[type=text],
+input[type='email'],
+input[type='password'],
+input[type='text'],
 select {
 	height: 22px;
 }
@@ -71,5 +73,7 @@ option,
 select,
 textarea,
 ul.tree-view {
-	font-family: "Arial", serif !important;
+	font-family: Arial, serif !important;
 }
+
+/* stylelint-enable */

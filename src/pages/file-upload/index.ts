@@ -5,8 +5,8 @@ import './style.scss';
 
 export default (rootElement: HTMLElement): void => {
 	const page: Window = new Window({
-			id: 'file-upload',
-			className: 'file-upload',
+			id: 'fileUpload',
+			className: 'fileUpload',
 			title: 'Загрузка файла',
 			controls: {
 				close: true

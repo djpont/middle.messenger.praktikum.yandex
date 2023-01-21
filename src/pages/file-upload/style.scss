@@ -1,12 +1,12 @@
-div.window.file-upload {
+div.window.fileUpload {
 	width: 260px;
-	padding: 5px 5px 10px 5px;
+	padding: 5px 5px 10px;
 	margin: auto;
 
-	& div.file-upload-container {
+	div.fileUploadContainer {
 		text-align: center;
 
-		& input.file {
+		input.file {
 			display: none;
 		}
 	}

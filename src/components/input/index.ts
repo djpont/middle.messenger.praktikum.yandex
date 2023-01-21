@@ -1,6 +1,6 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
-import './style.scss';
+// import './style.scss';
 
 type inputData = {
 	id?: string,

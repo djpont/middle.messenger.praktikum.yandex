@@ -9,8 +9,8 @@ export default (rootElement: HTMLElement): void => {
 
 	// Генерируем окно
 	const page: Window = new Window({
-		id: 'sign-in',
-		className: 'sign-in',
+		id: 'signIn',
+		className: 'signIn',
 		title: 'WinChat 98 - Электронные диалоги'
 	});
 	rootElement.append(page.document());

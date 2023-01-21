@@ -2,25 +2,29 @@ div.window.error {
 	width: 300px;
 	margin: auto;
 
-	& div.window-body {
-		padding: 5px 5px 10px 5px;
+	/* stylelint-disable selector-class-pattern */
+	div.window-body {
+		padding: 5px 5px 10px;
+		/* stylelint-enable selector-class-pattern */
+		/* stylelint-disable selector-class-pattern */
+		/* stylelint-enable selector-class-pattern */
 
-		& div.error-container {
+		div.errorContainer {
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: space-evenly;
 			align-items: flex-start;
 			align-content: flex-start;
 
-			& div.logo {
-				margin: 6px 0 0 0;
-				background: url("/static/images/error.png") no-repeat;
+			div.logo {
+				margin: 6px 0 0;
+				background: url('/static/images/error.png') no-repeat;
 				background-size: 100% 100%;
 				min-width: 64px;
 				height: 64px;
 			}
 
-			& button {
+			button {
 				margin-top: 10px;
 			}
 		}

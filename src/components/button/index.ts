@@ -21,6 +21,8 @@ export class Button extends Component {
 	constructor(buttonData: buttonData) {
 		const element: HTMLElement = generateDom(button(buttonData));
 		super(element);
-		this.registerBasementActionsForEventBus(['click']);
+		this.registerBasementActionsForEventBus([
+			Component.EVENTS.buttonClick
+		]);
 	}
 }

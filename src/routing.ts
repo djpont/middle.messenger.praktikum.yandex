@@ -1,5 +1,5 @@
 import page_sign_in from './pages/sign-in';
-// import page_sign_up from './pages/sign-up';
+import page_sign_up from './pages/sign-up';
 // import page_404 from './pages/error/404';
 // import page_500 from './pages/error/500';
 // import messenger from "./pages/messenger";
@@ -9,7 +9,7 @@ import page_sign_in from './pages/sign-in';
 export default (route: string, rootElement: HTMLElement): void => {
 	const pages = {
 		'/sign-in': page_sign_in,
-		// '/sign-up': page_sign_up,
+		'/sign-up': page_sign_up,
 		// '/404': page_404,
 		// '/500': page_500,
 		// '/messenger': messenger,

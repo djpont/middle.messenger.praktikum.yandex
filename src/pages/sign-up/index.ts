@@ -1,89 +1,112 @@
 import tpl from './tpl.hbs';
 import Window from "~src/components/window";
-import {button} from "~src/components/button";
-import {inputWithLabel} from "~src/components/input";
-import {generateDom} from "~src/functions";
+import {Button} from "~src/components/button";
+import {Input} from "~src/components/input";
 import './style.scss';
+import Content from "~src/modules/content";
+import {Component} from "~src/components/components";
 
 export default (rootElement: HTMLElement): void => {
 
 	// Генерируем окно
-	const page: Window = new Window({
-		id: 'signUp',
+	const window: Window = new Window({
 		className: 'signUp',
 		title: 'WinChat 98 - Регистрация',
 		controls: {
 			close: true
 		}
 	});
-	rootElement.append(page.document());
+	rootElement.append(window.document());
 
-	// Генерируем контент по шаблону
-	const document: HTMLElement = generateDom(tpl({
-		infoLines: [
-			inputWithLabel({
-				id: 'first_name',
-				type: 'text',
-				name: 'first_name',
-				label: 'Имя:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'second_name',
-				type: 'text',
-				name: 'second_name',
-				label: 'Фамилия:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'email',
-				type: 'email',
-				name: 'email',
-				label: 'Адрес электронной почты:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'phone',
-				type: 'text',
-				name: 'phone',
-				label: 'Телефон:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'login',
-				type: 'text',
-				name: 'login',
-				label: 'Логин:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'password',
-				type: 'password',
-				name: 'password',
-				label: 'Пароль:',
-				isStacked: true
-			}),
-			inputWithLabel({
-				id: 'password2',
-				type: 'password',
-				name: 'password2',
-				label: 'Пароль ещё раз:',
-				isStacked: true
-			})
+	// Генерируем дерево для контента по шаблону
+	const content:Content = new Content({
+		template:tpl
+	});
+	window.windowBody().append(content.document());
+
+	// Создаём экземпляры компонентов
+	const inputFirstName = new Input({
+		name: 'first_name',
+		type: 'text',
+		label: 'Имя:',
+		isStacked: true
+	});
+	const inputSecondName = new Input({
+		name: 'second_name',
+		type: 'text',
+		label: 'Фамилия:',
+		isStacked: true
+	});
+	const inputEmail = new Input({
+		name: 'email',
+		type: 'text',
+		label: 'Адрес электронной почты:',
+		isStacked: true
+	});
+	const inputPhone = new Input({
+		name: 'phone',
+		type: 'text',
+		label: 'Телефон:',
+		isStacked: true
+	});
+	const inputLogin = new Input({
+		name: 'login',
+		type: 'text',
+		label: 'Логин:',
+		isStacked: true
+	});
+	const inputPassword1 = new Input({
+		name: 'password',
+		type: 'password',
+		label: 'Пароль:',
+		isStacked: true
+	});
+	const inputPassword2 = new Input({
+		name: 'password2',
+		type: 'password',
+		label: 'Пароль ещё раз:',
+		isStacked: true
+	});
+	const buttonSubmit = new Button({
+		name: 'submit',
+		type: 'submit',
+		text: 'Регистрация'
+	});
+	const buttonCancel = new Button({
+		name: 'cancel',
+		type: 'cancel',
+		text: 'Отмена'
+	});
+
+	// Добавляем экземпляры компонентов к странице
+	content.addChildren({
+		'inputs': [
+			inputFirstName,
+			inputSecondName,
+			inputEmail,
+			inputPhone,
+			inputLogin,
+			inputPassword1,
+			inputPassword2
 		],
-		buttonSubmit: button({
-			id: 'submit',
-			name: 'submit',
-			type: 'submit',
-			value: 'Регистрация'
-		}),
-		buttonCancel: button({
-			id: 'cancel',
-			name: 'cancel',
-			type: 'button',
-			value: 'Отмена'
-		})
-	}));
-	page.content().append(document);
+		'buttons': [
+			buttonCancel,
+			buttonSubmit
+		]
+	});
+
+	// Действие при клике на Регистрация
+	const submitRegistration = (): void => {
+		console.log('submitRegistration');
+	}
+	buttonSubmit.eventBus.on(Component.EVENTS.buttonClick, submitRegistration);
+
+	// Действие при клике на Отмена
+	const openSignInPage = (): void => {
+		document.location='/sign-in';
+	}
+	buttonCancel.eventBus.on(Component.EVENTS.buttonClick, openSignInPage);
+	window.eventBus.on(Component.EVENTS.windowClose, openSignInPage);
+
 
 }

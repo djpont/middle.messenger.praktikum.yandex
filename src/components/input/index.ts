@@ -53,6 +53,8 @@ export class Input extends Component {
 		}
 		const element: HTMLElement = generateDom(templateFunction(data1));
 		super(element, targetSelector);
-		this.registerBasementActionsForEventBus(['change']);
+		this.registerBasementActionsForEventBus([
+			Component.EVENTS.inputChange
+		]);
 	}
 }

@@ -8,11 +8,17 @@ export class EventBus {
 		this._listeners = {};
 	}
 
-	on(event: string, callback: Fn<unknown>) {
+	on(event: string, callback: Fn<unknown>, insertBeforeLastListener:boolean=false) {
 		if (this._listeners[event]===undefined) {
 			this._listeners[event] = [];
 		}
-		this._listeners[event].push(callback);
+		if(!this._listeners[event].includes(callback)){
+			if(insertBeforeLastListener && this._listeners[event].length>0){
+				this._listeners[event].splice(this._listeners[event].length - 1, 0, callback);
+			}else{
+				this._listeners[event].push(callback);
+			}
+		}
 	}
 
 	off(event: string, callback: Fn<unknown>) {

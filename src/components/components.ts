@@ -1,31 +1,36 @@
 import {EventBus} from "~src/components/event-bus";
 import Randomizer from "~src/modules/randomizer";
 
-export class Component{
+enum EVENTS {
+	// INIT: "init",
+	// FLOW_CDM: "flow:component-did-mount",
+	// FLOW_CDU: "flow:component-did-update",
+	// FLOW_RENDER: "flow:render",
+	windowClose = "window:close",
+	buttonClick = "click",
+	inputChange = "change"
+};
 
-	static EVENTS = {
-		INIT: "init",
-		FLOW_CDM: "flow:component-did-mount",
-		FLOW_CDU: "flow:component-did-update",
-		FLOW_RENDER: "flow:render"
-	};
+export class Component {
+
+	public static readonly EVENTS = EVENTS;
 
 	protected readonly _element: HTMLElement;
 	public readonly eventBus: EventBus;
-	protected readonly id:string;
+	protected readonly id: string;
 	private _targetElement: HTMLElement;
 
-	constructor(document: HTMLElement, targetElementSelector:string='') {
+	constructor(document: HTMLElement, targetElementSelector: string = '') {
 		this.id = Randomizer.next();
 		this._element = document;
-		this._element.id=this.id;
+		this._element.id = this.id;
 		this.eventBus = new EventBus();
-		this._targetElement = (targetElementSelector.length>0)
+		this._targetElement = (targetElementSelector.length > 0)
 			? this.subElement(targetElementSelector)
 			: this.document();
 	}
 
-	protected registerBasementActionsForEventBus = (actions:string[]):void => {
+	protected registerBasementActionsForEventBus = (actions: string[]): void => {
 		actions.forEach(action => {
 			this.target().addEventListener(action, (e) => {
 				e.preventDefault();

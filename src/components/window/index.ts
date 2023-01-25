@@ -21,10 +21,30 @@ export default class Window extends Component {
 			controls
 		}));
 		super(document/*, 'div.window'*/);
+		this._registerWindowControls();
+	}
+
+	private _registerWindowControls = ():void => {
+		[['Close', Component.EVENTS.windowClose]].forEach(([label, action]) => {
+			const button = this.document().querySelector(
+				`:scope > .title-bar .title-bar-controls [aria-label="${label}"]`
+			);
+			if(button){
+				const callback = ():void => {
+					this.eventBus.emit(action);
+				};
+				button.addEventListener('click', callback);
+			}
+		});
+		this.eventBus.on(Component.EVENTS.windowClose, this._windowClose, true);
 	}
 
 	windowBody = ():HTMLElement => {
 		return this.subElement('.window-body');
+	}
+
+	private _windowClose = ():void => {
+		console.log('windowClose');
 	}
 
 	/*content = () => {

@@ -4,21 +4,24 @@ import {Button} from "~src/components/button";
 import {Input} from "~src/components/input";
 import "./style.scss";
 import Content from "~src/modules/content";
+import {Component} from "~src/components/components";
 
 export default (rootElement: HTMLElement): void => {
 
-	const page: Window = new Window({
+	// Генерируем окно
+	const window: Window = new Window({
 		className: 'signIn',
 		title: 'WinChat 98 - Электронные диалоги'
 	});
-	rootElement.append(page.document());
+	rootElement.append(window.document());
 
+	// Генерируем дерево для контента по шаблону
 	const content:Content = new Content({
 		template:tpl
 	});
+	window.windowBody().append(content.document());
 
-	page.windowBody().append(content.document());
-
+	// Создаём экземпляры компонентов
 	const inputLogin = new Input({
 		name: 'login',
 		type: 'text',
@@ -42,6 +45,7 @@ export default (rootElement: HTMLElement): void => {
 		text: 'Регистрация'
 	});
 
+	// Добавляем экземпляры компонентов к странице
 	content.addChildren({
 		'inputs': [
 			inputLogin,
@@ -53,14 +57,16 @@ export default (rootElement: HTMLElement): void => {
 		]
 	});
 
+	// Действие при клике на Вход
 	const openRegisterPage = (): void => {
 		document.location='/sign-up';
 	}
-	buttonRegister.eventBus.on('click', openRegisterPage);
+	buttonRegister.eventBus.on(Component.EVENTS.buttonClick, openRegisterPage);
 
+	// Действие при клике на Регистрация
 	const openMessengerPage = (): void => {
 		document.location='/messenger';
 	}
-	buttonSubmit.eventBus.on('click', openMessengerPage);
+	buttonSubmit.eventBus.on(Component.EVENTS.buttonClick, openMessengerPage);
 
 }

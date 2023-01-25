@@ -1,7 +1,8 @@
 import tpl_chatlist from './tpl_chatlist.hbs';
 import tpl_chat_preview from './tpl_chat_preview.hbs';
 import './style.scss';
-import {Component, generateDom} from "~src/components/components";
+import {Component} from "~src/components/components";
+import {generateDom} from "~src/functions";
 import Chat from "~src/modules/chat";
 import {messageData} from "~src/modules/message";
 import ChatFeed from "~src/components/chat-feed";

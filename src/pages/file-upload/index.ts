@@ -1,6 +1,6 @@
 import tpl from './tpl.hbs';
 import Window from "~src/components/window";
-import {generateDom} from "~src/components/components";
+import {generateDom} from "~src/functions";
 import './style.scss';
 
 export default (rootElement: HTMLElement): void => {

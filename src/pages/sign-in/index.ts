@@ -1,55 +1,66 @@
 import tpl from './tpl.hbs';
 import Window from "~src/components/window";
-import {button} from "~src/components/button";
-import {inputWithLabel} from "~src/components/input";
+import {Button} from "~src/components/button";
+import {Input} from "~src/components/input";
 import "./style.scss";
-import {generateDom} from "~src/components/components";
+import Content from "~src/modules/content";
 
 export default (rootElement: HTMLElement): void => {
 
-	// Генерируем окно
 	const page: Window = new Window({
-		id: 'signIn',
 		className: 'signIn',
 		title: 'WinChat 98 - Электронные диалоги'
 	});
 	rootElement.append(page.document());
 
+	const content:Content = new Content({
+		template:tpl
+	});
 
-	// Генерируем контент окна по шаблону
-	const document: HTMLElement = generateDom(tpl({
-		loginLine: inputWithLabel({
-			id: 'login',
-			name: 'login',
-			type: 'text',
-			label: 'Логин:',
-			isStacked: false
-		}),
-		passwordLine: inputWithLabel({
-			id: 'password',
-			type: 'password',
-			name: 'password',
-			label: 'Пароль:',
-			isStacked: false
-		}),
-		buttonSubmit: button({
-			id: 'submit',
-			name: 'submit',
-			type: 'submit',
-			value: 'Вход'
-		}),
-		buttonRegister: button({
-			id: 'registration',
-			name: 'registration',
-			type: 'button',
-			value: 'Регистрация'
-		})
-	}));
-	page.content().append(document);
+	page.windowBody().append(content.document());
 
-	// Находим инпуты и кнопки на будущее
-	// const inputLogin: HTMLElement = page.subElement('input#login');
-	// const inputPassword: HTMLElement = page.subElement('input#password');
-	// const buttonSubmit: HTMLElement = page.subElement('button#submit');
-	// const buttonRegister: HTMLElement = page.subElement('button#registration');
+	const inputLogin = new Input({
+		name: 'login',
+		type: 'text',
+		label: 'Логин:',
+		isStacked: false
+	});
+	const inputPassword = new Input({
+		name: 'password',
+		type: 'password',
+		label: 'Пароль:',
+		isStacked: false
+	});
+	const buttonSubmit = new Button({
+		name: 'submit',
+		type: 'submit',
+		text: 'Вход'
+	});
+	const buttonRegister = new Button({
+		name: 'registration',
+		type: 'button',
+		text: 'Регистрация'
+	});
+
+	content.addChildren({
+		'inputs': [
+			inputLogin,
+			inputPassword
+		],
+		'buttons': [
+			buttonSubmit,
+			buttonRegister
+		]
+	});
+
+	const openRegisterPage = (): void => {
+		document.location='/sign-up';
+	}
+	buttonRegister.eventBus.on('click', openRegisterPage);
+
+	const openMessengerPage = (): void => {
+		document.location='/messenger';
+	}
+	buttonSubmit.eventBus.on('click', openMessengerPage);
+
 }

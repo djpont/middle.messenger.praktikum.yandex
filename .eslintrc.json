@@ -18,6 +18,7 @@
 		"max-len": [2, 100],
 		"max-params": [2, 3],
 		"no-unused-vars": 0,
-		"@typescript-eslint/no-unused-vars": ["error"]
+		"@typescript-eslint/no-unused-vars": ["error"],
+		"@typescript-eslint/no-inferrable-types": ["off"]
 	}
 }

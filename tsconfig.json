@@ -1,26 +1,34 @@
 {
-  "include": [
-	"src",
-	"declaration.d.ts"
-  ],
-  "compilerOptions": {
-	"module": "ES2020",
-	"target": "ES2020",
-	"sourceMap": true,
-	"moduleResolution": "Node",
-	"baseUrl": "./",
-	"paths": {
-	  "~*": ["./*"]
+	"include": [
+		"src",
+		"declaration.d.ts"
+	],
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "ES6",
+		"sourceMap": true,
+		"moduleResolution": "Node",
+		"baseUrl": "./",
+		"paths": {
+			"~*": [
+				"./*"
+			]
+		},
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strictNullChecks": true,
+		"outDir": "dist",
+		"declaration": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"lib": [
+			"dom",
+			"ES2018"
+		]
 	},
-	"noImplicitAny": true,
-	"noUnusedLocals": false,		// true
-	"noUnusedParameters": true,
-	"strictNullChecks": true,
-	"outDir": "dist",
-	"declaration": false,
-	"isolatedModules": false
-  },
-  "exclude": [
-	"node_modules"
-  ]
+	"exclude": [
+		"node_modules"
+	]
 }
+

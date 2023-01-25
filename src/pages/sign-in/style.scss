@@ -24,6 +24,9 @@ div.window.signIn {
 
 			div.inputs {
 				width: 200px;
+				display: flex;
+				flex-flow: column nowrap;
+				align-items: stretch;
 
 				label {
 					width: 50px;
@@ -36,6 +39,8 @@ div.window.signIn {
 
 			div.buttons {
 				padding: 11px 0 0 10px;
+				display: flex;
+				flex-flow: column nowrap;
 
 				button {
 					width: 100px;

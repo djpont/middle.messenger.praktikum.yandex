@@ -1,18 +1,26 @@
 import tpl from "./tpl.hbs";
+import {Component} from "~src/components/components";
+import {generateDom} from "~src/functions";
 
 type buttonData = {
-	id?: string,
 	name?: string,
 	type?: string,
-	value?: string
+	text?: string
 }
 
 export const button = (data: buttonData): string => {
 	const {
-		id = '',
 		name = '',
 		type = '',
-		value = ''
+		text = ''
 	} = data;
-	return tpl({id, name, type, value});
+	return tpl({name, type, text});
 };
+
+export class Button extends Component {
+	constructor(buttonData: buttonData) {
+		const element: HTMLElement = generateDom(button(buttonData));
+		super(element);
+		this.registerBasementActionsForEventBus(['click']);
+	}
+}

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npm run clear > /dev/null && parcel static/index.html -p 3000 --no-cache",
     "build": "npm run clear > /dev/null && parcel build static/index.html",
-    "lint": "eslint . --ext .ts",
+    "eslint": "eslint . --ext .ts",
+    "stylelint": "npx stylelint ./**/*.scss",
     "clear": "rm -rf dist/* && rm -rf .parcel-cache/*"
   },
   "keywords": [],

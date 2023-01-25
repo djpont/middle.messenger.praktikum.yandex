@@ -1,7 +1,6 @@
 import tpl_messenger from './tpl_messenger.hbs';
 import './style.scss';
-
-import {generateDom} from "~src/components/components";
+import {generateDom} from "~src/functions";
 
 import Window from "~src/components/window";
 import Chat from "~src/modules/chat";

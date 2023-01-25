@@ -1,27 +1,49 @@
-export const generateDom = (html_code: string): HTMLElement => {
-	const dom = document.createRange().createContextualFragment(html_code);
-	return dom.firstChild as HTMLElement;
-}
+import {EventBus} from "~src/components/event-bus";
+import Randomizer from "~src/modules/randomizer";
 
-export class Component {
-	private _mainElementSelector: string;
-	private _document: HTMLElement;
+export class Component{
 
-	constructor(document: HTMLElement, mainElementSelector: string) {
-		this._document = document;
-		this._mainElementSelector = mainElementSelector;
+	static EVENTS = {
+		INIT: "init",
+		FLOW_CDM: "flow:component-did-mount",
+		FLOW_CDU: "flow:component-did-update",
+		FLOW_RENDER: "flow:render"
+	};
+
+	protected readonly _element: HTMLElement;
+	public readonly eventBus: EventBus;
+	protected readonly id:string;
+	private _targetElement: HTMLElement;
+
+	constructor(document: HTMLElement, targetElementSelector:string='') {
+		this.id = Randomizer.next();
+		this._element = document;
+		this._element.id=this.id;
+		this.eventBus = new EventBus();
+		this._targetElement = (targetElementSelector.length>0)
+			? this.subElement(targetElementSelector)
+			: this.document();
+	}
+
+	protected registerBasementActionsForEventBus = (actions:string[]):void => {
+		actions.forEach(action => {
+			this.target().addEventListener(action, (e) => {
+				e.preventDefault();
+				this.eventBus.emit(action);
+			})
+		});
 	}
 
 	document = (): HTMLElement => {
-		return this._document;
+		return this._element;
 	}
 
-	element = (): HTMLElement => {
-		return this.subElement(this._mainElementSelector);
+	target = (): HTMLElement => {
+		return this._targetElement;
 	}
 
 	subElements = (selector: string): HTMLElement[] => {
-		return Array.from(this.document().querySelectorAll(selector));
+		return Array.from(this._element.querySelectorAll(selector));
 	}
 
 	subElement = (selector: string): HTMLElement => {

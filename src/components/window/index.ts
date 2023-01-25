@@ -1,8 +1,8 @@
 import tpl from './tpl.hbs';
-import {Component, generateDom} from "~src/components/components";
+import {Component} from "~src/components/components";
+import {generateDom} from "~src/functions";
 
 type windowData = {
-	id?: string,
 	className?: string,
 	title?: string,
 	controls?: Record<string, boolean>
@@ -11,21 +11,23 @@ type windowData = {
 export default class Window extends Component {
 	constructor(data: windowData) {
 		const {
-			id = '',
 			className = '',
 			title = '',
 			controls = {}
 		} = data;
 		const document: HTMLElement = generateDom(tpl({
-			id,
 			className,
 			title,
 			controls
 		}));
-		super(document, 'div.window');
+		super(document/*, 'div.window'*/);
 	}
 
-	content = () => {
+	windowBody = ():HTMLElement => {
+		return this.subElement('.window-body');
+	}
+
+	/*content = () => {
 		const appendToParent = (
 			element: HTMLElement | Component | string,
 			parent: HTMLElement
@@ -40,7 +42,7 @@ export default class Window extends Component {
 				parent.innerHTML += element;
 				return;
 			}
-			console.error('getDocument не понял что делать с элементом', element);
+			// console.error('getDocument не понял что делать с элементом', element);
 		}
 
 		const documentElement: HTMLElement = this.subElement(':scope > div.window-body');
@@ -61,5 +63,5 @@ export default class Window extends Component {
 			append,
 			element: () => documentElement,
 		}
-	};
+	};*/
 }

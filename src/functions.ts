@@ -1,5 +1,7 @@
 import {Component} from "~src/components/components";
 
+export type Fn<T> = (...args: unknown[]) => T;
+
 export const joinDom = (components: Component[]) => {
 	const dom = document.createDocumentFragment();
 	for (const el of components) {
@@ -15,4 +17,11 @@ export const joinHTML = (elements: string[], addParentDiv = false) => {
 		html = `<div>${html}</div>`;
 	}
 	return html;
+
+}
+
+// Функция генерации DOM из строки
+export const generateDom = (html_code: string): HTMLElement => {
+	const dom = document.createRange().createContextualFragment(html_code);
+	return dom.firstChild as HTMLElement;
 }

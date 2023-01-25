@@ -2,7 +2,8 @@ import tpl_chatfeed from './tpl_chatfeed.hbs';
 import tpl_message from './tpl_message.hbs';
 import './style.scss';
 
-import {Component, generateDom} from "~src/components/components";
+import {Component} from "~src/components/components";
+import {generateDom} from "~src/functions";
 import Chat from "~src/modules/chat";
 import User from "~src/modules/user";
 import {messageData} from "~src/modules/message";

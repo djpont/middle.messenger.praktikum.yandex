@@ -1,5 +1,5 @@
 import tpl from './tpl.hbs';
-import {generateDom} from "~src/components/components";
+import {generateDom} from "~src/functions";
 
 export type errorData = {
 	id: string,

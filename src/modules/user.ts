@@ -1,5 +1,8 @@
 import Message from "./message";
 
+// Модуль Юзер. Хранит в себе данные пользователей.
+// В _myUser хранится текущий пользователь (от чьего имени пишем сообщения)
+
 export type userData = {
 	id: string,
 	login: string,

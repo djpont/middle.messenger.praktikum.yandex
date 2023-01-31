@@ -12,6 +12,8 @@ import {ComponentChildrenData} from "~src/components/components";
 import Routing from "~src/routing";
 import fileUpload from "~src/pages/file-upload";
 
+// Страничка профиля. Возвращает окно.
+
 export default (rootElement: View): Window => {
 
 	// Ссылка на аватарку текущего пользователя

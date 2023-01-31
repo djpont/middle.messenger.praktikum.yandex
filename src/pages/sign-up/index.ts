@@ -8,6 +8,8 @@ import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/routing";
 
+// Страничка регистрации. Возвращает окно.
+
 export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками

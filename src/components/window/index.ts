@@ -2,12 +2,18 @@ import tpl from './tpl.hbs';
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
 import {generateDom} from "~src/functions";
 
+// Компонент Window отвечает за окно - шапка с заголовком и кнопкой закрытия,
+// а так же рамка и пространство для содержимого (для экземпляра класса Content)
+
+// Тип данных для окна
 type windowData = {
 	className?: string,
 	title?: string,
 	controls?: Record<string, boolean>
 } & ComponentPropsData;
 
+
+// Метод рендера HTML-строки окна по шаблону
 const window = (data: windowData): string => {
 	const {
 		className = '',
@@ -17,29 +23,34 @@ const window = (data: windowData): string => {
 	return tpl({className, title, controls});
 };
 
-// Дополнительные действия с компонентом
+// Дополнительные действия с окном
 class WindowEVENTS extends EVENTS {
 	static close = "window:close"; // Закрытие окна
 }
 
+// Класс окна
 export default class Window extends Component<windowData> {
 
+	// Делаем действия публичными
 	public static override readonly EVENTS = WindowEVENTS;
 
 	constructor(data: windowData) {
+		// Сначала создаём базовый компонент  и рендерим его
 		super(data);
-		// Регистрация кнопок в шапке окна
+		// Регистрация кнопок из шапки окна
 		this._registerWindowControls();
-		// Регистраия базового действия окна - закрытие
-		this.eventBus.emit(Window.EVENTS.registerBasementAction, false, Window.EVENTS.close);
+		// Регистрируем базовое действие - закрытие окна
+		this.eventBus.emit(Component.EVENTS.registerBasementAction, false, Window.EVENTS.close);
 		// Добавляем к окну действие _close при закрытии окна
 		this.eventBus.on(Window.EVENTS.close, this._close);
 	}
 
+	// Метод рендера DOM-дерева кнопки по шаблону
 	protected override render(data: windowData): HTMLElement {
 		return generateDom(window(data));
 	}
 
+	// Метод обновления DOM-дерева после обновления пропса
 	protected override update(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop];
@@ -75,14 +86,12 @@ export default class Window extends Component<windowData> {
 		});
 	}
 
-	// target = (): HTMLElement => {
-	// 	return this.subElement('.window-body');
-	// }
-
+	// Метод закрытия окна - эмитирует цепочки эвент баса
 	public readonly close = ():void => {
 		this.eventBus.emit(Window.EVENTS.close);
 	}
 
+	// Метод закрытия окна - непосредственно уничтожение экземпляра окна
 	private readonly _close = ():void => {
 		this.destroy();
 	}

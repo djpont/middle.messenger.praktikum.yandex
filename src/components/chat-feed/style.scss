@@ -64,17 +64,3 @@
 		}
 	}
 }
-
-.message {
-	&.in {
-		color: var(--messageTextIncoming);
-	}
-
-	&.out {
-		color: var(--messageTextOutgoing);
-	}
-
-	&:not(:last-child) {
-		margin-bottom: 7px;
-	}
-}

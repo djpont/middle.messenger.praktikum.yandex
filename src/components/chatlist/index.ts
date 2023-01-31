@@ -7,6 +7,10 @@ import {messageData} from "~src/modules/message";
 import Chat from "~src/modules/chat";
 import {Fn, generateDom} from "~src/functions";
 
+// Компонент Chatlist отвечает за список чатов
+// Состоит из превью чата и списка превьюшек
+
+// Тип данных для превью
 type chatPreviewData = {
 	name: string,
 	time: string,
@@ -15,20 +19,25 @@ type chatPreviewData = {
 	unreadCount: number
 }
 
-const chatPreview = (data: chatPreviewData): string => {
+// Метод рендера HTML-строки превьюшки по шаблону
+function chatPreview(data: chatPreviewData): string {
 	return tpl_chatPreview(data);
-};
+}
 
+// Тип данных для чатлиста
 type chatlistData = {
 	chatFeed: ChatFeed
 } & ComponentPropsData;
 
-// Метод отрисовки содержимого чатлиста (список превьюшек чатов)
+// Метод рендера HTML-строки чатлиста по шаблону
+// Передаём callback - действие при клика на превьюшку
 const chatlist = (data: chatlistData, callback: Fn<void>):HTMLElement => {
+	// Сначала создаём DOM-дерево по шаблону
 	const chatlistDom = generateDom(tpl_chatlist(data));
+	// Залем перебираем чаты и добавляем их превью в DOM-дерево
 	Chat.getChatsList().forEach(chat => {
 		const lastMessage: messageData = chat.getLastMessage().data();
-		const unreadCount = 1;
+		const unreadCount = 1; // Количество непрочитанных, пока у всех = 1
 		const chatPreviewData: chatPreviewData = {
 			name: chat.data().title,
 			avatar: chat.data().avatar,
@@ -36,6 +45,7 @@ const chatlist = (data: chatlistData, callback: Fn<void>):HTMLElement => {
 			time: new Date(lastMessage.datetime).toTimeString().slice(0, 5),
 			unreadCount
 		};
+		// Создаём DOM-дерево превьюшки
 		const chatPreviewDom = generateDom(chatPreview(chatPreviewData));
 		chatlistDom.append(chatPreviewDom);
 		// Добавляем действие при клике
@@ -47,19 +57,22 @@ const chatlist = (data: chatlistData, callback: Fn<void>):HTMLElement => {
 	return chatlistDom;
 }
 
+// Класс чатлиста
 export default class Chatlist extends Component<chatlistData> {
 
 	constructor(props: chatlistData) {
+		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 	}
 
-	// Метод открытия чата при клике на chatPreview
+	// Метод открытия чата (вызывается при клике на превью чата)
 	public openChat(chat: Chat, preview:HTMLElement): void {
-		// Сначал убираем active у текущего нажатого превью
+		// Сначала убираем класс active у всех превью, затем добавляем нажатому
 		Array.from(this.subElements('button.chatPreview.active')).forEach(el => {
 			el.classList.remove('active');
 		});
 		preview.classList.add('active');
+		// Вызываем метод attachChat у Ленты Сообщений
 		if(this.props.chatFeed instanceof ChatFeed){
 			this.props.chatFeed.attachChat(chat);
 		}else{
@@ -67,10 +80,12 @@ export default class Chatlist extends Component<chatlistData> {
 		}
 	}
 
+	// Метод рендера DOM-дерева кнопки по шаблону
 	protected override render(data: chatlistData): HTMLElement {
 		return chatlist(data, this.openChat.bind(this));
 	}
 
+	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
 	protected override update(): void {
 		return;
 	}

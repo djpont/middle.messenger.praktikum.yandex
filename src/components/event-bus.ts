@@ -1,5 +1,4 @@
-
-import {Fn} from "~src/functions";
+import {Fn} from "~src/functions"; // Тип функции
 
 export class EventBus {
 	private readonly _listeners: Record<string, Fn<unknown>[]>;
@@ -8,6 +7,7 @@ export class EventBus {
 		this._listeners = {};
 	}
 
+	// Метод добавляения событий в EventBus
 	on(event: string, callback: Fn<unknown>, insertBeforeLastListener:boolean=false) {
 		if (this._listeners[event]===undefined) {
 			this._listeners[event] = [];
@@ -21,6 +21,7 @@ export class EventBus {
 		}
 	}
 
+	// Метод удаления событий из EventBus
 	off(event: string, callback: Fn<unknown>) {
 		if (this._listeners[event] === undefined) {
 			this.error(event);
@@ -30,6 +31,7 @@ export class EventBus {
 		);
 	}
 
+	// Метод вызова цепочки событий из EventBus
 	emit(event: string, ...args: unknown[]) {
 		if (this._listeners[event] === undefined) {
 			this.error(event);
@@ -42,8 +44,8 @@ export class EventBus {
 		}
 	}
 
+	// Метод в случае ошибки
 	error(event: string) {
-		// throw new Error(`Нет события: ${event}`);
 		console.error(`Нет события: ${event}`);
 	}
 }

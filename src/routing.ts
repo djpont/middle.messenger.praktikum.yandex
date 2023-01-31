@@ -8,6 +8,7 @@ import fileUpload from "./pages/file-upload";
 import View from "~src/components/view";
 import Window from "~src/components/window";
 
+// Роутинг
 export default (route: string, rootElement: View):void => {
 
 	// Очистка корневого элемента
@@ -18,7 +19,7 @@ export default (route: string, rootElement: View):void => {
 		history.pushState(null, '', route);
 	}
 
-	// Возмоные направления роутинга
+	// Возможные направления роутинга
 	const pages = {
 		'/sign-in': pageSignIn,
 		'/sign-up': pageSignUp,
@@ -36,7 +37,8 @@ export default (route: string, rootElement: View):void => {
 			throw new Error(`Роут ${route} не найден`);
 		}
 		const routeResult = routeVoid[1](rootElement);
-		// Есть страница вернула окно, то добавляем его во view
+		// Есть страница вернула окно, то добавляем его во view, иначе ничего не делаем, т.к. если
+		// роутинг был методом void, то он сам должен позаботиться о рендере окон
 		if (routeResult instanceof Window){
 			rootElement.children.main=[routeResult];
 			rootElement.updateChildren();

@@ -1,7 +1,9 @@
 import Component from "~src/components/components";
 
+// Тип данных для функции
 export type Fn<T> = (...args: unknown[]) => T;
 
+// Функция совмещения компонентов в единый DOM-элемент
 export const joinDom = (components: Component<unknown>[]) => {
 	const dom = document.createDocumentFragment();
 	for (const el of components) {

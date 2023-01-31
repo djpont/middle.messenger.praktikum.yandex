@@ -1,6 +1,9 @@
 import Message, {messageData} from "./message";
 import User from "~src/modules/user";
 
+// Модуль Чат. Хранит в себе данные чата и сообщения из этого чата
+// В будущем будет адапритован для работы с API Практики
+
 export type chatData = {
 	id: string,
 	title: string,
@@ -10,12 +13,13 @@ export type chatData = {
 }
 
 export default class Chat {
-	private _id: string;
-	private _title: string;
-	private _avatar: string;
-	private _users: User[];
-	private _messages: Message[];
+	private readonly _id: string;
+	private readonly _title: string;
+	private readonly _avatar: string;
+	private readonly _users: User[];
+	private readonly _messages: Message[];
 
+	// Список всех экземпляров класса Чат
 	private static chats: Chat[] = [];
 
 	constructor(data: chatData) {
@@ -39,7 +43,7 @@ export default class Chat {
 		Chat.chats.push(this);
 	}
 
-	data = (): chatData => {
+	public data(): chatData {
 		return {
 			id: this._id,
 			title: this._title,
@@ -51,7 +55,7 @@ export default class Chat {
 
 	// addUser = (user: User): number => this.users.push(user);
 
-	static getChatById = (id: string): Chat => {
+	public static getChatById(id: string): Chat {
 		const chat = Chat.chats.find((chat: Chat) => chat.data().id === id);
 		if (chat === undefined) {
 			throw new Error(`Чат ${id} не найден`);
@@ -59,9 +63,11 @@ export default class Chat {
 		return chat;
 	}
 
-	static getChatsList = (): Chat[] => Chat.chats;
+	public static getChatsList(): Chat[] {
+		return Chat.chats;
+	}
 
-	addMessage = (data: messageData): void => {
+	public addMessage(data: messageData): void {
 		if (this._users.includes(data.user)) {
 			if (!data.chat) {
 				data.chat = this;
@@ -72,7 +78,11 @@ export default class Chat {
 		}
 	}
 
-	getLastMessage = (): Message => {
+	public getLastMessage(): Message {
+		if(this._messages.length===0){
+			console.error(this);
+			console.error('Список в чате сообщений пуст');
+		}
 		return this._messages[this._messages.length - 1];
 	}
 }

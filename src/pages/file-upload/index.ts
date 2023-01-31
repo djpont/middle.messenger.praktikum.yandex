@@ -3,6 +3,8 @@ import './style.scss';
 import Window from "~src/components/window";
 import Content from "~src/components/content";
 
+// Страничка загрузки файла. Возвращает окно.
+
 export default (): Window => {
 
 	// Создаём содержимое окна по шаблону

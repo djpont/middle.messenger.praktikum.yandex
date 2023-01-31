@@ -3,28 +3,35 @@ import Component, {ComponentPropsData} from "~src/components/components";
 import {generateDom} from "~src/functions";
 import "./style.scss";
 
+// Компонент View отвечает за корневой элемент, в котором отображаются окна
+// Состоит из двух слоёв: main для рабочих окон и alert для окон сообщений и ошибок
+
+// Тип данных для вью
 type viewData = {
 	roomElement: HTMLElement
 } & ComponentPropsData;
 
+// Метод рендера HTML-строки вью по шаблону
 const view = (): string => {
 	return tpl();
 };
 
+// Класс вью
 export default class View extends Component<viewData>{
 
-	private static _rootElement:HTMLElement;
-
 	constructor(props: viewData) {
+		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
-		View._rootElement=this.props.roomElement;
-		View._rootElement.append(this.document());
+		// Добавляем документ вью в переданный родительский HTML-элемент
+		this.props.roomElement.append(this.document());
 	}
 
+	// Метод рендера DOM-дерева кнопки по шаблону
 	protected render():HTMLElement{
 		return generateDom(view());
 	}
 
+	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
 	protected override update(): void {
 		return;
 	}

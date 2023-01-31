@@ -1,6 +1,9 @@
 import Chat from "~src/modules/chat";
 import User from "~src/modules/user";
 
+// Модуль Сообщения. Хранит в себе даные одного сообщения
+// В будущем будет адапритован для работы с API Практики
+
 export enum messageStatus {
 	read = 'read',
 	unread = 'unread',

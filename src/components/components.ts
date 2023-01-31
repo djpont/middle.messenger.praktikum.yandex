@@ -1,6 +1,8 @@
 import {EventBus} from "~src/components/event-bus";
 import {Fn} from "~src/functions";
 
+// Базовый компонент (аналог Block из теории Практикума)
+
 // Возможные действия с базовым компонентом
 export class EVENTS {
 	static init = "component:init"; // Инициализация
@@ -10,52 +12,64 @@ export class EVENTS {
 	static updateChildren = "component:updateChildren"; // Обновление чилдренов
 }
 
-// Тип для чилдренов
+// Тип данных для чилдренов
 export type ComponentChildrenData = Record<string, Component<ComponentPropsData>[]>;
 
-// Тип для пропсов
+// Тип данных для пропсов
 export type ComponentPropsData = {
 	children?: ComponentChildrenData;
 	events?: Fn<unknown>[];	// Массив функций для ДЕФОЛТНОГО действия (клик для кнопки и т.д.)
 	[key: string]: any;
 };
 
+// Класс базового компонента
 export default abstract class Component<PropsType> {
 
+	// Делаем действия публичными
 	public static readonly EVENTS = EVENTS;
 
+	// Список всех компонентов - используется для поиска родителя при уничтожении
 	private static readonly _allComponents: Component<unknown>[] = [];
-	private _document: HTMLElement;
+
+	private _document: HTMLElement; // Тут хранится DOM-дерево компонента
 	public readonly eventBus: EventBus;
-	public readonly props: ComponentPropsData;
-	public children: ComponentChildrenData;
+	public readonly props: ComponentPropsData; // Основные пропсы (чилдрены отделяются)
+	public children: ComponentChildrenData;    // Чилдрены (массивы компонентов)
+
+	// Холдеры для чилдренов
+	// Холдер - это HTML-элемент в шаблоне компонента, изначально пустой,  куда добавлятся чилдрены
 	private _childrenHolders: Record<string, HTMLElement>;
 
 	protected constructor(props: PropsType) {
-		// Добавляем экземпляр в список всех компонентов, используется при поиске родителя
+		// Добавляем экземпляр в список всех компонентов
 		Component._allComponents.push(this);
 
-		// Добавляет EventBus и регистрируем события
+		// Добавляем EventBus и регистрируем базовые события
 		this.eventBus = new EventBus();
 		this._registerEvents();
 
+		// Создаем пустой прокси объект для чилдренов
+		// Пустой, потому что чилдрены должны быть созданы после рендера компонента
 		this.children = this._makeChildrenObjectProxy({});
-		this.props = this._makePropsProxy(props);
 
-		// Создаём элемент и собираем холдеры для чилдренов
+		// Делаем пропсы прокси
+		this.props = this._makePropsProxy(props) ;
+
+		// Вызываем инициализацию компонента
 		this.eventBus.emit(Component.EVENTS.init);
-		// Добавляем чилдрены в элемент
+
+		// Вырезаем чилдренов из пропсов и вставляем  чилдрены в элемент
 		Object.assign(this.children, this._getChildrenFromProps(props));
 	}
 
-	// Метод для отделения children от пропсов
+	// Метод для отделения children от пропсов (вырезаем из пропсов и возвращаем отдельно)
 	private _getChildrenFromProps(props: ComponentPropsData): ComponentChildrenData {
 		const children = (props.children !== undefined) ? props.children : {};
 		delete props.children;
 		return children;
 	}
 
-	// Регистрируем события для Event Bus
+	// Регистрируем базовые события для Event Bus
 	private _registerEvents(): void {
 		this.eventBus.on(Component.EVENTS.init, this._init.bind(this));
 		this.eventBus.on(Component.EVENTS.registerBasementAction,
@@ -95,7 +109,6 @@ export default abstract class Component<PropsType> {
 
 	// Метод обновления пропсов элемента
 	protected _update(prop: string): void {
-		// console.log('Component _update');
 		this.update(prop);
 	}
 
@@ -174,7 +187,7 @@ export default abstract class Component<PropsType> {
 				return result
 			}
 		};
-		return new Proxy(props, proxySetting) as ComponentPropsData;
+		return new Proxy(props as ComponentPropsData, proxySetting) as ComponentPropsData;
 	}
 
 	// Прокси для children элемента

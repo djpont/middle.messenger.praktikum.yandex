@@ -1,81 +1,83 @@
-import tpl_chatfeed from './tpl_chatfeed.hbs';
-import tpl_message from './tpl_message.hbs';
+import tpl from './tpl.hbs';
 import './style.scss';
-
 import Component, {ComponentPropsData} from "~src/components/components";
+import Message from "~src/components/message";
+import Chat, {chatData} from "~src/modules/chat";
 import {generateDom} from "~src/functions";
-import Chat from "~src/modules/chat";
-import User from "~src/modules/user";
-import {messageData} from "~src/modules/message";
+import Button from "~src/components/button";
 
+// Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
-type chatFeedData = {
-	tratata?: string
-} & ComponentPropsData;
+// Тип данных для компонента chatFeed (пока не отличается от типа базового компонента)
+type chatFeedData = ComponentPropsData;
 
+// Класс ленты сообщений
 export default class ChatFeed extends Component<chatFeedData> {
+
 	constructor(props: chatFeedData) {
+		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
+		// Делаем кнопки управляемыми
+		this._makeActiveButtons();
 	}
 
+	// Метод рендера DOM-дерева ленты сообщений по шаблону
 	protected override render(data: ComponentPropsData): HTMLElement {
-		return generateDom(tpl_chatfeed(data));
+		return generateDom(tpl(data));
 	}
 
+	// Метод превращения отрендеренных кнопок в управляемые экземпляры Button
+	private _makeActiveButtons():void {
+		const buttonSubmit = Button.makeButton(
+			this.subElement('div.newMessage button[type="submit"]')
+		);
+		console.log(buttonSubmit);
+		const buttonFileUpload = Button.makeButton(
+			this.subElement('div.newMessage button.attach')
+		);
+		console.log(buttonFileUpload);
+	}
+
+	// Метод обновления DOM-дерева после обновления пропса
 	protected override update(prop: string): void {
-		return;
-	}
-
-	public attachChat(chat: Chat): void {
-		console.log(this, chat);
-	}
-}
-
-
-export const message_old = (data: messageData): string => {
-	const {//id,
-		//chat,
-		user,
-		time,
-		text,
-		//status
-	} = data;
-	const nickname: string = user.data().nickname;
-	const className: string = (user === User.getMyUser()) ? 'out' : 'in';
-	return tpl_message({nickname, text, time, className});
-};
-
-export class ChatFeed_old extends Component {
-	private _chat: Chat | boolean;
-
-	constructor() {
-		const document: HTMLElement = generateDom(tpl_chatfeed());
-		super(document, `.feed`);
-		this._chat = false;
-	}
-
-	attachChat = (chat: Chat): void => {
-		console.log('attachChat', chat);
-		// this.document().classList.remove('hidden');
-		// this._chat = chat;
-		// const data = chat.data();
-		// this.clearMessages();
-		// this.subElement('.header .avatar').style.backgroundImage = `url('${data.avatar}')`;
-		// this.subElement('.header .chatName').innerText = data.title;
-		// (this.subElement('.newMessage .text') as HTMLInputElement).value = '';
-		// this.fillMessages();
-	}
-
-	clearMessages() {
-		this.element().innerHTML = '';
-	}
-
-	fillMessages() {
-		if (this._chat instanceof Chat) {
-			this._chat.data().messages.forEach(msg => {
-				const messageHtml = message(msg.data());
-				this.element().append(generateDom(messageHtml));
-			})
+		switch (prop) {
+			case 'title':
+				this.subElement('div.header div.chatName').textContent = this.props[prop];
+				break;
+			case 'avatar':
+				this.subElement('div.header div.avatar').style.backgroundImage =
+					`url('${this.props[prop]}')`;
+				break;
 		}
+	}
+
+	// Метод рендера ленты сообщений конкретного чата
+	// (вызывается при клике на превью чата в списке чатов)
+	public attachChat(chat: Chat): void {
+		this._setChatProps(chat.data());
+		this._clearMessages();
+		chat.data().messages.forEach(message => {
+			this.children.messages.push(new Message(message.data()));
+		});
+		this.updateChildren(true);
+	}
+
+	// Метод очистки ленты сообщений
+	private _clearMessages() {
+		// Очищаем чилдренов
+		this.children.messages = [];
+		this.updateChildren();
+		// Убираем набранный текст из поля нового сообщения
+		(this.subElement('div.newMessage input.text') as HTMLInputElement).value='';
+	}
+
+	// Делаем пропсы равными данным из переданного чата (заголовок и аватар)
+	private _setChatProps(data: chatData): void {
+		const {
+			title,
+			avatar
+		} = data;
+		this.props.title = title;
+		this.props.avatar = avatar;
 	}
 }

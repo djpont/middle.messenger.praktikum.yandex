@@ -5,22 +5,30 @@ import Window from "~src/components/window";
 import Content from "~src/components/content";
 import Button from "~src/components/button";
 
-// Тип для создания экземпляра класса
+// Компонент Alert отвечает за рендер окон с сообщениями.
+// Отличия от других компонентов: Данный компонент не является наследником базового Компонента.
+// По сути он является связущим звеном между view и window,
+// вынесен в отдельный компонент, чтобы не создавать взаимосвязь между view и window
+
+// Тип данных для алерта
 type alertData = {
 	rootElement: View
 }
 
-// Тип для указания типа сообщения
+// Тип для указания типа алерта
 enum alertType {
 	message,	// Сообщение с возможностью закрыть
 	error,		// Ошибка с возможностью закрыть
 	fatal,		// Ошибка без возможности закрыть
 }
 
+// Класс алерта
 export default class Alert {
 
+	// Детаем типы алертов публичными
 	public static readonly TYPE = alertType;
 
+	// Приватно сохраняем вью, в котором будем рендерить окна с сообщениями
 	private readonly _view: View;
 
 	constructor(data: alertData) {
@@ -43,6 +51,7 @@ export default class Alert {
 		this._showAlertWindow(alertType.fatal, 'Критическая ошибка', text);
 	}
 
+	// Метод рендера окна с сообщением или ошибкой
 	private _showAlertWindow(type:alertType, title:string, text:string[]){
 		let className = 'alert' // Стандартный класс
 		const controls = {close: true}	// Стандартный список кнопок контроля окна в шапке
@@ -89,7 +98,8 @@ export default class Alert {
 		window.updateChildren(true);
 	}
 
-	// Метод отобожения переданного окна на слой alert
+	// Метод отобожения переданного окна на слой alert.
+	// На случай, если окно не является сообщением, например file upload
 	public alertWindow(window: Window){
 		this._view.children.alert.push(window);
 		this._view.updateChildren();

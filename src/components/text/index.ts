@@ -2,12 +2,16 @@ import tpl from "./tpl.hbs";
 import Component, {ComponentPropsData} from "~src/components/components";
 import {generateDom} from "~src/functions";
 
+// Компонент Text отвечает за элемент, содержащий текстовую строку
+
+// Тип данных для текста
 type textData = {
 	name?: string,
 	className?: string,
 	text?: string
 } & ComponentPropsData;
 
+// Метод рендера HTML-строки текста по шаблону
 const text = (data: textData): string => {
 	const {
 		name = '',
@@ -17,16 +21,20 @@ const text = (data: textData): string => {
 	return tpl({name, className, text});
 };
 
+// Класс текста
 export default class Text extends Component<textData>{
 
 	constructor(props: textData) {
+		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 	}
 
+	// Метод рендера DOM-дерева кнопки по шаблону
 	protected override render(data: textData):HTMLElement{
 		return generateDom(text(data));
 	}
 
+	// Метод обновления DOM-дерева после обновления пропса
 	protected override update(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop];

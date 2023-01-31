@@ -12,6 +12,10 @@ import Chatlist from "~src/components/chatlist";
 import User from "~src/modules/user";
 import Routing from "~src/routing";
 
+// Страничка Мессенджера.
+// Возвращает большое окно, состоящее из двух больших компонентов: Списка чатов (Chatlist)
+// и Ленты сообщений (ChatFeed).
+
 export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками

@@ -1,190 +1,227 @@
-import tpl_profile from './tpl_profile.hbs';
+import tpl from './tpl_profile.hbs';
 import './style.scss';
+import View from "~src/components/view";
 import Window from "~src/components/window";
-import {button} from "~src/components/button";
-import {inputWithLabel} from "~src/components/input";
-import {generateDom} from "~src/functions";
+import Content from "~src/components/content";
+import Alert from "~src/components/window/alert";
+import Button from "~src/components/button";
+import Input from "~src/components/input";
+import Text from "~src/components/text";
 import User from "~src/modules/user";
+import {ComponentChildrenData} from "~src/components/components";
+import Routing from "~src/routing";
+import fileUpload from "~src/pages/file-upload";
 
-export default (rootElement: HTMLElement): void => {
+export default (rootElement: View): Window => {
 
-	// Генерируем окно
-	const page = new Window({
-		id: 'profile',
+	// Ссылка на аватарку текущего пользователя
+	const myAvatar: string = User.getMyUser().data().avatar;
+
+	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
+	const alert = new Alert({rootElement});
+
+	// Создаём содержимое окна по шаблону
+	const content = new Content({template: tpl, avatar: myAvatar});
+
+	// Создаём окно с созданным выше содержимым
+	const window = new Window({
 		className: 'profile',
 		title: 'Профиль пользователя',
 		controls: {
 			close: true
-		}
+		},
+		children: {
+			content: [content]  // Передаем содержимое в чилдрены
+		},
+		events: [
+			// Добавляем действие на закрытие окна
+			() => Routing('/messenger', rootElement)
+		]
 	});
-	rootElement.append(page.document());
+	// Вызываем обновление чилдренов окна
+	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
+	window.updateChildren(true);
 
-	const myAvatar: string = User.getMyUser().data().avatar;
-
-	// Метод генерации контента при просмотре профиля
-	const openWatch = (): void => {
-		const document: HTMLElement = generateDom(tpl_profile({
-			avatar: myAvatar,
-			infoLines: [
-				`Почта: ${'email@email.com'}`,
-				`Логин: ${'djpont'}`,
-				`Имя: ${'Александр'}`,
-				`Фамилия: ${'Вотяков'}`,
-				`Имя в чате: ${'djpont'}`,
-				`Телефон: ${'+79999999999'}`
-			],
-			buttons: [
-				button({
-					id: 'edit',
-					name: 'edit',
-					type: 'button',
-					value: 'Изменить данные'
-				}),
-				button({
-					id: 'changePassword',
-					name: 'changePassword',
-					type: 'button',
-					value: 'Изменить пароль'
-				}),
-				button({
-					id: 'close',
-					name: 'close',
-					type: 'button',
-					value: 'Закрыть'
-				})
+	// Содержимое для режима просмотра профиля
+	const contentWatch = (): ComponentChildrenData => {
+		// Заполняем блок инпутов текстом
+		const inputs = [
+			new Text({text: `Почта: ${'email@email.com'}`}),
+			new Text({text: `Логин: ${'djpont'}`}),
+			new Text({text: `Имя: ${'Александр'}`}),
+			new Text({text: `Фамилия: ${'Вотяков'}`}),
+			new Text({text: `Имя в чате: ${'djpont'}`}),
+			new Text({text: `Телефон: ${'+79999999999'}`})
+		];
+		// Создаём экземпляры кнопок и добавляем им действия
+		const buttonEdit = new Button({
+			name: 'edit',
+			type: 'button',
+			text: 'Изменить данные',
+			events: [
+				() => contentOpen(contentEdit())
 			]
-		}));
-		page.content().clearHTML();
-		page.content().append(document);
-		const buttonEdit: HTMLElement = page.subElement('button#edit');
-		buttonEdit.addEventListener('click', openEdit);
-		const buttonChangePassword: HTMLElement = page.subElement('button#changePassword');
-		buttonChangePassword.addEventListener('click', openChangePassword);
+		});
+		const buttonChangePassword = new Button({
+			name: 'changePassword',
+			type: 'button',
+			text: 'Изменить пароль',
+			events: [
+				() => contentOpen(contentChangePassword())
+			]
+		});
+		const buttonClose = new Button({
+			name: 'close',
+			type: 'button',
+			text: 'Закрыть',
+			events: [
+				window.close
+			]
+		});
+		// Вставляем кноки в контент
+		const buttons = [buttonEdit, buttonChangePassword, buttonClose];
+		return {inputs, buttons};
 	}
 
-	// Метод генерации контента при редактировании профиля
-	const openEdit = (): void => {
-		const document: HTMLElement = generateDom(tpl_profile({
-			avatar: myAvatar,
-			infoLines: [
-				inputWithLabel({
-					id: 'email',
-					type: 'email',
-					name: 'email',
-					label: 'Почта:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'login',
-					type: 'text',
-					name: 'login',
-					label: 'Логин:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'first_name',
-					type: 'text',
-					name: 'first_name',
-					label: 'Имя:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'second_name',
-					type: 'text',
-					name: 'second_name',
-					label: 'Фамилия:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'display_name',
-					type: 'text',
-					name: 'display_name',
-					label: 'Имя в чате:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'phone',
-					type: 'text',
-					name: 'phone',
-					label: 'Телефон:',
-					isStacked: true
-				}),
-			],
-			buttonChangeAvatar: button({
-				id: 'avatar',
-				name: 'avatar',
-				value: 'Изменить аватар'
-			}),
-			buttons: [
-				button({
-					id: 'save',
-					type: 'submit',
-					name: 'save',
-					value: 'Сохранить'
-				}),
-				button({
-					id: 'back',
-					type: 'button',
-					name: 'back',
-					value: 'Назад'
-				})
+	// Содержимое для режима редактирования профиля
+	const contentEdit = (): ComponentChildrenData => {
+		// Создаём экземпляры инпутов
+		const inputEmail = new Input({
+			type: 'email',
+			name: 'email',
+			label: 'Почта:',
+			isStacked: true
+		});
+		const inputLogin = new Input({
+			type: 'text',
+			name: 'login',
+			label: 'Логин:',
+			isStacked: true
+		});
+		const inputFirstName = new Input({
+			type: 'text',
+			name: 'first_name',
+			label: 'Имя:',
+			isStacked: true
+		});
+		const inputSecondName = new Input({
+			type: 'text',
+			name: 'second_name',
+			label: 'Фамилия:',
+			isStacked: true
+		});
+		const inputDisplayName = new Input({
+			type: 'text',
+			name: 'display_name',
+			label: 'Имя в чате:',
+			isStacked: true
+		});
+		const inputPhone = new Input({
+			type: 'text',
+			name: 'phone',
+			label: 'Телефон:',
+			isStacked: true
+		});
+		const inputs = [
+			inputEmail,
+			inputLogin,
+			inputFirstName,
+			inputSecondName,
+			inputDisplayName,
+			inputPhone
+		];
+
+		// Создаём экземпляры кнопок и добавляем им действия
+		const buttonSave = new Button({
+			name: 'save',
+			type: 'submit',
+			text: 'Сохранить',
+			events: [
+				() => console.log('Метод сохранения изменений в профиле')
 			]
-		}));
-		page.content().clearHTML();
-		page.content().append(document);
-		const buttonBack: HTMLElement = page.subElement('button#back');
-		buttonBack.addEventListener('click', openWatch);
+		});
+		const buttonBack = new Button({
+			name: 'back',
+			type: 'button',
+			text: 'Назад',
+			events: [
+				() => contentOpen(contentWatch())
+			]
+		});
+		const buttons = [buttonSave, buttonBack];
+
+		// Создаём кнопку изменения аватара
+		const buttonAvatar = new Button({
+			name: 'avatar',
+			type: 'button',
+			text: 'Изменить аватар',
+			events: [
+				() => alert.alertWindow(fileUpload())
+			]
+		});
+		const avatar = [buttonAvatar];
+
+		return {inputs, buttons, avatar};
 	}
 
+	// Содержимое для режима изменения пароля
+	const contentChangePassword = (): ComponentChildrenData => {
+		console.log('contentChangePassword');
+		// Создаём экземпляры инпутов
+		const inputOldPassword = new Input({
+			type: 'password',
+			name: 'oldPassword',
+			label: 'Старый пароль:',
+			isStacked: true
+		});
+		const inputNewPassword1 = new Input({
+			type: 'password',
+			name: 'newPassword',
+			label: 'Новый пароль:',
+			isStacked: true
+		});
+		const inputNewPassword2 = new Input({
+			type: 'password',
+			name: 'newPassword2',
+			label: 'Новый пароль ещё раз:',
+			isStacked: true
+		});
+		const inputs = [
+			inputOldPassword,
+			inputNewPassword1,
+			inputNewPassword2
+		];
 
-	// Метод генерации контента при изменении пароля
-	const openChangePassword = (): void => {
-		const document: HTMLElement = generateDom(tpl_profile({
-			avatar: myAvatar,
-			infoLines: [
-				inputWithLabel({
-					id: 'oldPassword',
-					type: 'password',
-					name: 'oldPassword',
-					label: 'Старый пароль:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'newPassword',
-					type: 'password',
-					name: 'newPassword',
-					label: 'Новый пароль:',
-					isStacked: true
-				}),
-				inputWithLabel({
-					id: 'newPassword2',
-					type: 'password',
-					name: 'newPassword2',
-					label: 'Новый пароль ещё раз:',
-					isStacked: true
-				}),
-			],
-			buttons: [
-				button({
-					id: 'save',
-					name: 'save',
-					type: 'submit',
-					value: 'Сохранить'
-				}),
-				button({
-					id: 'back',
-					name: 'back',
-					type: 'button',
-					value: 'Назад'
-				})
+		// Создаём экземпляры кнопок и добавляем им действия
+		const buttonSave = new Button({
+			name: 'save',
+			type: 'submit',
+			text: 'Сохранить',
+			events: [
+				() => console.log('Метод сохранения пароля')
 			]
-		}));
-		page.content().clearHTML();
-		page.content().append(document);
-		const buttonBack: HTMLElement = page.subElement('button#back');
-		buttonBack.addEventListener('click', openWatch);
+		});
+		const buttonBack = new Button({
+			name: 'back',
+			type: 'button',
+			text: 'Назад',
+			events: [
+				() => contentOpen(contentWatch())
+			]
+		});
+		const buttons = [buttonSave, buttonBack];
+
+		return {inputs, buttons};
 	}
 
-	openWatch();
+	// Метод обновления содержимого контента
+	const contentOpen = (children: ComponentChildrenData):void => {
+		content.children=children;
+		content.updateChildren(true);
+	}
 
+	// Изначально наполняем контент окна содержимым для просмотра профиля
+	contentOpen(contentWatch());
+
+	return window;
 }

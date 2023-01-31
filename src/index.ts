@@ -3,6 +3,7 @@ import Routing from "./routing";
 import Chat from "~src/modules/chat";
 import User from "~src/modules/user";
 import {messageStatus} from "~src/modules/message";
+import View from "~src/components/view";
 
 import avatar100 from '~static/images/user100.webp';
 import avatar101 from '~static/images/user101.webp';
@@ -10,6 +11,8 @@ import avatar102 from '~static/images/user102.webp';
 import avatar103 from '~static/images/user103.webp';
 import avatar104 from '~static/images/user104.webp';
 // import {userData} from "~src/modules/user";
+
+
 
 // Текущий пользователь
 const myUser = new User({
@@ -101,9 +104,11 @@ User.setMyUser(myUser);
 	});
 });
 
-// Находим элемент, куда будем рисовать контент и запускаем роутинг
-const root = document.getElementById('root');
-if (root === null) {
-	throw new Error(`Корневой элемент не найден`)
-}
-Routing(document.location.pathname, root);
+// Создаём конревой элемент и запускаем роутинг
+const view = new View({roomElement: document.body});
+Routing(document.location.pathname, view);
+
+// При нажатии на кноки назад или вперед вызываем роутинг
+window.addEventListener('popstate', () => {
+	Routing(document.location.pathname, view);
+});

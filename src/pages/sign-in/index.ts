@@ -1,27 +1,36 @@
 import tpl from './tpl.hbs';
-import Window from "~src/components/window";
-import {Button} from "~src/components/button";
-import {Input} from "~src/components/input";
 import "./style.scss";
-import Content from "~src/modules/content";
-import {Component} from "~src/components/components";
+import View from "~src/components/view";
+import Window from "~src/components/window";
+import Content from "~src/components/content";
+import Alert from "~src/components/window/alert";
+import Input from "~src/components/input";
+import Button from "~src/components/button";
+import Routing from "~src/routing";
 
-export default (rootElement: HTMLElement): void => {
+export default (rootElement: View): Window => {
 
-	// Генерируем окно
-	const window: Window = new Window({
+	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
+	const alert = new Alert({rootElement});
+
+	// Создаём содержимое окна по шаблону
+	const content = new Content({template: tpl});
+
+	// Создаём окно с созданным выше содержимым
+	const window = new Window({
 		className: 'signIn',
-		title: 'WinChat 98 - Электронные диалоги'
+		title: 'WinChat 98 - Электронные диалоги',
+		controls: {
+			close: false
+		},
+		children: {
+			content: [content]  // Передаем содержимое в чилдрены
+		}
 	});
-	rootElement.append(window.document());
+	rootElement.children.main.push(window); // Добавляем окно в корневой элемент
+	rootElement.updateChildren();	// Вызываем обновление чилдов корневого элемента
 
-	// Генерируем дерево для контента по шаблону
-	const content:Content = new Content({
-		template:tpl
-	});
-	window.windowBody().append(content.document());
-
-	// Создаём экземпляры компонентов
+	// Создаём экземпляры инпутов
 	const inputLogin = new Input({
 		name: 'login',
 		type: 'text',
@@ -34,39 +43,42 @@ export default (rootElement: HTMLElement): void => {
 		label: 'Пароль:',
 		isStacked: false
 	});
+	// Вставляем инпуты в контент
+	content.children.inputs = [inputLogin, inputPassword];
+
+	// Создаём экземпляры кнопок
 	const buttonSubmit = new Button({
 		name: 'submit',
 		type: 'submit',
-		text: 'Вход'
+		text: 'Вход',
+		events: [
+			() => {
+				// Показываем сообщение об ошибке при нажатии на кнопку
+				alert.error([
+						'Неверный логин или пароль.',
+						'Попробуйте снова.'
+					]);
+			}
+		]
 	});
 	const buttonRegister = new Button({
 		name: 'registration',
 		type: 'button',
-		text: 'Регистрация'
-	});
-
-	// Добавляем экземпляры компонентов к странице
-	content.addChildren({
-		'inputs': [
-			inputLogin,
-			inputPassword
-		],
-		'buttons': [
-			buttonSubmit,
-			buttonRegister
+		text: 'Регистрация',
+		events: [
+			() => {
+				// Действие при нажатии на кнопку
+				Routing('/sign-up', rootElement);
+			}
 		]
 	});
+	// Вставляем кноки в контент
+	content.children.buttons = [buttonSubmit, buttonRegister];
 
-	// Действие при клике на Вход
-	const openRegisterPage = (): void => {
-		document.location='/sign-up';
-	}
-	buttonRegister.eventBus.on(Component.EVENTS.buttonClick, openRegisterPage);
+	// Вызываем обновление чилдренов окна
+	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
+	window.updateChildren(true);
 
-	// Действие при клике на Регистрация
-	const openMessengerPage = (): void => {
-		document.location='/messenger';
-	}
-	buttonSubmit.eventBus.on(Component.EVENTS.buttonClick, openMessengerPage);
 
+	return window;
 }

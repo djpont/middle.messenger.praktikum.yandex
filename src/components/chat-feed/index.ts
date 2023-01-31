@@ -2,13 +2,37 @@ import tpl_chatfeed from './tpl_chatfeed.hbs';
 import tpl_message from './tpl_message.hbs';
 import './style.scss';
 
-import {Component} from "~src/components/components";
+import Component, {ComponentPropsData} from "~src/components/components";
 import {generateDom} from "~src/functions";
 import Chat from "~src/modules/chat";
 import User from "~src/modules/user";
 import {messageData} from "~src/modules/message";
 
-export const message = (data: messageData): string => {
+
+type chatFeedData = {
+	tratata?: string
+} & ComponentPropsData;
+
+export default class ChatFeed extends Component<chatFeedData> {
+	constructor(props: chatFeedData) {
+		super(props);
+	}
+
+	protected override render(data: ComponentPropsData): HTMLElement {
+		return generateDom(tpl_chatfeed(data));
+	}
+
+	protected override update(prop: string): void {
+		return;
+	}
+
+	public attachChat(chat: Chat): void {
+		console.log(this, chat);
+	}
+}
+
+
+export const message_old = (data: messageData): string => {
 	const {//id,
 		//chat,
 		user,
@@ -21,7 +45,7 @@ export const message = (data: messageData): string => {
 	return tpl_message({nickname, text, time, className});
 };
 
-export default class ChatFeed extends Component {
+export class ChatFeed_old extends Component {
 	private _chat: Chat | boolean;
 
 	constructor() {
@@ -31,14 +55,15 @@ export default class ChatFeed extends Component {
 	}
 
 	attachChat = (chat: Chat): void => {
-		this.document().classList.remove('hidden');
-		this._chat = chat;
-		const data = chat.data();
-		this.clearMessages();
-		this.subElement('.header .avatar').style.backgroundImage = `url('${data.avatar}')`;
-		this.subElement('.header .chatName').innerText = data.title;
-		(this.subElement('.newMessage .text') as HTMLInputElement).value = '';
-		this.fillMessages();
+		console.log('attachChat', chat);
+		// this.document().classList.remove('hidden');
+		// this._chat = chat;
+		// const data = chat.data();
+		// this.clearMessages();
+		// this.subElement('.header .avatar').style.backgroundImage = `url('${data.avatar}')`;
+		// this.subElement('.header .chatName').innerText = data.title;
+		// (this.subElement('.newMessage .text') as HTMLInputElement).value = '';
+		// this.fillMessages();
 	}
 
 	clearMessages() {

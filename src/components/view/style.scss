@@ -1,0 +1,25 @@
+main {
+	position: relative;
+	width: 100%;
+	height: calc(100% - 60px);
+
+	> div {
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+
+		&.alertWindows {
+			position: fixed;
+			background: #00000059;
+			display: flex;
+			flex-flow: column wrap;
+			align-content: center;
+			justify-content: center;
+
+			&:empty {
+				display: none;
+			}
+		}
+	}
+}

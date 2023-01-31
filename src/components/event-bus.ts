@@ -35,7 +35,9 @@ export class EventBus {
 			this.error(event);
 		}else{
 			this._listeners[event].forEach(
-				listener => listener(...args)
+				listener => {
+					listener(...args);
+				}
 			);
 		}
 	}

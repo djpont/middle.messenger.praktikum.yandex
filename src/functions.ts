@@ -1,8 +1,8 @@
-import {Component} from "~src/components/components";
+import Component from "~src/components/components";
 
 export type Fn<T> = (...args: unknown[]) => T;
 
-export const joinDom = (components: Component[]) => {
+export const joinDom = (components: Component<unknown>[]) => {
 	const dom = document.createDocumentFragment();
 	for (const el of components) {
 		dom.append(el.document());

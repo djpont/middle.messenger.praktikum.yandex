@@ -1,87 +1,90 @@
 import tpl from './tpl.hbs';
-import {Component} from "~src/components/components";
+import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
 import {generateDom} from "~src/functions";
 
 type windowData = {
 	className?: string,
 	title?: string,
 	controls?: Record<string, boolean>
+} & ComponentPropsData;
+
+const window = (data: windowData): string => {
+	const {
+		className = '',
+		title = '',
+		controls = {}
+	} = data;
+	return tpl({className, title, controls});
+};
+
+// Дополнительные действия с компонентом
+class WindowEVENTS extends EVENTS {
+	static close = "window:close"; // Закрытие окна
 }
 
-export default class Window extends Component {
+export default class Window extends Component<windowData> {
+
+	public static override readonly EVENTS = WindowEVENTS;
+
 	constructor(data: windowData) {
-		const {
-			className = '',
-			title = '',
-			controls = {}
-		} = data;
-		const document: HTMLElement = generateDom(tpl({
-			className,
-			title,
-			controls
-		}));
-		super(document/*, 'div.window'*/);
+		super(data);
+		// Регистрация кнопок в шапке окна
 		this._registerWindowControls();
+		// Регистраия базового действия окна - закрытие
+		this.eventBus.emit(Window.EVENTS.registerBasementAction, false, Window.EVENTS.close);
+		// Добавляем к окну действие _close при закрытии окна
+		this.eventBus.on(Window.EVENTS.close, this._close);
 	}
 
+	protected override render(data: windowData): HTMLElement {
+		return generateDom(window(data));
+	}
+
+	protected override update(prop: string): void {
+		let element: HTMLElement | null = null;
+		const value = this.props[prop];
+		switch (prop) {
+			case 'id':
+				element = this.document();
+				break;
+			case 'title':
+				element = this.subElement('.title-bar .title-bar-text');
+				break;
+			case 'className':
+				this.target().className = value;
+				break;
+		}
+		if (element) {
+			element.textContent = value;
+		}
+	}
+
+	// Метод регистрации действий на нажатия кнопок в шапке окна (Закрыть окно и т.д.)
 	private _registerWindowControls = ():void => {
-		[['Close', Component.EVENTS.windowClose]].forEach(([label, action]) => {
+		[[
+			'Close', Window.EVENTS.close
+		]].forEach(([label, action]) => {
 			const button = this.document().querySelector(
 				`:scope > .title-bar .title-bar-controls [aria-label="${label}"]`
 			);
 			if(button){
-				const callback = ():void => {
+				button.addEventListener('click', () => {
 					this.eventBus.emit(action);
-				};
-				button.addEventListener('click', callback);
+				});
 			}
 		});
-		this.eventBus.on(Component.EVENTS.windowClose, this._windowClose, true);
 	}
 
-	windowBody = ():HTMLElement => {
-		return this.subElement('.window-body');
+	// target = (): HTMLElement => {
+	// 	return this.subElement('.window-body');
+	// }
+
+	public readonly close = ():void => {
+		this.eventBus.emit(Window.EVENTS.close);
 	}
 
-	private _windowClose = ():void => {
-		console.log('windowClose');
+	private readonly _close = ():void => {
+		this.destroy();
 	}
 
-	/*content = () => {
-		const appendToParent = (
-			element: HTMLElement | Component | string,
-			parent: HTMLElement
-		): void => {
-			if (element instanceof HTMLElement) {
-				parent.append(element);
-				return;
-			} else if (element instanceof Component) {
-				parent.append(element.document());
-				return;
-			} else if (typeof element === 'string') {
-				parent.innerHTML += element;
-				return;
-			}
-			// console.error('getDocument не понял что делать с элементом', element);
-		}
-
-		const documentElement: HTMLElement = this.subElement(':scope > div.window-body');
-
-		const append = (el: HTMLElement | HTMLElement[]): void => {
-			if (Array.isArray(el)) {
-				for (const oneEl of el) {
-					appendToParent(oneEl, documentElement);
-				}
-			} else {
-				appendToParent(el, documentElement);
-			}
-		}
-
-		return {
-			// insertHTML: (html_code) => documentElement.innerHTML+=html_code,
-			clearHTML: () => documentElement.innerHTML = '',
-			append,
-			element: () => documentElement,
-		}
-	};*/
 }

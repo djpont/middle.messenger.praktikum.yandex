@@ -1,0 +1,45 @@
+div.window.alert {
+	width: 300px;
+
+	/* stylelint-disable selector-class-pattern */
+	div.window-body {
+		padding: 5px 5px 10px;
+		/* stylelint-enable selector-class-pattern */
+	}
+
+	div.errorContainer {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+		align-content: flex-start;
+
+		div.logo {
+			margin: 6px 0 0;
+			background: url('/static/images/error.png') no-repeat;
+			background-size: 100% 100%;
+			min-width: 64px;
+			height: 64px;
+			display: none;
+		}
+	}
+
+	div.buttonsContainer {
+		margin-top: 10px;
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: center;
+		align-items: flex-start;
+		align-content: flex-start;
+	}
+
+	&.error div.errorContainer div.logo {
+		display: block;
+	}
+
+	/* stylelint-disable selector-class-pattern */
+	&.fatal div.title-bar div.title-bar-controls {
+		/* stylelint-enable selector-class-pattern */
+		display: none;
+	}
+}

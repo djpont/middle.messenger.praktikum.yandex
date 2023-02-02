@@ -1,40 +1,48 @@
-div.window.sign-in {
+div.window.signIn {
 	width: 440px;
 	margin: auto;
 
-	& div.window-body{
-		padding:5px 5px 25px 5px;
+	/* stylelint-disable selector-class-pattern */
+	div.window-body {
+		padding: 5px 5px 25px;
+		/* stylelint-enable selector-class-pattern */
 
-		& div.sign-in-container {
+		div.signInContainer {
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: space-evenly;
 			align-items: flex-start;
 			align-content: flex-start;
 
-			& div.logo{
-				margin:6px 0 0 0;
+			div.logo {
+				margin: 6px 0 0;
 				background: url('/static/images/key.png') no-repeat;
 				background-size: 100% 100%;
-				width:64px;
-				height:64px;
+				width: 64px;
+				height: 64px;
 			}
 
-			& div.inputs{
-				width:200px;
+			div.inputs {
+				width: 200px;
+				display: flex;
+				flex-flow: column nowrap;
+				align-items: stretch;
 
-				& label{
+				label {
 					width: 50px;
 				}
-				& input{
-					flex-grow:2;
+
+				input {
+					flex-grow: 2;
 				}
 			}
 
-			& div.buttons{
+			div.buttons {
+				padding: 11px 0 0 10px;
+				display: flex;
+				flex-flow: column nowrap;
 
-				padding:11px 0 0 10px;
-				& button{
+				button {
 					width: 100px;
 					margin-bottom: 7px;
 				}

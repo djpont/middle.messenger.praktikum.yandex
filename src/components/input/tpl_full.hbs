@@ -1,11 +1,6 @@
 <div class="field-row{{#if isStacked}}-stacked{{/if}}">
 	{{#if label}}
-	<label for="{{id}}">{{label}}</label>
+		<label>{{label}}</label>
 	{{/if}}
-	<input
-		type="{{type}}"
-		id="{{id}}"
-		value="{{value}}"
-		{{#if name}} name="{{name}}" {{/if}}
-	>
+	{{>input}}
 </div>

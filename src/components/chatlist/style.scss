@@ -1,58 +1,55 @@
-@import "/static/index";
+@import '/static/index';
 
 button.chatPreview {
 	display: block;
 	text-align: left;
 	position: relative;
 	width: 100%;
-	&.active{
-		@include has3dBorder;
 
+	&.active {
+		@include has3dBorder;
 	}
-	&:not(:last-child){
+
+	&:not(:last-child) {
 		margin-bottom: 3px;
 	}
-	
-	&.hasUnread{
+
+	&.hasUnread {
 		font-weight: bold;
 	}
-	
-	& div.container{
+
+	div.container {
 		margin: 6px -5px;
 		display: flex;
 		flex-flow: row nowrap;
 		justify-content: start;
 		align-items: flex-start;
 		align-content: flex-start;
-		
-		& div.avatar{
+
+		div.avatar {
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 			width: 32px;
 			height: 32px;
 			margin-right: 7px;
 		}
-		
-		& div.text{
+
+		div.text {
 			width: calc(100% - 32px);
 			text-overflow: ellipsis;
 			overflow: hidden;
 			white-space: nowrap;
-			& div.name{
-				& span.unread_count{
+
+			div.name {
+				span.unreadCount {
 					color: var(--chatUnreadCounter);
 				}
 			}
-			& div.lastMessage{
+
+			div.lastMessage {
 				width: 100%;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				& span.time{
-				
-				}
-				& span.text{
-				
-				}
 			}
 		}
 	}

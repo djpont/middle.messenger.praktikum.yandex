@@ -3,12 +3,13 @@ import './style.scss';
 import Component, {ComponentPropsData} from "~src/components/components";
 import Message from "~src/components/message";
 import Chat, {chatData} from "~src/modules/chat";
-import {generateDom} from "~src/functions";
+import {fetchDataFromInputs, generateDom} from "~src/modules/functions";
 import Button from "~src/components/button";
 import Input from "~src/components/input";
 import fileUpload from "~src/pages/file-upload";
 import Alert from "~src/components/window/alert";
-import Validater from "~src/modules/validater";
+import Validator from "~src/modules/validator";
+import Fetch from "~src/modules/fetch";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
@@ -41,9 +42,16 @@ export default class ChatFeed extends Component<chatFeedData> {
 			this.subElement('div.newMessage button[type="submit"]'),
 			[
 				() => {
-					const valide = Validater.validateInputWithAlert(inputMessage);
+					// Сначала проверяем валидацию инпута
+					const valide = Validator.validateInputWithAlert(inputMessage);
+					// Если успешно, то выполянем запрос
 					if(valide){
-						console.log('Метод отправки сообщения');
+						const data = fetchDataFromInputs(inputMessage);
+						console.log(data);
+						Fetch.post({
+							path: '/message',
+							data
+						});
 					}
 				}
 			]

@@ -1,7 +1,7 @@
 import tpl from "./tpl.hbs";
 import './style.scss';
 import Component from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
 import {messageData} from "~src/modules/message";
 import User from "~src/modules/user";
 

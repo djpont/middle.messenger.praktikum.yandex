@@ -5,7 +5,7 @@ import Component, {ComponentPropsData} from "~src/components/components";
 import ChatFeed from "~src/components/chat-feed";
 import {messageData} from "~src/modules/message";
 import Chat from "~src/modules/chat";
-import {Fn, generateDom} from "~src/functions";
+import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Chatlist отвечает за список чатов
 // Состоит из превью чата и списка превьюшек

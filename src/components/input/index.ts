@@ -1,8 +1,8 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
-import {generateDom} from "~src/functions";
-import {Fn} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
+import {Fn} from "~src/modules/functions";
 
 // Регистрируем инпут как Partial (используется в шаблоне tpl_full)
 import * as handlebars from "handlebars";
@@ -13,7 +13,7 @@ type inputData = {
 	type?: string,
 	name?: string,
 	value?: string,
-	className?: string
+	className?: string,
 } & ComponentPropsData;
 
 // Тип данных для инпута с label
@@ -57,8 +57,6 @@ export default class Input extends Component<inputDataWithLabel>{
 	// Делаем действия публичными
 	public static override readonly EVENTS = InputEVENTS;
 
-	public x =5;
-
 	constructor(data: inputData | inputDataWithLabel) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(data);
@@ -68,7 +66,6 @@ export default class Input extends Component<inputDataWithLabel>{
 
 	// Метод рендера DOM-дерева инпута по шаблону
 	protected override render(data: inputDataWithLabel):HTMLElement{
-		this.x=7;
 		let templateFunction:Fn<string>;
 		if('label' in data){
 			templateFunction=inputWithLabel;

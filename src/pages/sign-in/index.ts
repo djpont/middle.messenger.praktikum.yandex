@@ -7,7 +7,9 @@ import Alert from "~src/components/window/alert";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/modules/routing";
-import Validater from "~src/modules/validater";
+import Validator from "~src/modules/validator";
+import Fetch from "~src/modules/fetch";
+import {fetchDataFromInputs} from "~src/modules/functions";
 
 // Страничка входа. Возвращает окно.
 
@@ -36,7 +38,7 @@ export default (rootElement: View): Window => {
 
 	// Метод для валидации инпутов
 	function validate(input: Input) {
-		Validater.validateInputWithAlert(input);
+		Validator.validateInputWithAlert(input);
 	}
 
 	// Создаём экземпляры инпутов
@@ -69,12 +71,22 @@ export default (rootElement: View): Window => {
 		events: [
 			() => {
 				{
-					const formValid = Validater.validateInputWithAlert(
+					// Сначала проверяем валидацию инпутов
+					const formValid = Validator.validateInputWithAlert(
 						inputLogin,
 						inputPassword
 					);
+					// Если успешно, то выполянем запрос
 					if(formValid){
-						console.log('Метод авторизации пользователя');
+						const data = fetchDataFromInputs(
+							inputLogin,
+							inputPassword
+						)
+						console.log(data);
+						Fetch.get({
+							path: '/authorize',
+							data
+						});
 					}
 				}
 			}

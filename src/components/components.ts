@@ -1,5 +1,5 @@
 import {EventBus} from "~src/modules/event-bus";
-import {Fn} from "~src/functions";
+import {Fn} from "~src/modules/functions";
 
 // Базовый компонент (аналог Block из теории Практикума)
 
@@ -53,7 +53,7 @@ export default abstract class Component<PropsType> {
 		this.children = this._makeChildrenObjectProxy({});
 
 		// Делаем пропсы прокси
-		this.props = this._makePropsProxy(props) ;
+		this.props = this._makePropsProxy(props);
 
 		// Вызываем инициализацию компонента
 		this.eventBus.emit(Component.EVENTS.init);

@@ -77,7 +77,6 @@ export default (rootElement: View): Window => {
 	window.updateChildren(true);
 
 	const chatFeed = new ChatFeed({});
-
 	const chatlist = new Chatlist({chatFeed});
 	content.children.chatlist=[chatlist];
 	content.children.chatFeed=[chatFeed];

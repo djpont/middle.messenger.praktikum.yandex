@@ -1,5 +1,5 @@
 import Component, {ComponentPropsData} from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
 
 // Компонент Content отвечат за содержимое окна
 

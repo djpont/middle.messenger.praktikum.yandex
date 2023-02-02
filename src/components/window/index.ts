@@ -1,6 +1,6 @@
 import tpl from './tpl.hbs';
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
 
 // Компонент Window отвечает за окно - шапка с заголовком и кнопкой закрытия,
 // а так же рамка и пространство для содержимого (для экземпляра класса Content)

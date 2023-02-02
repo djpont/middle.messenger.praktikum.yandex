@@ -1,6 +1,6 @@
 import tpl from "./tpl.hbs";
 import Component, {ComponentPropsData} from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
 import "./style.scss";
 
 // Компонент View отвечает за корневой элемент, в котором отображаются окна

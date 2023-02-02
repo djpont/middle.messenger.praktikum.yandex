@@ -7,7 +7,9 @@ import Alert from "~src/components/window/alert";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/modules/routing";
-import Validater from "~src/modules/validater";
+import Validator from "~src/modules/validator";
+import Fetch from "~src/modules/fetch";
+import {fetchDataFromInputs} from "~src/modules/functions";
 
 // Страничка регистрации. Возвращает окно.
 
@@ -40,7 +42,7 @@ export default (rootElement: View): Window => {
 
 	// Метод для валидации инпутов
 	function validate(input: Input) {
-		Validater.validateInputWithAlert(input);
+		Validator.validateInputWithAlert(input);
 	}
 
 
@@ -123,7 +125,8 @@ export default (rootElement: View): Window => {
 		text: 'Регистрация',
 		events: [
 			() => {
-				const formValid = Validater.validateInputWithAlert(
+				// Сначала проверяем валидацию инпутов
+				const formValid = Validator.validateInputWithAlert(
 						inputFirstName,
 						inputSecondName,
 						inputEmail,
@@ -131,11 +134,25 @@ export default (rootElement: View): Window => {
 						inputLogin,
 						inputPassword1
 				);
+				// Если успешно, то проверяем, что пароли одинаковые
 				if(formValid){
-					if(!Validater.equalInput([inputPassword1, inputPassword2])){
+					if(!Validator.equalInput([inputPassword1, inputPassword2])){
 						alert.error(['Введённые пароли отличаются.']);
 					}else{
-						console.log('Метод регистрации пользователя');
+						// Если успешно, то выполянем запрос
+						const data = fetchDataFromInputs(
+							inputFirstName,
+							inputSecondName,
+							inputEmail,
+							inputPhone,
+							inputLogin,
+							inputPassword1
+						)
+						console.log(data);
+						Fetch.post({
+							path: '/registration',
+							data
+						});
 					}
 				}
 			}

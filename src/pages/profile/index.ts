@@ -11,7 +11,9 @@ import User from "~src/modules/user";
 import {ComponentChildrenData} from "~src/components/components";
 import Routing from "~src/modules/routing";
 import fileUpload from "~src/pages/file-upload";
-import Validater from "~src/modules/validater";
+import Validator from "~src/modules/validator";
+import Fetch from "~src/modules/fetch";
+import {fetchDataFromInputs} from "~src/modules/functions";
 
 // Страничка профиля. Возвращает окно.
 
@@ -47,7 +49,7 @@ export default (rootElement: View): Window => {
 
 	// Метод для валидации инпутов
 	function validate(input: Input) {
-		Validater.validateInputWithAlert(input);
+		Validator.validateInputWithAlert(input);
 	}
 
 	// Содержимое для режима просмотра профиля
@@ -161,15 +163,28 @@ export default (rootElement: View): Window => {
 			text: 'Сохранить',
 			events: [
 				() => {
-					const formValid = Validater.validateInputWithAlert(
+					// Сначала проверяем валидацию инпутов
+					const formValid = Validator.validateInputWithAlert(
 						inputFirstName,
 						inputSecondName,
 						inputEmail,
 						inputPhone,
 						inputLogin
 					);
+					// Если успешно, то выполянем запрос
 					if(formValid){
-						console.log('Метод сохранения данных профиля');
+						const data = fetchDataFromInputs(
+							inputFirstName,
+							inputSecondName,
+							inputEmail,
+							inputPhone,
+							inputLogin
+						);
+						console.log(data);
+						Fetch.post({
+							path: '/profile',
+							data
+						});
 					}
 				}
 			]
@@ -236,10 +251,21 @@ export default (rootElement: View): Window => {
 			text: 'Сохранить',
 			events: [
 				() => {
-					if(!Validater.equalInput([inputNewPassword1, inputNewPassword2])){
+					// Сначала проверяем, что введённые пароли одинаковые
+					if(!Validator.equalInput([inputNewPassword1, inputNewPassword2])){
 						alert.error(['Введённые пароли отличаются.']);
 					}else{
-						console.log('Метод сохранния нового пароля пользователя');
+						// Если совпадают, то выполянем запрос
+						const data = fetchDataFromInputs(
+							inputOldPassword,
+							inputNewPassword1,
+							inputNewPassword2
+						);
+						console.log(data);
+						Fetch.post({
+							path: '/profile',
+							data
+						});
 					}
 				}
 			]

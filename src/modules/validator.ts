@@ -38,7 +38,7 @@ const regexpsRules: Record<string, { regexp: RegExp, description: string }> = {
 		description: "Сообщение не должно быть пустым."
 	}
 }
-export default class Validater {
+export default class Validator {
 
 	// Метод валидации. Возвращает boolean успеха и описание
 	public static validate(rule: string, value: string): { valid: boolean, description: string } {
@@ -58,7 +58,7 @@ export default class Validater {
 		inputs.forEach(input => {
 			const rule = input.props.name;
 			const value = input.props.value;
-			const validated = Validater.validate(rule, value);
+			const validated = Validator.validate(rule, value);
 			if (!validated.valid) {
 				result = false;
 				let text = validated.description;

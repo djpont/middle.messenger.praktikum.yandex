@@ -1,6 +1,6 @@
 import tpl from "./tpl.hbs";
 import Component, {ComponentPropsData} from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {generateDom} from "~src/modules/functions";
 
 // Компонент Text отвечает за элемент, содержащий текстовую строку
 

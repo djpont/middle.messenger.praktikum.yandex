@@ -22,7 +22,7 @@ const text = (data: textData): string => {
 };
 
 // Класс текста
-export default class Text extends Component<textData>{
+export default class Text extends Component {
 
 	constructor(props: textData) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -37,7 +37,7 @@ export default class Text extends Component<textData>{
 	// Метод обновления DOM-дерева после обновления пропса
 	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
-		const value = this.props[prop];
+		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'text':
 				element = this.target();

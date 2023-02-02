@@ -52,7 +52,7 @@ class InputEVENTS extends EVENTS {
 }
 
 // Класс инпута
-export default class Input extends Component<inputDataWithLabel>{
+export default class Input extends Component {
 
 	// Делаем действия публичными
 	public static override readonly EVENTS = InputEVENTS;
@@ -69,7 +69,7 @@ export default class Input extends Component<inputDataWithLabel>{
 		let templateFunction:Fn<string>;
 		if('label' in data){
 			templateFunction=inputWithLabel;
-			this.props.targetSelector='input'; // Сохраняем указатель самого импута в пропсы
+			this.props['targetSelector']='input'; // Сохраняем указатель самого импута в пропсы
 		}else{
 			templateFunction=input;
 		}
@@ -102,7 +102,7 @@ export default class Input extends Component<inputDataWithLabel>{
 	// Возвращаем активный элемент инпута (на случай сложного DOM)
 	public override target = ():HTMLInputElement => {
 		if(this.props.targetSelector){
-			return this.subElement(this.props.targetSelector) as HTMLInputElement;
+			return this.subElement(this.props['targetSelector'] as string) as HTMLInputElement;
 		}else{
 			return this.document() as HTMLInputElement;
 		}

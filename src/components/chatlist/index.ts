@@ -58,7 +58,7 @@ const chatlist = (data: chatlistData, callback: Fn<void>):HTMLElement => {
 }
 
 // Класс чатлиста
-export default class Chatlist extends Component<chatlistData> {
+export default class Chatlist extends Component {
 
 	constructor(props: chatlistData) {
 		// Сначала создаём базовый компонент  и рендерим его

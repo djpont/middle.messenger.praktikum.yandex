@@ -22,6 +22,7 @@
 		"declaration": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
+		"suppressImplicitAnyIndexErrors": true,
 		"lib": [
 			"dom",
 			"ES2018"

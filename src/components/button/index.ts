@@ -29,7 +29,7 @@ class ButtonEVENTS extends EVENTS {
 }
 
 // Класс кнопки
-export default class Button extends Component<buttonData>{
+export default class Button extends Component{
 
 	// Делаем действия публичными
 	public static override readonly EVENTS = ButtonEVENTS;
@@ -49,7 +49,7 @@ export default class Button extends Component<buttonData>{
 	// Метод обновления DOM-дерева после обновления пропса
 	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
-		const value = this.props[prop];
+		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'id':
 				this.target().id=value;

@@ -34,7 +34,7 @@ export class EventBus {
 	// Метод вызова цепочки событий из EventBus
 	emit(event: string, ...args: unknown[]) {
 		if (this._listeners[event] === undefined) {
-			this.error(event);
+			// this.error(event);
 		} else {
 			this._listeners[event].forEach(
 				listener => {

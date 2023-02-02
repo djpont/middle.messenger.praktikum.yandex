@@ -16,7 +16,7 @@ const message = (data: messageData): string => {
 	return tpl({className, nickname, time, text});
 };
 
-export default class Message extends Component<messageData>{
+export default class Message extends Component{
 
 	constructor(props: messageData) {
 		super(props);
@@ -28,7 +28,7 @@ export default class Message extends Component<messageData>{
 
 	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
-		const value = this.props[prop];
+		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'text':
 				element = this.target();

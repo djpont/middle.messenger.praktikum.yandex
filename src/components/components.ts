@@ -13,23 +13,23 @@ export class EVENTS {
 }
 
 // Тип данных для чилдренов
-export type ComponentChildrenData = Record<string, Component<ComponentPropsData>[]>;
+export type ComponentChildrenData = Record<string, Component[]>;
 
 // Тип данных для пропсов
 export type ComponentPropsData = {
 	children?: ComponentChildrenData;
 	events?: Fn<unknown>[];	// Массив функций для ДЕФОЛТНОГО действия (клик для кнопки и т.д.)
-	[key: string]: any;
+	[key: string]: unknown;
 };
 
 // Класс базового компонента
-export default abstract class Component<PropsType> {
+export default abstract class Component {
 
 	// Делаем действия публичными
 	public static readonly EVENTS = EVENTS;
 
 	// Список всех компонентов - используется для поиска родителя при уничтожении
-	private static readonly _allComponents: Component<unknown>[] = [];
+	private static readonly _allComponents: Component[] = [];
 
 	private _document: HTMLElement; // Тут хранится DOM-дерево компонента
 	public readonly eventBus: EventBus;
@@ -40,7 +40,7 @@ export default abstract class Component<PropsType> {
 	// Холдер - это HTML-элемент в шаблоне компонента, изначально пустой,  куда добавлятся чилдрены
 	private _childrenHolders: Record<string, HTMLElement>;
 
-	protected constructor(props: PropsType) {
+	protected constructor(props: ComponentPropsData) {
 		// Добавляем экземпляр в список всех компонентов
 		Component._allComponents.push(this);
 
@@ -193,7 +193,7 @@ export default abstract class Component<PropsType> {
 			set: (
 				target: ComponentChildrenData,
 				prop: string,
-				value: Component<unknown>[]
+				value: Component[]
 			): boolean => {
 				// Значение превращаем в прокси
 				target[prop] = this._makeChildrenArrayProxy(value);
@@ -209,21 +209,21 @@ export default abstract class Component<PropsType> {
 
 	// Прокси для массивов внутри children элемента
 	// Отличия: после изменения ничего не вызывается и значения хранятся как есть
-	private _makeChildrenArrayProxy(props: Component<unknown>[]): Component<unknown>[] {
-		const proxySetting = {
-			get: (target: ComponentPropsData, prop: string): unknown => {
+	private _makeChildrenArrayProxy(props: Component[]): Component[] {
+		const proxySetting: ProxyHandler<Component[]> = {
+			get: (target: Component[], prop: string): unknown => {
 				return target[prop];
 			},
-			set: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
+			set: (target: Component[], prop: string, value: unknown): boolean => {
 				target[prop] = value;
 				return true;
 			},
-			deleteProperty: (target: ComponentPropsData, prop: string): boolean => {
+			deleteProperty: (target: Component[], prop: string): boolean => {
 				delete target[prop];
 				return true;
 			}
 		};
-		return new Proxy(props, proxySetting) as Component<unknown>[];
+		return new Proxy(props, proxySetting);
 	}
 
 	// Регистрация базовых действий для интерактивных компонентов (click, change и т.д.)
@@ -283,11 +283,11 @@ export default abstract class Component<PropsType> {
 	// Метод поиска родительского компонента
 	// Можно было бы хранить родителя в пропсах, но не хотелось связки в обе стороны делать
 	public parent(): {
-		parent: Component<unknown> | boolean,
+		parent: Component | boolean,
 		holder: string,
 		index: number
 	} {
-			let parentComponent: Component<unknown> | boolean = false;
+			let parentComponent: Component | boolean = false;
 			let parentChildrenHolder: string | boolean = '';
 			let parentChildrenIndex: number = -1;
 			Component._allComponents.forEach(component => {

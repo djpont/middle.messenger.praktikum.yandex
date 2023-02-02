@@ -17,7 +17,7 @@ import Fetch from "~src/modules/fetch";
 type chatFeedData = ComponentPropsData;
 
 // Класс ленты сообщений
-export default class ChatFeed extends Component<chatFeedData> {
+export default class ChatFeed extends Component {
 
 	constructor(props: chatFeedData) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -69,7 +69,7 @@ export default class ChatFeed extends Component<chatFeedData> {
 	protected override updateProp(prop: string): void {
 		switch (prop) {
 			case 'title':
-				this.subElement('div.header div.chatName').textContent = this.props[prop];
+				this.subElement('div.header div.chatName').textContent = this.props[prop] as string;
 				break;
 			case 'avatar':
 				this.subElement('div.header div.avatar').style.backgroundImage =

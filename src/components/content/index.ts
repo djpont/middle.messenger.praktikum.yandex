@@ -10,7 +10,7 @@ type contentType = {
 } & ComponentPropsData;
 
 // Класс контента
-export default class Content extends Component<contentType> {
+export default class Content extends Component {
 
 	constructor(data: contentType) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -19,7 +19,7 @@ export default class Content extends Component<contentType> {
 
 	// Метод рендера DOM-дерева кнопки по шаблону
 	protected override render(data: contentType): HTMLElement {
-		return generateDom(this.props.template(data));
+		return generateDom((this.props as contentType).template(data));
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)

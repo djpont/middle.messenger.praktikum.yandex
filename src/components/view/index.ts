@@ -17,14 +17,14 @@ const view = (): string => {
 };
 
 // Класс вью
-export default class View extends Component<viewData>{
+export default class View extends Component {
 
 
 	constructor(props: viewData) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 		// Добавляем документ вью в переданный родительский HTML-элемент
-		this.props.roomElement.append(this.document());
+		(this.props as viewData).roomElement.append(this.document());
 	}
 
 	// Метод рендера DOM-дерева кнопки по шаблону

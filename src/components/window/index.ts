@@ -29,7 +29,7 @@ class WindowEVENTS extends EVENTS {
 }
 
 // Класс окна
-export default class Window extends Component<windowData> {
+export default class Window extends Component {
 
 	// Делаем действия публичными
 	public static override readonly EVENTS = WindowEVENTS;
@@ -53,7 +53,7 @@ export default class Window extends Component<windowData> {
 	// Метод обновления DOM-дерева после обновления пропса
 	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
-		const value = this.props[prop];
+		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'id':
 				element = this.document();

@@ -29,5 +29,4 @@ https://github.com/djpont/middle.messenger.praktikum.yandex/pull/2
 * `/static` - статичные элементы и картинки
 * `/ui` - макет программы, выполненный на бумаге
 
-
 Используется стили [98.css](https://jdan.github.io/98.css/)

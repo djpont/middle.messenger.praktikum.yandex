@@ -3,20 +3,21 @@ import './style.scss';
 import View from "~src/components/view";
 import Window from "~src/components/window";
 import Content from "~src/components/content";
-// import Alert from "~src/components/window/alert";
+import Alert from "~src/components/window/alert";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
-import Routing from "~src/routing";
+import Routing from "~src/modules/routing";
+import Validater from "~src/modules/validater";
 
 // Страничка регистрации. Возвращает окно.
 
 export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
-	// const alert = new Alert({rootElement});
+	const alert = new Alert({rootElement});
 
 	// Создаём содержимое окна по шаблону
-	const content = new Content({ template:tpl });
+	const content = new Content({template: tpl});
 
 	// Создаём окно с созданным выше содержимым
 	const window = new Window({
@@ -26,7 +27,7 @@ export default (rootElement: View): Window => {
 			close: true
 		},
 		children: {
-			content:[content]  // Передаем содержимое в чилдрены
+			content: [content]  // Передаем содержимое в чилдрены
 		},
 		events: [
 			// Добавляем действие на закрытие окна
@@ -36,42 +37,67 @@ export default (rootElement: View): Window => {
 	rootElement.children.main.push(window); // Добавляем окно в корневой элемент
 	rootElement.updateChildren();
 
+
+	// Метод для валидации инпутов
+	function validate(input: Input) {
+		Validater.validateInputWithAlert(input);
+	}
+
+
 	// Создаём экземпляры инпутов
 	const inputFirstName = new Input({
 		name: 'first_name',
 		type: 'text',
 		label: 'Имя:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputSecondName = new Input({
 		name: 'second_name',
 		type: 'text',
 		label: 'Фамилия:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputEmail = new Input({
 		name: 'email',
 		type: 'text',
 		label: 'Адрес электронной почты:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputPhone = new Input({
 		name: 'phone',
 		type: 'text',
 		label: 'Телефон:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputLogin = new Input({
 		name: 'login',
 		type: 'text',
 		label: 'Логин:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputPassword1 = new Input({
 		name: 'password',
 		type: 'password',
 		label: 'Пароль:',
-		isStacked: true
+		isStacked: true,
+		events: [
+			validate
+		]
 	});
 	const inputPassword2 = new Input({
 		name: 'password2',
@@ -80,7 +106,7 @@ export default (rootElement: View): Window => {
 		isStacked: true
 	});
 	// Вставляем инпуты в контент
-	content.children.inputs=[
+	content.children.inputs = [
 		inputFirstName,
 		inputSecondName,
 		inputEmail,
@@ -94,20 +120,41 @@ export default (rootElement: View): Window => {
 	const buttonSubmit = new Button({
 		name: 'submit',
 		type: 'submit',
-		text: 'Регистрация'
+		text: 'Регистрация',
+		events: [
+			() => {
+				const formValid = Validater.validateInputWithAlert(
+						inputFirstName,
+						inputSecondName,
+						inputEmail,
+						inputPhone,
+						inputLogin,
+						inputPassword1
+				);
+				if(formValid){
+					if(!Validater.equalInput([inputPassword1, inputPassword2])){
+						alert.error(['Введённые пароли отличаются.']);
+					}else{
+						console.log('Метод регистрации пользователя');
+					}
+				}
+			}
+		]
 	});
 	const buttonCancel = new Button({
 		name: 'cancel',
 		type: 'cancel',
-		text: 'Отмена'
+		text: 'Отмена',
+		events: [
+			() => window.close()
+		]
 	});
 	// Вставляем кноки в контент
-	content.children.buttons=[buttonSubmit, buttonCancel];
+	content.children.buttons = [buttonSubmit, buttonCancel];
 
 	// Вызываем обновление чилдренов окна, в аргументах true - для рекурсии, чтобы вложенные
 	// дочерние элементы тоже обновились
 	window.updateChildren(true);
-
 
 	return window;
 }

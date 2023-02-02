@@ -1,4 +1,4 @@
-import {EventBus} from "~src/components/event-bus";
+import {EventBus} from "~src/modules/event-bus";
 import {Fn} from "~src/functions";
 
 // Базовый компонент (аналог Block из теории Практикума)
@@ -8,7 +8,7 @@ export class EVENTS {
 	static init = "component:init"; // Инициализация
 	static registerBasementAction = "component:registerBasementAction"; // Регистр базового действия
 	static render = "component:render"; // Рендер
-	static update = "component:update"; // Обновление пропсов
+	static updateProp = "component:update"; // Обновление пропсов
 	static updateChildren = "component:updateChildren"; // Обновление чилдренов
 }
 
@@ -75,7 +75,7 @@ export default abstract class Component<PropsType> {
 		this.eventBus.on(Component.EVENTS.registerBasementAction,
 			this._registerBasementActionForEventBus.bind(this));
 		this.eventBus.on(Component.EVENTS.render, this._render.bind(this));
-		this.eventBus.on(Component.EVENTS.update, this._update.bind(this));
+		this.eventBus.on(Component.EVENTS.updateProp, this.updateProp.bind(this));
 		this.eventBus.on(Component.EVENTS.updateChildren, this.updateChildren.bind(this));
 	}
 
@@ -107,13 +107,11 @@ export default abstract class Component<PropsType> {
 	// Метод генерации HTML дерева по шаблону, должен быть описан в дочернем классе
 	protected abstract render(data: ComponentPropsData): HTMLElement
 
-	// Метод обновления пропсов элемента
-	protected _update(prop: string): void {
-		this.update(prop);
-	}
+	// Метод обновления пропса элемента, должен быть описан в дочернем классе
+	protected abstract updateProp(prop: string): void
 
-	// Метод обновления пропсов элемента, должен быть описан в дочернем классе
-	protected abstract update(prop: string): void
+	// Метод получения пропса элемента, должен быть описан в дочернем классе
+	protected abstract getProp(prop: string): { fromDom: boolean, value: unknown }
 
 	// Метод обновления дочерних элементов
 	public updateChildren(nestedUpdatesToo: boolean = false): void {
@@ -151,40 +149,30 @@ export default abstract class Component<PropsType> {
 		return this.document();
 	}
 
-	// Методы для прокси
-	private readonly _proxyActions = {
-		getProp: (target: ComponentPropsData, prop: string): unknown => {
-			return target[prop];
-		},
-		setProp: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
-			target[prop] = value;
-			return true;
-		},
-		deleteProp: (target: ComponentPropsData, prop: string): boolean => {
-			delete target[prop];
-			return true;
-		}
-	}
-
 	// Прокси для основных пропсов элемента
 	// Отличия: после изменения вызывается update компонента
 	private _makePropsProxy(props: ComponentPropsData): ComponentPropsData {
 		const proxySetting = {
 			get: (target: ComponentPropsData, prop: string): unknown => {
-				return this._proxyActions.getProp(target, prop)
+				// Запрашиваем значение из DOM-элемента через метод
+				const propFromDom = this.getProp(prop);
+				if (propFromDom.fromDom){
+					return propFromDom.value;
+				}else{
+					return target[prop];
+				}
 			},
 			set: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
-				if (target[prop] === value) {
-					return true;
+				if (target[prop] !== value) {
+					target[prop] = value;
+					this.eventBus.emit(Component.EVENTS.updateProp, prop);
 				}
-				const result = this._proxyActions.setProp(target, prop, value);
-				this.eventBus.emit(Component.EVENTS.update, prop);
-				return result
+				return true;
 			},
 			deleteProperty: (target: ComponentPropsData, prop: string): boolean => {
-				const result = this._proxyActions.deleteProp(target, prop);
-				this.eventBus.emit(Component.EVENTS.update, prop);
-				return result
+				delete target[prop];
+				this.eventBus.emit(Component.EVENTS.updateProp, prop);
+				return true;
 			}
 		};
 		return new Proxy(props as ComponentPropsData, proxySetting) as ComponentPropsData;
@@ -196,11 +184,11 @@ export default abstract class Component<PropsType> {
 		const proxySetting = {
 			get: (target: ComponentChildrenData, prop: string): unknown => {
 				// Если ключ отсутствует, то создаём для него прокси с пустым массивом
-				if (this._proxyActions.getProp(target, prop) === undefined) {
+				if (target[prop] === undefined) {
 					this.children[prop] = this._makeChildrenArrayProxy([]);
 					this.children[prop] = [];
 				}
-				return this._proxyActions.getProp(target, prop)
+				return target[prop];
 			},
 			set: (
 				target: ComponentChildrenData,
@@ -208,11 +196,12 @@ export default abstract class Component<PropsType> {
 				value: Component<unknown>[]
 			): boolean => {
 				// Значение превращаем в прокси
-				value = this._makeChildrenArrayProxy(value);
-				return this._proxyActions.setProp(target, prop, value);
+				target[prop] = this._makeChildrenArrayProxy(value);
+				return true;
 			},
 			deleteProperty: (target: ComponentChildrenData, prop: string): boolean => {
-				return this._proxyActions.deleteProp(target, prop);
+				delete target[prop];
+				return true;
 			}
 		};
 		return new Proxy(props, proxySetting) as ComponentChildrenData;
@@ -223,13 +212,15 @@ export default abstract class Component<PropsType> {
 	private _makeChildrenArrayProxy(props: Component<unknown>[]): Component<unknown>[] {
 		const proxySetting = {
 			get: (target: ComponentPropsData, prop: string): unknown => {
-				return this._proxyActions.getProp(target, prop)
+				return target[prop];
 			},
 			set: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
-				return this._proxyActions.setProp(target, prop, value);
+				target[prop] = value;
+				return true;
 			},
 			deleteProperty: (target: ComponentPropsData, prop: string): boolean => {
-				return this._proxyActions.deleteProp(target, prop);
+				delete target[prop];
+				return true;
 			}
 		};
 		return new Proxy(props, proxySetting) as Component<unknown>[];
@@ -249,7 +240,7 @@ export default abstract class Component<PropsType> {
 		if (htmlAction && htmlAction.length > 0) {
 			this.target().addEventListener(htmlAction, (e) => {
 				e.preventDefault();
-				this.eventBus.emit(eventBusAction);
+				this.eventBus.emit(eventBusAction, this, e);
 			})
 		}
 	}

@@ -1,5 +1,5 @@
 // import '/static/index.css';
-import Routing from "./routing";
+import Routing from "./modules/routing";
 import Chat from "~src/modules/chat";
 import User from "~src/modules/user";
 import {messageStatus} from "~src/modules/message";

@@ -19,6 +19,7 @@ const view = (): string => {
 // Класс вью
 export default class View extends Component<viewData>{
 
+
 	constructor(props: viewData) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
@@ -32,7 +33,7 @@ export default class View extends Component<viewData>{
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
-	protected override update(): void {
+	protected override updateProp(): void {
 		return;
 	}
 
@@ -43,5 +44,14 @@ export default class View extends Component<viewData>{
 				child.destroy();
 			});
 		});
+	}
+
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
 	}
 }

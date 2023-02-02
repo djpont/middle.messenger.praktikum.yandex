@@ -35,7 +35,7 @@ export default class Text extends Component<textData>{
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override update(prop: string): void {
+	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop];
 		switch (prop) {
@@ -46,5 +46,14 @@ export default class Text extends Component<textData>{
 		if (element) {
 			element.textContent = value;
 		}
+	}
+
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
 	}
 }

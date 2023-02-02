@@ -26,7 +26,7 @@ export default class Message extends Component<messageData>{
 		return generateDom(message(data));
 	}
 
-	protected override update(prop: string): void {
+	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop];
 		switch (prop) {
@@ -37,6 +37,15 @@ export default class Message extends Component<messageData>{
 		if (element) {
 			element.textContent = value;
 		}
+	}
+
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
 	}
 
 }

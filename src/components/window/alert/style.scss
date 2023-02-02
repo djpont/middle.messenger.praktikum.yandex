@@ -1,5 +1,6 @@
 div.window.alert {
-	width: 300px;
+	min-width: 300px;
+	max-width: calc(300px + 30%);
 
 	/* stylelint-disable selector-class-pattern */
 	div.window-body {

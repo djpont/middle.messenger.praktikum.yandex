@@ -28,11 +28,20 @@ export default class Alert {
 	// Детаем типы алертов публичными
 	public static readonly TYPE = alertType;
 
+	// Сохраняем последний view для инпользования внутри компонентов
+	private static _lastAlert:Alert;
+
 	// Приватно сохраняем вью, в котором будем рендерить окна с сообщениями
 	private readonly _view: View;
 
 	constructor(data: alertData) {
 		this._view = data.rootElement;
+		Alert._lastAlert=this;
+	}
+
+	// Получаем последний использованный view для инпользования внутри компонентов
+	public static lastAlert():Alert{
+		return Alert._lastAlert;
 	}
 
 	// Метод отобржения сообщения в заренее указанном view

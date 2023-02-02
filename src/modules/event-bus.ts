@@ -8,14 +8,14 @@ export class EventBus {
 	}
 
 	// Метод добавляения событий в EventBus
-	on(event: string, callback: Fn<unknown>, insertBeforeLastListener:boolean=false) {
-		if (this._listeners[event]===undefined) {
+	on(event: string, callback: Fn<unknown>, insertBeforeLastListener: boolean = false) {
+		if (this._listeners[event] === undefined) {
 			this._listeners[event] = [];
 		}
-		if(!this._listeners[event].includes(callback)){
-			if(insertBeforeLastListener && this._listeners[event].length>0){
+		if (!this._listeners[event].includes(callback)) {
+			if (insertBeforeLastListener && this._listeners[event].length > 0) {
 				this._listeners[event].splice(this._listeners[event].length - 1, 0, callback);
-			}else{
+			} else {
 				this._listeners[event].push(callback);
 			}
 		}
@@ -35,7 +35,7 @@ export class EventBus {
 	emit(event: string, ...args: unknown[]) {
 		if (this._listeners[event] === undefined) {
 			this.error(event);
-		}else{
+		} else {
 			this._listeners[event].forEach(
 				listener => {
 					listener(...args);

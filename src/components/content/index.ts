@@ -23,7 +23,16 @@ export default class Content extends Component<contentType> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
-	protected override update(): void {
+	protected override updateProp(): void {
 		return;
+	}
+
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
 	}
 }

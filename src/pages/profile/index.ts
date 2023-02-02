@@ -1,4 +1,4 @@
-import tpl from './tpl_profile.hbs';
+import tpl from './tpl.hbs';
 import './style.scss';
 import View from "~src/components/view";
 import Window from "~src/components/window";
@@ -9,8 +9,9 @@ import Input from "~src/components/input";
 import Text from "~src/components/text";
 import User from "~src/modules/user";
 import {ComponentChildrenData} from "~src/components/components";
-import Routing from "~src/routing";
+import Routing from "~src/modules/routing";
 import fileUpload from "~src/pages/file-upload";
+import Validater from "~src/modules/validater";
 
 // Страничка профиля. Возвращает окно.
 
@@ -43,6 +44,11 @@ export default (rootElement: View): Window => {
 	// Вызываем обновление чилдренов окна
 	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
 	window.updateChildren(true);
+
+	// Метод для валидации инпутов
+	function validate(input: Input) {
+		Validater.validateInputWithAlert(input);
+	}
 
 	// Содержимое для режима просмотра профиля
 	const contentWatch = (): ComponentChildrenData => {
@@ -92,25 +98,37 @@ export default (rootElement: View): Window => {
 			type: 'email',
 			name: 'email',
 			label: 'Почта:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputLogin = new Input({
 			type: 'text',
 			name: 'login',
 			label: 'Логин:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputFirstName = new Input({
 			type: 'text',
 			name: 'first_name',
 			label: 'Имя:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputSecondName = new Input({
 			type: 'text',
 			name: 'second_name',
 			label: 'Фамилия:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputDisplayName = new Input({
 			type: 'text',
@@ -122,7 +140,10 @@ export default (rootElement: View): Window => {
 			type: 'text',
 			name: 'phone',
 			label: 'Телефон:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputs = [
 			inputEmail,
@@ -139,7 +160,18 @@ export default (rootElement: View): Window => {
 			type: 'submit',
 			text: 'Сохранить',
 			events: [
-				() => console.log('Метод сохранения изменений в профиле')
+				() => {
+					const formValid = Validater.validateInputWithAlert(
+						inputFirstName,
+						inputSecondName,
+						inputEmail,
+						inputPhone,
+						inputLogin
+					);
+					if(formValid){
+						console.log('Метод сохранения данных профиля');
+					}
+				}
 			]
 		});
 		const buttonBack = new Button({
@@ -178,13 +210,16 @@ export default (rootElement: View): Window => {
 		});
 		const inputNewPassword1 = new Input({
 			type: 'password',
-			name: 'newPassword',
+			name: 'password',
 			label: 'Новый пароль:',
-			isStacked: true
+			isStacked: true,
+			events: [
+				validate
+			]
 		});
 		const inputNewPassword2 = new Input({
 			type: 'password',
-			name: 'newPassword2',
+			name: 'password2',
 			label: 'Новый пароль ещё раз:',
 			isStacked: true
 		});
@@ -200,7 +235,13 @@ export default (rootElement: View): Window => {
 			type: 'submit',
 			text: 'Сохранить',
 			events: [
-				() => console.log('Метод сохранения пароля')
+				() => {
+					if(!Validater.equalInput([inputNewPassword1, inputNewPassword2])){
+						alert.error(['Введённые пароли отличаются.']);
+					}else{
+						console.log('Метод сохранния нового пароля пользователя');
+					}
+				}
 			]
 		});
 		const buttonBack = new Button({

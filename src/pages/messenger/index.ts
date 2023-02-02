@@ -3,14 +3,14 @@ import './style.scss';
 import View from "~src/components/view";
 import Window from "~src/components/window";
 import Content from "~src/components/content";
-// import Alert from "~src/components/window/alert";
+import Alert from "~src/components/window/alert";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
 // import Chat from "~src/modules/chat";
 import ChatFeed from "~src/components/chat-feed";
 import Chatlist from "~src/components/chatlist";
 import User from "~src/modules/user";
-import Routing from "~src/routing";
+import Routing from "~src/modules/routing";
 
 // Страничка Мессенджера.
 // Возвращает большое окно, состоящее из двух больших компонентов: Списка чатов (Chatlist)
@@ -19,7 +19,8 @@ import Routing from "~src/routing";
 export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
-	// const alert = new Alert({rootElement});
+	// const alert =
+		new Alert({rootElement});
 
 	// Получаем никтейм и аватар текущего пользователя
 	const {nickname, avatar} = User.getMyUser().data();
@@ -80,27 +81,8 @@ export default (rootElement: View): Window => {
 	const chatlist = new Chatlist({chatFeed});
 	content.children.chatlist=[chatlist];
 	content.children.chatFeed=[chatFeed];
-	// console.log(content.children);
 
 	content.updateChildren();
-
-
-	// Создаём экземпляр списка чатов и прииваиваем ему дом элемент для отображения чата
-	// const chatList: ChatList = new ChatList();
-	// page.subElement('fieldset.chatsListField div.container').append(chatList.document());
-	// Chat.getChatsList().forEach(chat => chatList.addChat(chat));
-
-	// Создаём экземпляк ленты сообщений
-	// const chatFeed: ChatFeed = new ChatFeed();
-	// page.subElement('div.chatFeedHolder').append(chatFeed.document());
-
-	// Дружим список чатов и ленту сообщений
-	// chatList.attachFeed(chatFeed);
-
-	// Открываем первый чат в ленте сообщений
-	// if (Chat.getChatsList().length > 0) {
-	// 	chatList.openChat(Chat.getChatsList()[0]);
-	// }
 
 	return window;
 

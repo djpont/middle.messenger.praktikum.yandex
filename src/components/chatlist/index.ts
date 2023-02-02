@@ -85,8 +85,17 @@ export default class Chatlist extends Component<chatlistData> {
 		return chatlist(data, this.openChat.bind(this));
 	}
 
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
+	}
+
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
-	protected override update(): void {
+	protected override updateProp(): void {
 		return;
 	}
 }

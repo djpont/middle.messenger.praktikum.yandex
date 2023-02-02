@@ -2,7 +2,6 @@ import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
 import {generateDom} from "~src/functions";
-
 import {Fn} from "~src/functions";
 
 // Регистрируем инпут как Partial (используется в шаблоне tpl_full)
@@ -58,8 +57,7 @@ export default class Input extends Component<inputDataWithLabel>{
 	// Делаем действия публичными
 	public static override readonly EVENTS = InputEVENTS;
 
-	// селектор для импута (на случай сложного DOM, если кнопка имеет label)
-	private _targetSelector:string|null = null;
+	public x =5;
 
 	constructor(data: inputData | inputDataWithLabel) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -70,10 +68,11 @@ export default class Input extends Component<inputDataWithLabel>{
 
 	// Метод рендера DOM-дерева инпута по шаблону
 	protected override render(data: inputDataWithLabel):HTMLElement{
+		this.x=7;
 		let templateFunction:Fn<string>;
 		if('label' in data){
 			templateFunction=inputWithLabel;
-			this._targetSelector='input';
+			this.props.targetSelector='input'; // Сохраняем указатель самого импута в пропсы
 		}else{
 			templateFunction=input;
 		}
@@ -81,16 +80,50 @@ export default class Input extends Component<inputDataWithLabel>{
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override update(): void {
+	protected override updateProp(): void {
 		return;
 	}
 
-	// Возвращаем активный элемент инпута (на случай сложного DOM)
-	public override target = ():HTMLElement => {
-		if(this._targetSelector===null){
-			return this.document();
-		}else{
-			return this.subElement(this._targetSelector);
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(prop: string): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
 		}
+		// Ищем в значение в DOM-дереве только если документ уже построен
+		if(this.document()!==undefined){
+			switch (prop){
+				case 'value':
+					result.fromDom=true;
+					result.value=this.target().value;
+					break;
+			}
+		}
+		return result;
+	}
+
+	// Возвращаем активный элемент инпута (на случай сложного DOM)
+	public override target = ():HTMLInputElement => {
+		if(this.props.targetSelector){
+			return this.subElement(this.props.targetSelector) as HTMLInputElement;
+		}else{
+			return this.document() as HTMLInputElement;
+		}
+	}
+
+	// Метод превращения DOM-элемента в экземпляр  Input
+	// Внимание: пока не умеет находить label
+	public static makeInput(renderedInput: HTMLElement, events: Fn<unknown>[] = []): Input {
+		const type = renderedInput.getAttribute('type') || undefined;
+		const className = renderedInput.getAttribute('class') || undefined;
+		const name = renderedInput.getAttribute('name') || undefined;
+		const input = new Input({
+			type,
+			className,
+			name,
+			events
+		});
+		renderedInput.replaceWith(input.document());
+		return input;
 	}
 }

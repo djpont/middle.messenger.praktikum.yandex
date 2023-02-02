@@ -5,6 +5,10 @@ import Message from "~src/components/message";
 import Chat, {chatData} from "~src/modules/chat";
 import {generateDom} from "~src/functions";
 import Button from "~src/components/button";
+import Input from "~src/components/input";
+import fileUpload from "~src/pages/file-upload";
+import Alert from "~src/components/window/alert";
+import Validater from "~src/modules/validater";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
@@ -18,7 +22,7 @@ export default class ChatFeed extends Component<chatFeedData> {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 		// Делаем кнопки управляемыми
-		this._makeActiveButtons();
+		this._makeNewMessageFormActive();
 	}
 
 	// Метод рендера DOM-дерева ленты сообщений по шаблону
@@ -27,19 +31,34 @@ export default class ChatFeed extends Component<chatFeedData> {
 	}
 
 	// Метод превращения отрендеренных кнопок в управляемые экземпляры Button
-	private _makeActiveButtons():void {
-		const buttonSubmit = Button.makeButton(
-			this.subElement('div.newMessage button[type="submit"]')
+	private _makeNewMessageFormActive():void {
+		// Превращаем инпут для ввода сообщения в экземпляр Input
+		const inputMessage = Input.makeInput(
+			this.subElement('div.newMessage input[name="message"]')
 		);
-		console.log(buttonSubmit);
-		const buttonFileUpload = Button.makeButton(
-			this.subElement('div.newMessage button.attach')
+		// Превращаем кнопку для отправки сообщения в экземпляр Button
+		Button.makeButton(
+			this.subElement('div.newMessage button[type="submit"]'),
+			[
+				() => {
+					const valide = Validater.validateInputWithAlert(inputMessage);
+					if(valide){
+						console.log('Метод отправки сообщения');
+					}
+				}
+			]
 		);
-		console.log(buttonFileUpload);
+		// Превращаем кнопку для прикрепления файла в экземпляр Button
+		Button.makeButton(
+			this.subElement('div.newMessage button.attach'),
+			[
+				() => Alert.lastAlert().alertWindow(fileUpload())
+			]
+		);
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override update(prop: string): void {
+	protected override updateProp(prop: string): void {
 		switch (prop) {
 			case 'title':
 				this.subElement('div.header div.chatName').textContent = this.props[prop];
@@ -49,6 +68,15 @@ export default class ChatFeed extends Component<chatFeedData> {
 					`url('${this.props[prop]}')`;
 				break;
 		}
+	}
+
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
 	}
 
 	// Метод рендера ленты сообщений конкретного чата

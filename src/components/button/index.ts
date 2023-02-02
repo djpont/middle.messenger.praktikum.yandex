@@ -1,6 +1,6 @@
 import tpl from "./tpl.hbs";
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
-import {generateDom} from "~src/functions";
+import {Fn, generateDom} from "~src/functions";
 
 // Компонент Button отвечает за кнопки
 
@@ -47,7 +47,7 @@ export default class Button extends Component<buttonData>{
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override update(prop: string): void {
+	protected override updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop];
 		switch (prop) {
@@ -63,8 +63,17 @@ export default class Button extends Component<buttonData>{
 		}
 	}
 
+	// Метод получения пропса из DOM-дерева
+	protected override getProp(): { fromDom: boolean; value: unknown } {
+		const result = {
+			fromDom: false,
+			value: ''
+		}
+		return result;
+	}
+
 	// Метод превращения DOM-элемента в экземпляр Button
-	public static makeButton(renderedButton: HTMLElement): Button {
+	public static makeButton(renderedButton: HTMLElement, events: Fn<unknown>[] = []): Button {
 		const type = renderedButton.getAttribute('type') || undefined;
 		const className = renderedButton.getAttribute('class') || undefined;
 		const name = renderedButton.getAttribute('name') || undefined;
@@ -73,7 +82,8 @@ export default class Button extends Component<buttonData>{
 			type,
 			className,
 			text,
-			name
+			name,
+			events
 		});
 		renderedButton.replaceWith(button.document());
 		return button;

@@ -1,10 +1,10 @@
-import pageSignIn from './pages/sign-in';
-import pageSignUp from './pages/sign-up';
-import page404 from './pages/error/404'; // тут нужно вызывать обычный Window с рабочей кнопкой
-import page500 from './pages/error/500'; // , а содержимое по своему шаблону генерировать
-import messenger from "./pages/messenger";
-import profile from "./pages/profile";
-import fileUpload from "./pages/file-upload";
+import pageSignIn from '../pages/sign-in';
+import pageSignUp from '../pages/sign-up';
+import page404 from '../pages/error/404'; // тут нужно вызывать обычный Window с рабочей кнопкой
+import page500 from '../pages/error/500'; // , а содержимое по своему шаблону генерировать
+import messenger from "../pages/messenger";
+import profile from "../pages/profile";
+import fileUpload from "../pages/file-upload";
 import View from "~src/components/view";
 import Window from "~src/components/window";
 

@@ -6,14 +6,16 @@ import Content from "~src/components/content";
 import Alert from "~src/components/window/alert";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
-import Routing from "~src/routing";
+import Routing from "~src/modules/routing";
+import Validater from "~src/modules/validater";
 
 // Страничка входа. Возвращает окно.
 
 export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
-	const alert = new Alert({rootElement});
+	// const alert =
+		new Alert({rootElement});
 
 	// Создаём содержимое окна по шаблону
 	const content = new Content({template: tpl});
@@ -32,18 +34,29 @@ export default (rootElement: View): Window => {
 	rootElement.children.main.push(window); // Добавляем окно в корневой элемент
 	rootElement.updateChildren();	// Вызываем обновление чилдов корневого элемента
 
+	// Метод для валидации инпутов
+	function validate(input: Input) {
+		Validater.validateInputWithAlert(input);
+	}
+
 	// Создаём экземпляры инпутов
 	const inputLogin = new Input({
 		name: 'login',
 		type: 'text',
 		label: 'Логин:',
-		isStacked: false
+		isStacked: false,
+		events: [
+			validate
+		]
 	});
 	const inputPassword = new Input({
 		name: 'password',
 		type: 'password',
 		label: 'Пароль:',
-		isStacked: false
+		isStacked: false,
+		events: [
+			validate
+		]
 	});
 	// Вставляем инпуты в контент
 	content.children.inputs = [inputLogin, inputPassword];
@@ -55,11 +68,15 @@ export default (rootElement: View): Window => {
 		text: 'Вход',
 		events: [
 			() => {
-				// Показываем сообщение об ошибке при нажатии на кнопку
-				alert.error([
-						'Неверный логин или пароль.',
-						'Попробуйте снова.'
-					]);
+				{
+					const formValid = Validater.validateInputWithAlert(
+						inputLogin,
+						inputPassword
+					);
+					if(formValid){
+						console.log('Метод авторизации пользователя');
+					}
+				}
 			}
 		]
 	});

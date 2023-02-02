@@ -10,6 +10,7 @@ import Routing from "~src/modules/routing";
 import Validator from "~src/modules/validator";
 import Fetch from "~src/modules/fetch";
 import {fetchDataFromInputs} from "~src/modules/functions";
+import Form from "~src/components/form";
 
 // Страничка регистрации. Возвращает окно.
 
@@ -31,10 +32,7 @@ export default (rootElement: View): Window => {
 		children: {
 			content: [content]  // Передаем содержимое в чилдрены
 		},
-		events: [
-			// Добавляем действие на закрытие окна
-			() => Routing('/sign-in', rootElement)
-		]
+		close: () => Routing('/sign-in', rootElement)
 	});
 	rootElement.children.main.push(window); // Добавляем окно в корневой элемент
 	rootElement.updateChildren();
@@ -52,54 +50,66 @@ export default (rootElement: View): Window => {
 		type: 'text',
 		label: 'Имя:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputFirstName);
+			}
+		}
 	});
 	const inputSecondName = new Input({
 		name: 'second_name',
 		type: 'text',
 		label: 'Фамилия:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputSecondName);
+			}
+		}
 	});
 	const inputEmail = new Input({
 		name: 'email',
 		type: 'text',
 		label: 'Адрес электронной почты:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputEmail);
+			}
+		}
 	});
 	const inputPhone = new Input({
 		name: 'phone',
 		type: 'text',
 		label: 'Телефон:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputPhone);
+			}
+		}
 	});
 	const inputLogin = new Input({
 		name: 'login',
 		type: 'text',
 		label: 'Логин:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputLogin);
+			}
+		}
 	});
 	const inputPassword1 = new Input({
 		name: 'password',
 		type: 'password',
 		label: 'Пароль:',
 		isStacked: true,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputPassword1);
+			}
+		}
 	});
 	const inputPassword2 = new Input({
 		name: 'password2',
@@ -122,52 +132,60 @@ export default (rootElement: View): Window => {
 	const buttonSubmit = new Button({
 		name: 'submit',
 		type: 'submit',
-		text: 'Регистрация',
-		events: [
-			() => {
-				// Сначала проверяем валидацию инпутов
-				const formValid = Validator.validateInputWithAlert(
+		text: 'Регистрация'
+	});
+	const buttonCancel = new Button({
+		name: 'cancel',
+		type: 'cancel',
+		text: 'Отмена',
+		events: {
+			'click': () => window.close()
+		}
+	});
+	// Вставляем кноки в контент
+	content.children.buttons = [buttonSubmit, buttonCancel];
+
+	// Находим форму, превращаем в экземпляр Form и вешаем события
+	const form = Form.makeForm(content.document());
+	form.props.events={
+		'submit': (e: SubmitEvent) => {
+			e.preventDefault();
+			// Сначала првоеряем, что нет показанных сообщений после change input
+			if(rootElement.children.alert.length>0){
+				return;
+			}
+			// Сначала проверяем валидацию инпутов
+			const formValid = Validator.validateInputWithAlert(
+				inputFirstName,
+				inputSecondName,
+				inputEmail,
+				inputPhone,
+				inputLogin,
+				inputPassword1
+			);
+			// Если успешно, то проверяем, что пароли одинаковые
+			if(formValid){
+				if(!Validator.equalInput([inputPassword1, inputPassword2])){
+					alert.error(['Введённые пароли отличаются.']);
+				}else{
+					// Если успешно, то выполянем запрос
+					const data = fetchDataFromInputs(
 						inputFirstName,
 						inputSecondName,
 						inputEmail,
 						inputPhone,
 						inputLogin,
 						inputPassword1
-				);
-				// Если успешно, то проверяем, что пароли одинаковые
-				if(formValid){
-					if(!Validator.equalInput([inputPassword1, inputPassword2])){
-						alert.error(['Введённые пароли отличаются.']);
-					}else{
-						// Если успешно, то выполянем запрос
-						const data = fetchDataFromInputs(
-							inputFirstName,
-							inputSecondName,
-							inputEmail,
-							inputPhone,
-							inputLogin,
-							inputPassword1
-						)
-						console.log(data);
-						Fetch.post({
-							path: '/registration',
-							data
-						});
-					}
+					)
+					console.log(data);
+					Fetch.post({
+						path: '/registration',
+						data
+					});
 				}
 			}
-		]
-	});
-	const buttonCancel = new Button({
-		name: 'cancel',
-		type: 'cancel',
-		text: 'Отмена',
-		events: [
-			() => window.close()
-		]
-	});
-	// Вставляем кноки в контент
-	content.children.buttons = [buttonSubmit, buttonCancel];
+		}
+	};
 
 	// Вызываем обновление чилдренов окна, в аргументах true - для рекурсии, чтобы вложенные
 	// дочерние элементы тоже обновились

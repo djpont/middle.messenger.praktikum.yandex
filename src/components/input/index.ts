@@ -1,6 +1,6 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
-import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
+import Component, {ComponentPropsData, EventsType} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 import {Fn} from "~src/modules/functions";
 
@@ -46,22 +46,12 @@ const inputWithLabel = (data: inputDataWithLabel): string => {
 	return tpl_full({type, name, value, label, isStacked});
 };
 
-// Дополнительные действия с компонентом
-class InputEVENTS extends EVENTS {
-	static change = "input:change" // Изменение инпута
-}
-
 // Класс инпута
-export default class Input extends Component {
-
-	// Делаем действия публичными
-	public static override readonly EVENTS = InputEVENTS;
+export default class Input extends Component<inputDataWithLabel> {
 
 	constructor(data: inputData | inputDataWithLabel) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(data);
-		// Регистрируем базовое действие - изменения текста в инпуте
-		this.eventBus.emit(Component.EVENTS.registerBasementAction, 'change', Input.EVENTS.change);
 	}
 
 	// Метод рендера DOM-дерева инпута по шаблону
@@ -110,7 +100,7 @@ export default class Input extends Component {
 
 	// Метод превращения DOM-элемента в экземпляр  Input
 	// Внимание: пока не умеет находить label
-	public static makeInput(renderedInput: HTMLElement, events: Fn<unknown>[] = []): Input {
+	public static makeInput(renderedInput: HTMLElement, events: EventsType = {}): Input {
 		const type = renderedInput.getAttribute('type') || undefined;
 		const className = renderedInput.getAttribute('class') || undefined;
 		const name = renderedInput.getAttribute('name') || undefined;

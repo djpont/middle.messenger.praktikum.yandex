@@ -10,6 +10,7 @@ import Routing from "~src/modules/routing";
 import Validator from "~src/modules/validator";
 import Fetch from "~src/modules/fetch";
 import {fetchDataFromInputs} from "~src/modules/functions";
+import Form from "~src/components/form";
 
 // Страничка входа. Возвращает окно.
 
@@ -17,7 +18,7 @@ export default (rootElement: View): Window => {
 
 	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
 	// const alert =
-		new Alert({rootElement});
+	new Alert({rootElement});
 
 	// Создаём содержимое окна по шаблону
 	const content = new Content({template: tpl});
@@ -47,61 +48,68 @@ export default (rootElement: View): Window => {
 		type: 'text',
 		label: 'Логин:',
 		isStacked: false,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputLogin);
+			}
+		}
 	});
 	const inputPassword = new Input({
 		name: 'password',
 		type: 'password',
 		label: 'Пароль:',
 		isStacked: false,
-		events: [
-			validate
-		]
+		events: {
+			'focusout': () => {
+				validate(inputPassword);
+			}
+		}
 	});
 	// Вставляем инпуты в контент
 	content.children.inputs = [inputLogin, inputPassword];
+
+	// Находим форму, превращаем в экземпляр Form и вешаем события
+	const form = Form.makeForm(content.document());
+	form.props.events={
+		'submit': (e: SubmitEvent) => {
+			e.preventDefault();
+			// Сначала првоеряем, что нет показанных сообщений после change input
+			if(rootElement.children.alert.length>0){
+				return;
+			}
+			// Проверяем валидацию инпутов
+			const formValid = Validator.validateInputWithAlert(
+				inputLogin,
+				inputPassword
+			);
+			// Если успешно, то выполянем запрос
+			if(formValid){
+				const data = fetchDataFromInputs(
+					inputLogin,
+					inputPassword
+				)
+				console.log(data);
+				Fetch.get({
+					path: '/authorize',
+					data
+				});
+			}
+		}
+	};
 
 	// Создаём экземпляры кнопок
 	const buttonSubmit = new Button({
 		name: 'submit',
 		type: 'submit',
-		text: 'Вход',
-		events: [
-			() => {
-				{
-					// Сначала проверяем валидацию инпутов
-					const formValid = Validator.validateInputWithAlert(
-						inputLogin,
-						inputPassword
-					);
-					// Если успешно, то выполянем запрос
-					if(formValid){
-						const data = fetchDataFromInputs(
-							inputLogin,
-							inputPassword
-						)
-						console.log(data);
-						Fetch.get({
-							path: '/authorize',
-							data
-						});
-					}
-				}
-			}
-		]
+		text: 'Вход'
 	});
 	const buttonRegister = new Button({
 		name: 'registration',
 		type: 'button',
 		text: 'Регистрация',
-		events: [
-			() => {
-				// Действие при нажатии на кнопку
-				Routing('/sign-up', rootElement);
-			}
-		]
+		events: {
+			'click': () => Routing('/sign-up', rootElement)
+		}
 	});
 	// Вставляем кноки в контент
 	content.children.buttons = [buttonSubmit, buttonRegister];
@@ -109,7 +117,6 @@ export default (rootElement: View): Window => {
 	// Вызываем обновление чилдренов окна
 	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
 	window.updateChildren(true);
-
 
 	return window;
 }

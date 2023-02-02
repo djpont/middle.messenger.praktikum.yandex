@@ -6,7 +6,6 @@ import {Fn} from "~src/modules/functions";
 // Возможные действия с базовым компонентом
 export class EVENTS {
 	static init = "component:init"; // Инициализация
-	static registerBasementAction = "component:registerBasementAction"; // Регистр базового действия
 	static render = "component:render"; // Рендер
 	static updateProp = "component:update"; // Обновление пропсов
 	static updateChildren = "component:updateChildren"; // Обновление чилдренов
@@ -15,15 +14,17 @@ export class EVENTS {
 // Тип данных для чилдренов
 export type ComponentChildrenData = Record<string, Component[]>;
 
+export type EventsType = Record<string, Fn<unknown> | Fn<unknown>[]>
+
 // Тип данных для пропсов
 export type ComponentPropsData = {
 	children?: ComponentChildrenData;
-	events?: Fn<unknown>[];	// Массив функций для ДЕФОЛТНОГО действия (клик для кнопки и т.д.)
+	events?: EventsType;
 	[key: string]: unknown;
 };
 
 // Класс базового компонента
-export default abstract class Component {
+export default abstract class Component<PropsType extends ComponentPropsData = ComponentPropsData> {
 
 	// Делаем действия публичными
 	public static readonly EVENTS = EVENTS;
@@ -33,14 +34,14 @@ export default abstract class Component {
 
 	private _document: HTMLElement; // Тут хранится DOM-дерево компонента
 	public readonly eventBus: EventBus;
-	public readonly props: ComponentPropsData; // Основные пропсы (чилдрены отделяются)
+	public readonly props: PropsType; // Основные пропсы (чилдрены отделяются)
 	public children: ComponentChildrenData;    // Чилдрены (массивы компонентов)
 
 	// Холдеры для чилдренов
 	// Холдер - это HTML-элемент в шаблоне компонента, изначально пустой,  куда добавлятся чилдрены
 	private _childrenHolders: Record<string, HTMLElement>;
 
-	protected constructor(props: ComponentPropsData) {
+	protected constructor(props: PropsType) {
 		// Добавляем экземпляр в список всех компонентов
 		Component._allComponents.push(this);
 
@@ -53,13 +54,38 @@ export default abstract class Component {
 		this.children = this._makeChildrenObjectProxy({});
 
 		// Делаем пропсы прокси
-		this.props = this._makePropsProxy(props);
+		this.props = this._makePropsProxy(props) as PropsType;
 
 		// Вызываем инициализацию компонента
 		this.eventBus.emit(Component.EVENTS.init);
 
 		// Вырезаем чилдренов из пропсов и вставляем  чилдрены в элемент
 		Object.assign(this.children, this._getChildrenFromProps(props));
+
+		// Теперь добавляем переданные евенты
+		this._addEvents(this.props.events as EventsType);
+	}
+
+	private _addEvents(events: EventsType = {}){
+		Object.entries(events).forEach(([HtmlAction, eventsArray])=>{
+			if(!(eventsArray instanceof Array)){
+				eventsArray=[eventsArray];
+			}
+			eventsArray.forEach(event => {
+				this.target().addEventListener(HtmlAction, event);
+			});
+		});
+	}
+
+	private _removeEvents(events: EventsType = {}){
+		Object.entries(events).forEach(([HtmlAction, eventsArray])=>{
+			if(!(eventsArray instanceof Array)){
+				eventsArray=[eventsArray];
+			}
+			eventsArray.forEach(event => {
+				this.target().removeEventListener(HtmlAction, event);
+			});
+		});
 	}
 
 	// Метод для отделения children от пропсов (вырезаем из пропсов и возвращаем отдельно)
@@ -72,8 +98,6 @@ export default abstract class Component {
 	// Регистрируем базовые события для Event Bus
 	private _registerEvents(): void {
 		this.eventBus.on(Component.EVENTS.init, this._init.bind(this));
-		this.eventBus.on(Component.EVENTS.registerBasementAction,
-			this._registerBasementActionForEventBus.bind(this));
 		this.eventBus.on(Component.EVENTS.render, this._render.bind(this));
 		this.eventBus.on(Component.EVENTS.updateProp, this.updateProp.bind(this));
 		this.eventBus.on(Component.EVENTS.updateChildren, this.updateChildren.bind(this));
@@ -142,6 +166,10 @@ export default abstract class Component {
 		return this._document;
 	}
 
+	public setDocument(document: HTMLElement): void {
+		this._document=document;
+	}
+
 	// Метод возвращает ключевой HTML элемент из всего документа
 	// Может быть перезаписан в дочернем классе
 	// По-умолчанию возвращает весь документ
@@ -151,19 +179,23 @@ export default abstract class Component {
 
 	// Прокси для основных пропсов элемента
 	// Отличия: после изменения вызывается update компонента
-	private _makePropsProxy(props: ComponentPropsData): ComponentPropsData {
+	private _makePropsProxy(props: PropsType): PropsType {
 		const proxySetting = {
 			get: (target: ComponentPropsData, prop: string): unknown => {
 				// Запрашиваем значение из DOM-элемента через метод
 				const propFromDom = this.getProp(prop);
-				if (propFromDom.fromDom){
+				if (propFromDom.fromDom) {
 					return propFromDom.value;
-				}else{
+				} else {
 					return target[prop];
 				}
 			},
 			set: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
 				if (target[prop] !== value) {
+					if(prop==='events'){
+						this._removeEvents(this.props.events as EventsType);
+						this._addEvents(value as EventsType);
+					}
 					target[prop] = value;
 					this.eventBus.emit(Component.EVENTS.updateProp, prop);
 				}
@@ -175,7 +207,7 @@ export default abstract class Component {
 				return true;
 			}
 		};
-		return new Proxy(props as ComponentPropsData, proxySetting) as ComponentPropsData;
+		return new Proxy(props, proxySetting) as PropsType;
 	}
 
 	// Прокси для children элемента
@@ -226,25 +258,6 @@ export default abstract class Component {
 		return new Proxy(props, proxySetting);
 	}
 
-	// Регистрация базовых действий для интерактивных компонентов (click, change и т.д.)
-	private _registerBasementActionForEventBus(
-		htmlAction: string | false,
-		eventBusAction: string
-	): void {
-		if (this.props.events && this.props.events.length > 0) {
-			this.props.events.forEach(event => {
-				this.eventBus.on(eventBusAction, event);
-			});
-		}
-		delete this.props.events;
-		if (htmlAction && htmlAction.length > 0) {
-			this.target().addEventListener(htmlAction, (e) => {
-				e.preventDefault();
-				this.eventBus.emit(eventBusAction, this, e);
-			})
-		}
-	}
-
 	// Поиск элементов в дом дереве
 	public subElements(selector: string): HTMLElement[] {
 		return Array.from(this._document.querySelectorAll(selector));
@@ -261,6 +274,8 @@ export default abstract class Component {
 
 	// Метод уничтожения экземпляра
 	public destroy(): void {
+		// Убираем слушателей
+		this.props.events={};
 		// Рекурсивно вызываем уничтожение всех чилдренов
 		Object.values(this.children).forEach(children => {
 			for (const child of children) {
@@ -287,24 +302,25 @@ export default abstract class Component {
 		holder: string,
 		index: number
 	} {
-			let parentComponent: Component | boolean = false;
-			let parentChildrenHolder: string | boolean = '';
-			let parentChildrenIndex: number = -1;
-			Component._allComponents.forEach(component => {
-				Object.entries(component.children).forEach(([holder, children]) => {
-					children.forEach(child => {
-						if (child === this) {
-							parentComponent = component;
-							parentChildrenHolder = holder;
-							parentChildrenIndex = children.indexOf(this);
-						}
-					})
+		let parentComponent: Component | boolean = false;
+		let parentChildrenHolder: string | boolean = '';
+		let parentChildrenIndex: number = -1;
+		Component._allComponents.forEach(component => {
+			Object.entries(component.children).forEach(([holder, children]) => {
+				children.forEach(child => {
+					if (child === this) {
+						parentComponent = component;
+						parentChildrenHolder = holder;
+						parentChildrenIndex = children.indexOf(this);
+					}
 				})
-			});
-			return {
-				parent: parentComponent,
-				holder: parentChildrenHolder,
-				index: parentChildrenIndex
-			}
+			})
+		});
+		return {
+			parent: parentComponent,
+			holder: parentChildrenHolder,
+			index: parentChildrenIndex
 		}
+	}
+
 }

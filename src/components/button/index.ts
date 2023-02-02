@@ -1,6 +1,6 @@
 import tpl from "./tpl.hbs";
-import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
-import {Fn, generateDom} from "~src/modules/functions";
+import Component, {ComponentPropsData, EventsType} from "~src/components/components";
+import {generateDom} from "~src/modules/functions";
 
 // Компонент Button отвечает за кнопки
 
@@ -23,26 +23,16 @@ const button = (data: buttonData): string => {
 	return tpl({name, type, text, className});
 };
 
-// Дополнительные действия с компонентом
-class ButtonEVENTS extends EVENTS {
-	static click = "button:click"; // Клик на кнопку
-}
-
 // Класс кнопки
-export default class Button extends Component{
-
-	// Делаем действия публичными
-	public static override readonly EVENTS = ButtonEVENTS;
+export default class Button extends Component<buttonData> {
 
 	constructor(props: buttonData) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
-		// Регистрируем базовое действие - клик по кнопке
-		this.eventBus.emit(Component.EVENTS.registerBasementAction, 'click', Button.EVENTS.click);
 	}
 
 	// Метод рендера DOM-дерева кнопки по шаблону
-	protected override render(data: buttonData):HTMLElement{
+	protected override render(data: buttonData): HTMLElement {
 		return generateDom(button(data));
 	}
 
@@ -52,7 +42,7 @@ export default class Button extends Component{
 		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'id':
-				this.target().id=value;
+				this.target().id = value;
 				break;
 			case 'text':
 				element = this.target();
@@ -73,7 +63,7 @@ export default class Button extends Component{
 	}
 
 	// Метод превращения DOM-элемента в экземпляр Button
-	public static makeButton(renderedButton: HTMLElement, events: Fn<unknown>[] = []): Button {
+	public static makeButton(renderedButton: HTMLElement, events: EventsType = {}): Button {
 		const type = renderedButton.getAttribute('type') || undefined;
 		const className = renderedButton.getAttribute('class') || undefined;
 		const name = renderedButton.getAttribute('name') || undefined;

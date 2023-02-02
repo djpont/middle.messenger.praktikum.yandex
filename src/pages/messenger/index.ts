@@ -11,6 +11,7 @@ import ChatFeed from "~src/components/chat-feed";
 import Chatlist from "~src/components/chatlist";
 import User from "~src/modules/user";
 import Routing from "~src/modules/routing";
+import Form from "~src/components/form";
 
 // Страничка Мессенджера.
 // Возвращает большое окно, состоящее из двух больших компонентов: Списка чатов (Chatlist)
@@ -35,12 +36,9 @@ export default (rootElement: View): Window => {
 				new Button({
 					className: 'details',
 					text: 'Детали',
-					events: [
-						() => {
-							// Действие при нажатии на кнопку
-							Routing('/profile', rootElement)
-						}
-					]
+					events: {
+						'click': () => Routing('/profile', rootElement)
+					}
 				})],
 			search: [
 				new Input({
@@ -49,16 +47,18 @@ export default (rootElement: View): Window => {
 				new Button({
 					type: 'submit',
 					className: 'buttonSearch',
-					text: 'Найти',
-					events: [
-						() => {
-							// Действие при нажатии на кнопку
-							console.log('Метод поиска сообщений');
-						}
-					]
+					text: 'Найти'
 				})],
 		}
 	});
+
+	const searchForm = Form.makeForm(content.subElement('form.search'));
+	searchForm.props.events={
+		'submit': (e: SubmitEvent) => {
+			e.preventDefault();
+			console.log('Метод поиска сообщений');
+		}
+	}
 
 	// Создаём окно с созданным выше содержимым
 	const window = new Window({

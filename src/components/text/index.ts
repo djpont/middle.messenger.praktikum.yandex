@@ -22,7 +22,7 @@ const text = (data: textData): string => {
 };
 
 // Класс текста
-export default class Text extends Component {
+export default class Text extends Component<textData> {
 
 	constructor(props: textData) {
 		// Сначала создаём базовый компонент  и рендерим его

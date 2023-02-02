@@ -7,7 +7,7 @@ import Input from "~src/components/input";
 export type Fn<T> = (...args: unknown[]) => T;
 
 // Функция совмещения компонентов в единый DOM-элемент
-export const joinDom = (components: Component<unknown>[]) => {
+export const joinDom = (components: Component[]) => {
 	const dom = document.createDocumentFragment();
 	for (const el of components) {
 		dom.append(el.document());
@@ -32,10 +32,12 @@ export const generateDom = (html_code: string): HTMLElement => {
 }
 
 // Функция превращения массива инпутов в data для Fetch запроса
-export const fetchDataFromInputs = (...inputs: Input[]): Record<string, string> => {
-	const data: Record<string, string> = {};
+export const fetchDataFromInputs = (...inputs: Input[]): {[key: string]: string} => {
+	const data: {[key: string]: string} = {};
 	inputs.forEach(input => {
-		data[input.props.name]=input.props.value;
+		if(typeof input.props.name === 'string' && typeof input.props.value === 'string'){
+			data[input.props.name]=input.props.value;
+		}
 	});
 	return data;
 }

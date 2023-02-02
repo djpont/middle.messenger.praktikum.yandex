@@ -14,6 +14,7 @@ import fileUpload from "~src/pages/file-upload";
 import Validator from "~src/modules/validator";
 import Fetch from "~src/modules/fetch";
 import {fetchDataFromInputs} from "~src/modules/functions";
+import Form from "~src/components/form";
 
 // Страничка профиля. Возвращает окно.
 
@@ -38,14 +39,17 @@ export default (rootElement: View): Window => {
 		children: {
 			content: [content]  // Передаем содержимое в чилдрены
 		},
-		events: [
-			// Добавляем действие на закрытие окна
+		close:
+		// Добавляем действие на закрытие окна
 			() => Routing('/messenger', rootElement)
-		]
+
 	});
 	// Вызываем обновление чилдренов окна
 	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
 	window.updateChildren(true);
+
+	// Находим форму, превращаем в экземпляр Form
+	const form = Form.makeForm(content.document());
 
 	// Метод для валидации инпутов
 	function validate(input: Input) {
@@ -68,28 +72,30 @@ export default (rootElement: View): Window => {
 			name: 'edit',
 			type: 'button',
 			text: 'Изменить данные',
-			events: [
-				() => contentOpen(contentEdit())
-			]
+			events: {
+				'click': () => contentOpen(contentEdit())
+			}
 		});
 		const buttonChangePassword = new Button({
 			name: 'changePassword',
 			type: 'button',
 			text: 'Изменить пароль',
-			events: [
-				() => contentOpen(contentChangePassword())
-			]
+			events: {
+				'click': () => contentOpen(contentChangePassword())
+			}
 		});
 		const buttonClose = new Button({
 			name: 'close',
 			type: 'button',
 			text: 'Закрыть',
-			events: [
-				window.close
-			]
+			events: {
+				'click': window.close
+			}
 		});
 		// Вставляем кноки в контент
 		const buttons = [buttonEdit, buttonChangePassword, buttonClose];
+		// Очищаем слушателей формы
+		form.props.events = {};
 		return {inputs, buttons};
 	}
 
@@ -101,36 +107,44 @@ export default (rootElement: View): Window => {
 			name: 'email',
 			label: 'Почта:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputEmail);
+				}
+			}
 		});
 		const inputLogin = new Input({
 			type: 'text',
 			name: 'login',
 			label: 'Логин:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputLogin);
+				}
+			}
 		});
 		const inputFirstName = new Input({
 			type: 'text',
 			name: 'first_name',
 			label: 'Имя:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputFirstName);
+				}
+			}
 		});
 		const inputSecondName = new Input({
 			type: 'text',
 			name: 'second_name',
 			label: 'Фамилия:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputSecondName);
+				}
+			}
 		});
 		const inputDisplayName = new Input({
 			type: 'text',
@@ -143,9 +157,11 @@ export default (rootElement: View): Window => {
 			name: 'phone',
 			label: 'Телефон:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputPhone);
+				}
+			}
 		});
 		const inputs = [
 			inputEmail,
@@ -160,42 +176,15 @@ export default (rootElement: View): Window => {
 		const buttonSave = new Button({
 			name: 'save',
 			type: 'submit',
-			text: 'Сохранить',
-			events: [
-				() => {
-					// Сначала проверяем валидацию инпутов
-					const formValid = Validator.validateInputWithAlert(
-						inputFirstName,
-						inputSecondName,
-						inputEmail,
-						inputPhone,
-						inputLogin
-					);
-					// Если успешно, то выполянем запрос
-					if(formValid){
-						const data = fetchDataFromInputs(
-							inputFirstName,
-							inputSecondName,
-							inputEmail,
-							inputPhone,
-							inputLogin
-						);
-						console.log(data);
-						Fetch.post({
-							path: '/profile',
-							data
-						});
-					}
-				}
-			]
+			text: 'Сохранить'
 		});
 		const buttonBack = new Button({
 			name: 'back',
 			type: 'button',
 			text: 'Назад',
-			events: [
-				() => contentOpen(contentWatch())
-			]
+			events: {
+				'click': () => contentOpen(contentWatch())
+			}
 		});
 		const buttons = [buttonSave, buttonBack];
 
@@ -204,18 +193,51 @@ export default (rootElement: View): Window => {
 			name: 'avatar',
 			type: 'button',
 			text: 'Изменить аватар',
-			events: [
-				() => alert.alertWindow(fileUpload())
-			]
+			events: {
+				'click': () => alert.alertWindow(fileUpload())
+			}
 		});
 		const avatar = [buttonAvatar];
+
+		// Добавляем действие форме
+		form.props.events = {
+			'submit': (e: SubmitEvent) => {
+				e.preventDefault();
+				// Сначала првоеряем, что нет показанных сообщений после change input
+				if (rootElement.children.alert.length > 0) {
+					return;
+				}
+				// Сначала проверяем валидацию инпутов
+				const formValid = Validator.validateInputWithAlert(
+					inputFirstName,
+					inputSecondName,
+					inputEmail,
+					inputPhone,
+					inputLogin
+				);
+				// Если успешно, то выполянем запрос
+				if (formValid) {
+					const data = fetchDataFromInputs(
+						inputFirstName,
+						inputSecondName,
+						inputEmail,
+						inputPhone,
+						inputLogin
+					);
+					console.log(data);
+					Fetch.post({
+						path: '/profile',
+						data
+					});
+				}
+			}
+		};
 
 		return {inputs, buttons, avatar};
 	}
 
 	// Содержимое для режима изменения пароля
 	const contentChangePassword = (): ComponentChildrenData => {
-		console.log('contentChangePassword');
 		// Создаём экземпляры инпутов
 		const inputOldPassword = new Input({
 			type: 'password',
@@ -228,9 +250,11 @@ export default (rootElement: View): Window => {
 			name: 'password',
 			label: 'Новый пароль:',
 			isStacked: true,
-			events: [
-				validate
-			]
+			events: {
+				'focusout': () => {
+					validate(inputNewPassword1);
+				}
+			}
 		});
 		const inputNewPassword2 = new Input({
 			type: 'password',
@@ -248,13 +272,32 @@ export default (rootElement: View): Window => {
 		const buttonSave = new Button({
 			name: 'save',
 			type: 'submit',
-			text: 'Сохранить',
-			events: [
-				() => {
-					// Сначала проверяем, что введённые пароли одинаковые
-					if(!Validator.equalInput([inputNewPassword1, inputNewPassword2])){
+			text: 'Сохранить'
+		});
+		const buttonBack = new Button({
+			name: 'back',
+			type: 'button',
+			text: 'Назад',
+			events: {
+				'click': () => contentOpen(contentWatch())
+			}
+		});
+		const buttons = [buttonSave, buttonBack];
+
+		// Добавляем действие форме
+		form.props.events = {
+			'submit': (e: SubmitEvent) => {
+				e.preventDefault();
+				// Сначала првоеряем, что нет показанных сообщений после change input
+				if (rootElement.children.alert.length > 0) {
+					return;
+				}
+				// Проверяем, что пароль проходит валидацию
+				if(Validator.validateInputWithAlert(inputNewPassword1)){
+					// Проверяем, что введённые пароли одинаковые
+					if (!Validator.equalInput([inputNewPassword1, inputNewPassword2])) {
 						alert.error(['Введённые пароли отличаются.']);
-					}else{
+					} else {
 						// Если совпадают, то выполянем запрос
 						const data = fetchDataFromInputs(
 							inputOldPassword,
@@ -268,24 +311,15 @@ export default (rootElement: View): Window => {
 						});
 					}
 				}
-			]
-		});
-		const buttonBack = new Button({
-			name: 'back',
-			type: 'button',
-			text: 'Назад',
-			events: [
-				() => contentOpen(contentWatch())
-			]
-		});
-		const buttons = [buttonSave, buttonBack];
+			}
+		};
 
 		return {inputs, buttons};
 	}
 
 	// Метод обновления содержимого контента
-	const contentOpen = (children: ComponentChildrenData):void => {
-		content.children=children;
+	const contentOpen = (children: ComponentChildrenData): void => {
+		content.children = children;
 		content.updateChildren(true);
 	}
 

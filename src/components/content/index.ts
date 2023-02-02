@@ -1,11 +1,11 @@
 import Component, {ComponentPropsData} from "~src/components/components";
-import {generateDom} from "~src/modules/functions";
+import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Content отвечат за содержимое окна
 
 // Тип данных для контанта
 type contentType = {
-	readonly template: (...args: unknown[]) => string,
+	readonly template: Fn<string>,
 	data?: unknown
 } & ComponentPropsData;
 

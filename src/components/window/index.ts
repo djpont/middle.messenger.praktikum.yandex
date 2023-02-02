@@ -1,6 +1,6 @@
 import tpl from './tpl.hbs';
 import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
-import {generateDom} from "~src/modules/functions";
+import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Window отвечает за окно - шапка с заголовком и кнопкой закрытия,
 // а так же рамка и пространство для содержимого (для экземпляра класса Content)
@@ -9,7 +9,8 @@ import {generateDom} from "~src/modules/functions";
 type windowData = {
 	className?: string,
 	title?: string,
-	controls?: Record<string, boolean>
+	controls?: Record<string, boolean>,
+	close?: Fn<unknown>
 } & ComponentPropsData;
 
 
@@ -29,7 +30,7 @@ class WindowEVENTS extends EVENTS {
 }
 
 // Класс окна
-export default class Window extends Component {
+export default class Window extends Component<windowData> {
 
 	// Делаем действия публичными
 	public static override readonly EVENTS = WindowEVENTS;
@@ -39,9 +40,10 @@ export default class Window extends Component {
 		super(data);
 		// Регистрация кнопок из шапки окна
 		this._registerWindowControls();
-		// Регистрируем базовое действие - закрытие окна
-		this.eventBus.emit(Component.EVENTS.registerBasementAction, false, Window.EVENTS.close);
-		// Добавляем к окну действие _close при закрытии окна
+		// Добавляем к окну переданное действие и действие _close при закрытии окна
+		if (this.props.close) {
+			this.eventBus.on(Window.EVENTS.close, this.props.close);
+		}
 		this.eventBus.on(Window.EVENTS.close, this._close);
 	}
 
@@ -80,14 +82,14 @@ export default class Window extends Component {
 	}
 
 	// Метод регистрации действий на нажатия кнопок в шапке окна (Закрыть окно и т.д.)
-	private _registerWindowControls = ():void => {
+	private _registerWindowControls = (): void => {
 		[[
 			'Close', Window.EVENTS.close
 		]].forEach(([label, action]) => {
 			const button = this.document().querySelector(
 				`:scope > .title-bar .title-bar-controls [aria-label="${label}"]`
 			);
-			if(button){
+			if (button) {
 				button.addEventListener('click', () => {
 					this.eventBus.emit(action);
 				});
@@ -96,13 +98,12 @@ export default class Window extends Component {
 	}
 
 	// Метод закрытия окна - эмитирует цепочки эвент баса
-	public readonly close = ():void => {
+	public readonly close = (): void => {
 		this.eventBus.emit(Window.EVENTS.close);
 	}
 
 	// Метод закрытия окна - непосредственно уничтожение экземпляра окна
-	private readonly _close = ():void => {
+	private readonly _close = (): void => {
 		this.destroy();
 	}
-
 }

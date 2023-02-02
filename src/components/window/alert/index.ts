@@ -90,13 +90,16 @@ export default class Alert {
 		});
 
 		// Если сообщение или ошибка (не фатальная), то добаляем кнопку закрытия
+		let button: Button | null = null;
 		if(type === alertType.message || type === alertType.error){
-			const button = new Button({
-				text:'Закрыть'
+			button = new Button({
+				text:'Закрыть',
+				events:{
+					// При нажатии кнопка вызывает метод close() у window
+					'click': window.close
+				}
 			});
 			content.children.buttons=[button];
-			// При нажатии кнопка вызывает метод close() у window
-			button.eventBus.on(Button.EVENTS.click, window.close);
 		}
 
 		// Добавляем окно в view
@@ -105,6 +108,10 @@ export default class Alert {
 		this._view.updateChildren();
 		// Обновляем чилдренов окна (без рекурсии)
 		window.updateChildren(true);
+
+		if(button){
+			button.target().focus();
+		}
 	}
 
 	// Метод отобожения переданного окна на слой alert.

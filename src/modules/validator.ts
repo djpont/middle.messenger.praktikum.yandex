@@ -56,8 +56,9 @@ export default class Validator {
 		let result: boolean = true;
 		const errorTexts: string[] = [];
 		inputs.forEach(input => {
-			const rule = input.props.name;
-			const value = input.props.value;
+			console.log(input);
+			const rule = input.props.name as string;
+			const value = input.props.value as string;
 			const validated = Validator.validate(rule, value);
 			if (!validated.valid) {
 				result = false;

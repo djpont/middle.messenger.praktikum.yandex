@@ -10,6 +10,7 @@ import fileUpload from "~src/pages/file-upload";
 import Alert from "~src/components/window/alert";
 import Validator from "~src/modules/validator";
 import Fetch from "~src/modules/fetch";
+import Form from "~src/components/form";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
@@ -32,37 +33,43 @@ export default class ChatFeed extends Component {
 	}
 
 	// Метод превращения отрендеренных кнопок в управляемые экземпляры Button
-	private _makeNewMessageFormActive():void {
+	private _makeNewMessageFormActive(): void {
 		// Превращаем инпут для ввода сообщения в экземпляр Input
 		const inputMessage = Input.makeInput(
 			this.subElement('div.newMessage input[name="message"]')
 		);
 		// Превращаем кнопку для отправки сообщения в экземпляр Button
 		Button.makeButton(
-			this.subElement('div.newMessage button[type="submit"]'),
-			[
-				() => {
-					// Сначала проверяем валидацию инпута
-					const valid = Validator.validateInputWithAlert(inputMessage);
-					// Если успешно, то выполянем запрос
-					if(valid){
-						const data = fetchDataFromInputs(inputMessage);
-						console.log(data);
-						Fetch.post({
-							path: '/message',
-							data
-						});
-					}
-				}
-			]
+			this.subElement('div.newMessage button[type="submit"]')
 		);
 		// Превращаем кнопку для прикрепления файла в экземпляр Button
 		Button.makeButton(
 			this.subElement('div.newMessage button.attach'),
-			[
-				() => Alert.lastAlert().alertWindow(fileUpload())
-			]
+			{
+				'click': [
+					() => Alert.lastAlert().alertWindow(fileUpload())
+				]
+			}
 		);
+		// Превращаем форму в экземпляр Form и вешаем событие на submit
+		const form = Form.makeForm(this.subElement('form'));
+		form.props.events={
+			'submit': (e: SubmitEvent) => {
+				e.preventDefault();
+				// Сначала проверяем валидацию инпута
+				const valid = Validator.validateInputWithAlert(inputMessage);
+				// Если успешно, то выполянем запрос
+				if (valid) {
+					const data = fetchDataFromInputs(inputMessage);
+					console.log(data);
+					Fetch.post({
+						path: '/message',
+						data
+					});
+				}
+			}
+		}
+
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
@@ -104,7 +111,7 @@ export default class ChatFeed extends Component {
 		this.children.messages = [];
 		this.updateChildren();
 		// Убираем набранный текст из поля нового сообщения
-		(this.subElement('div.newMessage input.text') as HTMLInputElement).value='';
+		(this.subElement('div.newMessage input.text') as HTMLInputElement).value = '';
 	}
 
 	// Делаем пропсы равными данным из переданного чата (заголовок и аватар)

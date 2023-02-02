@@ -17,7 +17,7 @@ const view = (): string => {
 };
 
 // Класс вью
-export default class View extends Component {
+export default class View extends Component<viewData> {
 
 
 	constructor(props: viewData) {

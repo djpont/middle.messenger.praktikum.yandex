@@ -43,9 +43,9 @@ export default class ChatFeed extends Component<chatFeedData> {
 			[
 				() => {
 					// Сначала проверяем валидацию инпута
-					const valide = Validator.validateInputWithAlert(inputMessage);
+					const valid = Validator.validateInputWithAlert(inputMessage);
 					// Если успешно, то выполянем запрос
-					if(valide){
+					if(valid){
 						const data = fetchDataFromInputs(inputMessage);
 						console.log(data);
 						Fetch.post({

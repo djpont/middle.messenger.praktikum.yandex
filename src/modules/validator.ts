@@ -43,7 +43,7 @@ export default class Validator {
 	// Метод валидации. Возвращает boolean успеха и описание
 	public static validate(rule: string, value: string): { valid: boolean, description: string } {
 		if (!regexpsRules[rule]) {
-			throw new Error(`Validater не имеет правила ${rule}`);
+			throw new Error(`Validator не имеет правила ${rule}`);
 		}
 		return {
 			valid: regexpsRules[rule].regexp.test(value),

@@ -5,7 +5,7 @@ import {generateDom} from "~src/modules/functions";
 
 // Тип данных для контанта
 type contentType = {
-	readonly template: (...args: any) => string,
+	readonly template: (...args: unknown[]) => string,
 	data?: unknown
 } & ComponentPropsData;
 

@@ -51,7 +51,5 @@ https://github.com/djpont/middle.messenger.praktikum.yandex/pull/2
 * `Button`, `Input`, `Text` - базовые компоненты, могут быть созданы из пропсов или из имеющегося HTML-элемента.
 * `Chatlist` - список чатов.
 * `ChatFeed` - лента сообщений.
->>>>>>> sprint_2
-
 
 Используется стили [98.css](https://jdan.github.io/98.css/)

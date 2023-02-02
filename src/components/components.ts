@@ -4,11 +4,11 @@ import {Fn} from "~src/modules/functions";
 // Базовый компонент (аналог Block из теории Практикума)
 
 // Возможные действия с базовым компонентом
-export class EVENTS {
-	static init = "component:init"; // Инициализация
-	static render = "component:render"; // Рендер
-	static updateProp = "component:update"; // Обновление пропсов
-	static updateChildren = "component:updateChildren"; // Обновление чилдренов
+export const EVENTS = {
+	init: "component:init", // Инициализация
+	render: "component:render", // Рендер
+	updateProp: "component:update", // Обновление пропсов
+	updateChildren: "component:updateChildren", // Обновление чилдренов
 }
 
 // Тип данных для чилдренов

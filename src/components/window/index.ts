@@ -1,5 +1,5 @@
 import tpl from './tpl.hbs';
-import Component, {ComponentPropsData, EVENTS} from "~src/components/components";
+import Component, {ComponentPropsData} from "~src/components/components";
 import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Window отвечает за окно - шапка с заголовком и кнопкой закрытия,
@@ -25,15 +25,15 @@ const window = (data: windowData): string => {
 };
 
 // Дополнительные действия с окном
-class WindowEVENTS extends EVENTS {
-	static close = "window:close"; // Закрытие окна
+const WindowEVENTS = {
+	close: "window:close" // Закрытие окна
 }
 
 // Класс окна
 export default class Window extends Component<windowData> {
 
 	// Делаем действия публичными
-	public static override readonly EVENTS = WindowEVENTS;
+	public static override readonly EVENTS = Object.assign(Component.EVENTS, WindowEVENTS);
 
 	constructor(data: windowData) {
 		// Сначала создаём базовый компонент  и рендерим его

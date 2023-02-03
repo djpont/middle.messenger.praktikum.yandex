@@ -2,9 +2,6 @@
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/djpont/middle.messenger.praktikum.yandex/tests.yml?branch=sprint_1)
 ![Netlify](https://img.shields.io/netlify/b32e09ac-0be1-44f2-ac50-b754434586f1)
 
-### Ссылка на pull request
-https://github.com/djpont/middle.messenger.praktikum.yandex/pull/2
-
 
 ### Запуск проекта
 * `npm run start`
@@ -21,6 +18,7 @@ https://github.com/djpont/middle.messenger.praktikum.yandex/pull/2
 Внешний вид выполнен духе приложений эпохи Windows 95/98/2000.
 В качестве шаблонизатора используется Handlebars.
 
+
 ### Описание директорий
 * `/src` - ресурсы программы
 * `/src/components` - визуальные компоненты, с помощью которых создаются dom-элементы
@@ -28,22 +26,7 @@ https://github.com/djpont/middle.messenger.praktikum.yandex/pull/2
 * `/src/pages` - страницы для демонстрации работы
 * `/static` - статичные элементы и картинки
 * `/ui` - макет программы, выполненный на бумаге
-
-
-### Описание проекта
-Учебный проект "Мессенджер" для Яндекс.Практикума.
-Функционал сравним с любым современным мессенджером.
-Внешний вид выполнен духе приложений эпохи Windows 95/98/2000.
-В качестве шаблонизатора используется Handlebars.
-
-
-### Описание директорий
-* `/src` - ресурсы программы.
-* `/src/components` - визуальные компоненты, с помощью которых создаются dom-элементы.
-* `/src/modules` - классы для основных сущностей мессенджера.
-* `/src/pages` - страницы для демонстрации работы.
-* `/static` - статичные элементы и картинки.
-* `/ui` - макет программы, выполненный на бумаге.
+* 
 
 ### Структура основных компонентов
 Все компоненты, кроме `View`, настедуются от базового класса `Component`.

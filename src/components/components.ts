@@ -9,7 +9,7 @@ export const EVENTS = {
 	render: "component:render", // Рендер
 	updateProp: "component:update", // Обновление пропсов
 	updateChildren: "component:updateChildren", // Обновление чилдренов
-}
+} as const;
 
 // Тип данных для чилдренов
 export type ComponentChildrenData = Record<string, Component[]>;

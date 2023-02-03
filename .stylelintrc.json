@@ -1,0 +1,30 @@
+{
+	"extends": "stylelint-config-standard-scss",
+	"plugins": [
+		"stylelint-scss"
+	],
+	"rules": {
+		"color-hex-case": "lower",
+		"string-quotes": "single",
+		"import-notation": null,
+		"indentation": null,
+		"at-rule-no-unknown": null,
+		"scss/at-rule-no-unknown": true,
+		"scss/dollar-variable-pattern": "^foo",
+		"scss/selector-no-redundant-nesting-selector": true,
+		"custom-property-pattern": "^[a-zA-Z0-9]*$",
+		"scss/at-mixin-pattern": "^[a-zA-Z0-9]*$",
+		"selector-id-pattern": "^[a-zA-Z0-9]*$",
+		"selector-class-pattern": "^[a-zA-Z0-9]*$",
+		"declaration-colon-newline-after": "always-multi-line"
+	},
+	"rule-naming-convention": [true, {
+		"severity": "warning",
+		"ignore": [".window-body"]
+	}],
+	"ignoreFiles": [
+		"dist/*",
+		"node_modules/*",
+		".parcel-cache/*"
+	]
+}

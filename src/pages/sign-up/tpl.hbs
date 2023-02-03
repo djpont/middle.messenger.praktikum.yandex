@@ -1,19 +1,12 @@
 <form action="">
-	<div class="sign-up-container">
+	<div class="signUpContainer">
 		<div>
 			<div class="logo"></div>
 		</div>
 		<div>
 			<p>Введите логин и пароль для регистрации.</p>
-			<div class="inputs">
-				{{#each infoLines}}
-					{{{this}}}
-				{{/each}}
-			</div>
-			<div class="buttons">
-				{{{buttonSubmit}}}
-				{{{buttonCancel}}}
-			</div>
+			<div class="inputs" data-holder="inputs"></div>
+			<div class="buttons" data-holder="buttons"></div>
 		</div>
 	</div>
 </form>

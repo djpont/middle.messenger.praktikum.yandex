@@ -5,82 +5,62 @@
 	align-items: stretch;
 	align-content: flex-start;
 	height: 100%;
-	
-	&.hidden{
+
+	&.hidden {
 		display: none;
 	}
-	
-	& div.header{
+
+	div.header {
 		display: flex;
 		flex-flow: row nowrap;
 		justify-content: start;
 		align-items: center;
 		align-content: flex-start;
-		
 		padding: 3px 0 11px;
-		
-		& div.avatar{
+
+		div.avatar {
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 			width: 32px;
 			height: 32px;
 			margin-right: 7px;
 		}
-		& div.chatName{
+
+		div.chatName {
 			flex-grow: 1;
 			font-weight: bold;
 		}
-		& button.options{
-		
-		}
-		
 	}
-	
-	& div.feed{
-		min-height:200px;
+
+	div.feed {
+		min-height: 200px;
 		background: var(--chatBackground);
 		padding: 5px 7px;
 		flex-grow: 1;
 	}
-	
-	& div.newMessage{
+
+	div.newMessage {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: flex-end;
 		align-items: flex-start;
 		align-content: flex-start;
-		
 		padding: 0 0 3px;
-		
-		& input.text{
+
+		input.text {
 			display: inline-block;
 			flex-grow: 1;
 			margin-top: 11px;
 		}
-		
-		& div.buttons{
+
+		div.buttons {
 			text-align: right;
 			margin-left: 7px;
 			margin-top: 11px;
-			& button.send{
+
+			button.send {
 				margin-right: 7px;
 			}
-			& button.attach{
-			
-			}
 		}
-		
-	}
-}
-
-.message{
-	&.in{
-		color: var(--messageTextIncoming);
-	}
-	&.out{
-		color: var(--messageTextOutgoing);
-	}
-	&:not(:last-child){
-		margin-bottom: 7px;
 	}
 }

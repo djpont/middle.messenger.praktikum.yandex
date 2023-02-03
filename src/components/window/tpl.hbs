@@ -1,15 +1,13 @@
-<div class="window {{windowClassName}}" id="{{id}}">
+<div class="window {{className}}">
 	<div class="title-bar">
 		<div class="title-bar-text">{{title}}</div>
 		{{#if controls}}
-		<div class="title-bar-controls">
-			{{#if controls.close}}
-			<button aria-label="Close" id="{{id}}_windowCloseButton"></button>
-			{{/if}}
-		</div>
+			<div class="title-bar-controls">
+				{{#if controls.close}}
+					<button aria-label="Close"></button>
+				{{/if}}
+			</div>
 		{{/if}}
 	</div>
-	<div class="window-body">
-
-	</div>
+	<div class="window-body" data-holder="content"></div>
 </div>

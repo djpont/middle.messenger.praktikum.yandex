@@ -1,0 +1,35 @@
+{
+	"include": [
+		"src",
+		"declaration.d.ts"
+	],
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "ES6",
+		"sourceMap": true,
+		"moduleResolution": "Node",
+		"baseUrl": "./",
+		"paths": {
+			"~*": [
+				"./*"
+			]
+		},
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strictNullChecks": true,
+		"outDir": "dist",
+		"declaration": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"lib": [
+			"dom",
+			"ES2018"
+		]
+	},
+	"exclude": [
+		"node_modules"
+	]
+}
+

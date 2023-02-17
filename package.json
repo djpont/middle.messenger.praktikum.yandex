@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"start": "npm run clear > /dev/null && parcel static/index.html -p 3000 --no-cache",
-		"build": "npm run clear > /dev/null && parcel build static/index.html",
+		"build": "parcel build static/index.html",
 		"eslint": "eslint . --ext .ts",
 		"stylelint": "stylelint '**/*.scss' && stylelint **/*.scss",
 		"clear": "rm -rf dist/* && rm -rf .parcel-cache/*"

@@ -3,6 +3,10 @@
 ![Netlify](https://img.shields.io/netlify/b32e09ac-0be1-44f2-ac50-b754434586f1)
 
 
+### Ссылка на pull request
+[Sprint 3](https://github.com/djpont/middle.messenger.praktikum.yandex/pull/4)
+
+
 ### Запуск проекта
 * `npm run start`
 * `npm run build`

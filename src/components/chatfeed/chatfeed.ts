@@ -6,11 +6,8 @@ import BaseComponent, {ComponentPropsData} from "~src/components/components";
 import {Fn, generateDom} from "~src/modules/functions";
 import Button from "~src/components/button";
 import Input from "~src/components/input";
-// import fileUpload from "~src/pages/file-upload";
-// import Alert from "~src/components/window/alert";
 import Validator from "~src/modules/validator";
 import Form from "~src/components/form";
-// import Message from "~src/components/chatfeed/message";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
@@ -69,19 +66,20 @@ export default class ChatFeed extends BaseComponent<chatFeedData> {
 		const inputMessage = Input.makeInput(
 			this.subElement('div.newMessage input[name="message"]')
 		);
+		// Убрал, пока нет реализации добавления файлов к сообщению
 		// Превращаем кнопку для отправки сообщения в экземпляр Button
-		Button.makeButton(
-			this.subElement('div.newMessage button[type="submit"]')
-		);
+		// Button.makeButton(
+		// 	this.subElement('div.newMessage button[type="submit"]')
+		// );
 		// Превращаем кнопку для прикрепления файла в экземпляр Button
-		Button.makeButton(
-			this.subElement('div.newMessage button.attach'),
-			{
-				'click': [
-					//() => Alert.alertWindow(fileUpload(() => console.log('yopyoypyp!')))
-				]
-			}
-		);
+		// Button.makeButton(
+		// 	this.subElement('div.newMessage button.attach'),
+		// 	{
+		// 		'click': [
+		// 			//() => Alert.alertWindow(fileUpload(() => console.log('yopyoypyp!')))
+		// 		]
+		// 	}
+		// );
 		// Превращаем форму в экземпляр Form и вешаем событие на submit
 		const form = Form.makeForm(this.subElement('form'));
 		form.props.events = {

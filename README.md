@@ -9,7 +9,7 @@
 
 
 ### Проект на Netlify
-[Dreamy-capybara-f77156](https://dreamy-capybara-f77156.netlify.app/)
+[Dreamy-capybara-f77156](https://dreamy-capybara-f77156.netlify.app)
 
 
 ### Описание проекта
@@ -35,5 +35,12 @@
 * `Button`, `Input`, `Text` - базовые компоненты, могут быть созданы из пропсов или из имеющегося HTML-элемента.
 * `Chatlist` - список чатов.
 * `ChatFeed` - лента сообщений.
+
+### Структура модулей
+* `Fetch` - класс для работы с запросами на сервер
+* `Api` - класс для работы с Api сетвера
+* `Routing` - класс роутера
+* `Store` - класс состояния
+* `Functions` - набор вспомогательных функций
 
 Используется стили [98.css](https://jdan.github.io/98.css/)

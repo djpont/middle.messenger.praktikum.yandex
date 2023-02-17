@@ -50,7 +50,7 @@ export function validate(input: Input) {
 	}
 }
 
-
+// Метод проверки идентичности двех объектов
 export function isEqual(a: object, b: object): boolean {
 	if (Object.keys(a).length === Object.keys(b).length) {
 		for (let key in a) {
@@ -75,7 +75,7 @@ export function isEqual(a: object, b: object): boolean {
 	return true;
 }
 
-
+// Метод активации вкладок (тэги <menu role="tablist"> и <article role="tabpanel">)
 export function activateTabs(document: HTMLElement): Record<string, Fn<unknown>> {
 	const tabs = document.querySelectorAll('[role="tabpanel"]') as NodeList;
 	const tabList = document.querySelector('[role="tablist"]') as HTMLElement;

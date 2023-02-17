@@ -7,13 +7,10 @@ import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/modules/routing";
 import Validator from "~src/modules/validator";
-// import Fetch from "~src/modules/fetch";
-import {fetchDataFromInputs} from "~src/modules/functions";
+import {validate, fetchDataFromInputs} from "~src/modules/functions";
 import Form from "~src/components/form";
-import Auth from "~src/modules/auth";
+import Api from "~src/modules/api";
 import {PATHS} from "~src";
-// import Component from "~src/components/components";
-import {validate} from "~src/modules/functions";
 
 // Страничка входа. Возвращает окно.
 
@@ -99,9 +96,9 @@ export default class PageSignIn extends Window{
 						inputPassword
 					)
 					buttons.forEach(button => button.target().disabled = true);
-					Auth.signIn(data)
+					Api.signIn(data)
 						.then(() => {
-							Auth.getMyUserInfo()
+							Api.getMyUserInfo()
 								.then(() => {
 									Routing.go(PATHS.messenger);
 								})

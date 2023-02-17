@@ -23,7 +23,6 @@ const form = (data: formData): string => {
 export default class Form extends BaseComponent<formData> {
 
 	constructor(props: formData) {
-		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 	}
 

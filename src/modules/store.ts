@@ -79,20 +79,6 @@ class Store extends EventBus {
 		this._state = {};
 		this.emit(StoreEVENTS.updated);
 	}
-
-	// public attach(map: string, callback: (...args: Indexed[]) => void): void {
-	// 	this.on(
-	// 		StoreEVENTS.updated,
-	// 		() => callback(getByMap(this.getState(), map))
-	// 	);
-	// }
-	//
-	// public detach(map: string, callback: (...args: Indexed[]) => void): void {
-	// 	this.off(
-	// 		StoreEVENTS.updated,
-	// 		() => callback(getByMap(this.getState(), map))
-	// 	);
-	// }
 }
 
 const store: Store = new Store();
@@ -146,17 +132,3 @@ function merge(object1: Indexed, object2: Indexed): Indexed {
 	}
 	return result;
 }
-
-// function getByMap(object: Indexed, map: string): Indexed {
-// 	const arr = map.split('.');
-// 	let result = object;
-// 	arr.forEach((key) => {
-// 		if(result[key]){
-// 			result = result[key] as Indexed;
-// 		}else{
-// 			result = {} as Indexed;
-// 		}
-// 	});
-// 	return result;
-// }
-

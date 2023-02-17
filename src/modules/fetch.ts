@@ -1,5 +1,4 @@
 // Модуль Fetch. Отвечает за общение с сервером
-// Пока только имитация (выводит в консоль данные для запроса)
 
 // Доступные режимы
 enum METHODS {
@@ -47,6 +46,7 @@ type optionsType = {
 	[key: string]: unknown;
 };
 
+// Класс для работы с запросами
 export default class Fetch {
 	public static get(options: optionsType = {}) {
 		if (options.data && typeof options.data!=='string') {

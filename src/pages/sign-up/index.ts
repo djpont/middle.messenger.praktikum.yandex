@@ -7,12 +7,9 @@ import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/modules/routing";
 import Validator from "~src/modules/validator";
-import Auth from "~src/modules/auth";
-// import Fetch from "~src/modules/fetch";
+import Api from "~src/modules/api";
 import {fetchDataFromInputs} from "~src/modules/functions";
 import Form from "~src/components/form";
-// import Component from "~src/components/components";
-// import {store, storeCurrentUserType} from "~src/modules/store";
 import {validate} from "~src/modules/functions";
 import {PATHS} from "~src";
 
@@ -169,9 +166,8 @@ export default class PageSignUp extends Window{
 							inputPassword1
 						)
 						buttonSubmit.target().disabled = true;
-						Auth.signUp(data)
-							.then(res => {
-								console.log('sing up ok', res);
+						Api.signUp(data)
+							.then(() => {
 								Routing.go(PATHS.messenger);
 							})
 							.catch(res => {

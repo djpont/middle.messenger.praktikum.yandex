@@ -36,15 +36,10 @@ export default class Text extends BaseComponent<textData> {
 
 	// Метод обновления DOM-дерева после обновления пропса
 	protected override _updateProp(prop: string): void {
-		let element: HTMLElement | null = null;
-		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'text':
-				element = this.target();
+				this.target().textContent = this.props[prop] as string;
 				break;
-		}
-		if (element) {
-			element.textContent = value;
 		}
 	}
 

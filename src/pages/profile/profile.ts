@@ -9,10 +9,9 @@ import Text from "~src/components/text";
 import {ComponentChildrenData, ComponentPropsData} from "~src/components/components";
 import fileUpload from "~src/pages/file-upload";
 import Validator from "~src/modules/validator";
-import {fetchDataFromInputs} from "~src/modules/functions";
 import Form from "~src/components/form";
-import Auth from "~src/modules/auth";
-import {Fn, validate} from "~src/modules/functions";
+import Api from "~src/modules/api";
+import {Fn, validate, fetchDataFromInputs} from "~src/modules/functions";
 
 // Страничка профиля. Возвращает окно.
 
@@ -168,7 +167,7 @@ export default class Profile extends Window{
 		// Функция обновления аватарки
 		const avatarUpload: Fn<void, File> = (file: File) => {
 			[...buttons, ...avatar].forEach(button => button.target().disabled = true);
-			Auth.editAvatar(file)
+			Api.editAvatar(file)
 				.then(() => {
 					this._contentOpen(this._contentWatch());
 				})
@@ -204,7 +203,7 @@ export default class Profile extends Window{
 						inputDisplayName
 					);
 					[...buttons, ...avatar].forEach(button => button.target().disabled = true);
-					Auth.editProfile(data)
+					Api.editProfile(data)
 						.then(() => {
 							this._contentOpen(this._contentWatch());
 						})
@@ -285,7 +284,7 @@ export default class Profile extends Window{
 							inputOldPassword,
 							inputNewPassword2
 						);
-						Auth.changePassword(data)
+						Api.changePassword(data)
 							.then(() => {
 								Alert.message(['Пароль изменен']);
 								this._contentOpen(this._contentWatch());

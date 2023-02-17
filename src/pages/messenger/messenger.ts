@@ -5,14 +5,13 @@ import Content from "~src/components/content";
 import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Form from "~src/components/form";
-import Auth from "~src/modules/auth";
+import Api from "~src/modules/api";
 import {ComponentPropsData} from "~src/components/components";
 import Alert from "~src/components/window/alert";
-import {activateTabs} from "~src/modules/functions";
 import {UserlistSearchConnected, UserlistCurrentChatConnected} from "~src/components/userlist";
 import Chatlist from "~src/components/chatlist";
 import ChatFeedConnected from "~src/components/chatfeed";
-import {Fn} from "~src/modules/functions";
+import {Fn, activateTabs} from "~src/modules/functions";
 
 // Страничка Мессенджера.
 // Состоит из двух больших компонентов: Списка чатов (Chatlist) и Ленты сообщений (ChatFeed).
@@ -82,7 +81,7 @@ export default class Messenger extends Window {
 				e.preventDefault();
 				const data = createForm.getFormData();
 				if (data.text && data.text.length > 0) {
-					Auth.createChat(data.text)
+					Api.createChat(data.text)
 						.then(() => {
 							createForm.clearFormData();
 						});
@@ -97,7 +96,7 @@ export default class Messenger extends Window {
 			'submit': (e: SubmitEvent) => {
 				e.preventDefault();
 				const data = searchForm.getFormData();
-				Auth.findUser({login: data.text})
+				Api.findUser({login: data.text})
 					.then((res: unknown[]) => {
 						if (res.length === 0) {
 							Alert.message(['Не найдено']);
@@ -119,7 +118,7 @@ export default class Messenger extends Window {
 				content: [content]  // Передаем содержимое в чилдрены
 			},
 			close: () => {
-				Auth.logout()
+				Api.logout()
 					.then(() => {
 						(props.callbacks.logoutCallback as Fn<void>)();
 					});
@@ -138,7 +137,7 @@ export default class Messenger extends Window {
 		content.children.chatFeed = [chatfeed];
 
 		function postMessageToChat(text: string): void {
-			Auth.postNewMessage(text);
+			Api.postNewMessage(text);
 		}
 
 		// Вкладка списка чатов
@@ -146,7 +145,7 @@ export default class Messenger extends Window {
 		content.children.chatlist = [chatlist];
 
 		function chatlistClick(id: string) {
-			Auth.openChat(id);
+			Api.openChat(id);
 			return;
 		}
 
@@ -155,10 +154,10 @@ export default class Messenger extends Window {
 		content.children.foundlist = [foundlist];
 
 		function addUserToCurrentChat(userId: string):void {
-			const currentChatId = Auth.getCurrentChatId();
+			const currentChatId = Api.getCurrentChatId();
 			if (currentChatId > 0) {
-				Auth.addUserToChat(userId);
-				Auth.clearFoundUsers();
+				Api.addUserToChat(userId);
+				Api.clearFoundUsers();
 				searchForm.clearFormData();
 				sidebarTabsEvents['dialogs']();
 			} else {
@@ -171,9 +170,9 @@ export default class Messenger extends Window {
 		content.children.userlist = [userlist];
 
 		function deleteUserFromCurrentChat(userId: string):void {
-			const currentChatId = Auth.getCurrentChatId();
+			const currentChatId = Api.getCurrentChatId();
 			if (currentChatId > 0) {
-				Auth.deleteUserFromChat(userId);
+				Api.deleteUserFromChat(userId);
 			}
 		}
 

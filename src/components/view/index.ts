@@ -4,7 +4,8 @@ import {generateDom} from "~src/modules/functions";
 import "./style.scss";
 
 // Компонент View отвечает за корневой элемент, в котором отображаются окна
-// Состоит из двух слоёв: main для рабочих окон и alert для окон сообщений и ошибок
+// Состоит из трех слоёв: main для рабочих окон, second для прочих окон
+// и alert для окон сообщений и ошибок
 
 // Тип данных для вью
 type viewData = {
@@ -21,6 +22,7 @@ const LAYERS = {
 	second: "second",
 	alert: "alert",
 } as const;
+
 // Класс вью
 export default class View extends BaseComponent<viewData> {
 
@@ -59,7 +61,6 @@ export default class View extends BaseComponent<viewData> {
 			});
 			children.length=0;
 		});
-		// this.children={};
 	}
 
 	// Метод получения пропса из DOM-дерева

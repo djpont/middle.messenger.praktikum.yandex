@@ -1,5 +1,5 @@
 import tpl from "./tpl.hbs";
-import Component, {ComponentPropsData, EventsType} from "~src/components/components";
+import BaseComponent, {ComponentPropsData, EventsType} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 
 // Компонент Form отвечает за формы
@@ -20,7 +20,7 @@ const form = (data: formData): string => {
 };
 
 // Класс кнопки
-export default class Form extends Component<formData> {
+export default class Form extends BaseComponent<formData> {
 
 	constructor(props: formData) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -33,7 +33,7 @@ export default class Form extends Component<formData> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(prop: string): void {
+	protected override _updateProp(prop: string): void {
 		const value = this.props[prop] as string;
 		switch (prop) {
 			case 'name':
@@ -53,6 +53,23 @@ export default class Form extends Component<formData> {
 		}
 		return result;
 	}
+	// Получаем данные формы
+	public getFormData(): {[key: string]: string} {
+		const data: {[key: string]: string} = {};
+		this.subElements('input').forEach((input: HTMLInputElement) => {
+			if(input.name){
+				data[input.name]=input.value;
+			}
+		});
+		return data;
+	}
+
+	// Метод очистки формы
+	public clearFormData(): void {
+		this.subElements('input').forEach((input: HTMLInputElement) => {
+			input.value='';
+		});
+	}
 
 	// Метод превращения DOM-элемента в экземпляр Button
 	public static makeForm(renderedForm: HTMLElement, events: EventsType = {}): Form {
@@ -66,4 +83,6 @@ export default class Form extends Component<formData> {
 		form.props.events = events;
 		return form;
 	}
+
+
 }

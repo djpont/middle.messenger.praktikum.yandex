@@ -3,21 +3,40 @@
 		<fieldset class="profileField">
 			<legend>Мой профиль</legend>
 			<div class="container">
-				<div class="avatar has3dBorder" style="background-image: url('{{avatar}}')"></div>
-				<div class="nickname">{{nickname}}</div>
+				<div class="avatar has3dBorder"
+					{{#if avatar}}
+					 style="background-image: url('{{avatar}}')"
+					{{/if}}
+				>
+					{{#if avatarText}}{{avatarText}}{{/if}}
+				</div>
+				<div class="displayName">{{displayName}}</div>
 				<div data-holder="details"></div>
 			</div>
 		</fieldset>
-		<fieldset class="searchField">
-			<legend>Поиск по диалогам</legend>
+		<fieldset class="createField">
+			<legend>Создать диалог</legend>
+			<form action="" class="create">
+				<div class="container" data-holder="create"></div>
+			</form>
+		</fieldset>
+		<menu role="tablist">
+			<button aria-selected="true" aria-controls="dialogs">Диалоги</button>
+			<button aria-selected="false" aria-controls="addUser">Добавить<br>в диалог</button>
+			<button aria-selected="false" aria-controls="deleteUser">Удалить<br>из диалога</button>
+		</menu>
+		<article role="tabpanel" aria="dialogs">
+			<div class="container" data-holder="chatlist"></div>
+		</article>
+		<article role="tabpanel" hidden aria="addUser">
 			<form action="" class="search">
 				<div class="container" data-holder="search"></div>
 			</form>
-		</fieldset>
-		<fieldset class="chatsListField">
-			<legend>Диалоги</legend>
-			<div class="container" data-holder="chatlist"></div>
-		</fieldset>
+			<div class="container" data-holder="foundlist"></div>
+		</article>
+		<article role="tabpanel" hidden aria="deleteUser">
+			<div class="container" data-holder="userlist"></div>
+		</article>
 	</div>
 	<div class="chatFeedHolder" data-holder="chatFeed"></div>
 </div>

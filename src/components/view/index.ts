@@ -1,5 +1,5 @@
 import tpl from "./tpl.hbs";
-import Component, {ComponentPropsData} from "~src/components/components";
+import BaseComponent, {ComponentPropsData} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 import "./style.scss";
 
@@ -8,7 +8,7 @@ import "./style.scss";
 
 // Тип данных для вью
 type viewData = {
-	roomElement: HTMLElement
+	rootElement: HTMLElement
 } & ComponentPropsData;
 
 // Метод рендера HTML-строки вью по шаблону
@@ -16,15 +16,29 @@ const view = (): string => {
 	return tpl();
 };
 
+const LAYERS = {
+	main: "main",
+	second: "second",
+	alert: "alert",
+} as const;
 // Класс вью
-export default class View extends Component<viewData> {
+export default class View extends BaseComponent<viewData> {
 
+	public static readonly LAYERS = LAYERS;
+
+	private static _instance: View; // Синглтон
 
 	constructor(props: viewData) {
+		// Синглтон
+		if(View._instance){
+			return View._instance;
+		}
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 		// Добавляем документ вью в переданный родительский HTML-элемент
-		(this.props as viewData).roomElement.append(this.document());
+		this.props.rootElement.append(this.document());
+		// Синглтон
+		View._instance = this;
 	}
 
 	// Метод рендера DOM-дерева кнопки по шаблону
@@ -33,7 +47,7 @@ export default class View extends Component<viewData> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
-	protected override updateProp(): void {
+	protected override _updateProp(): void {
 		return;
 	}
 
@@ -43,7 +57,9 @@ export default class View extends Component<viewData> {
 			children.forEach(child => {
 				child.destroy();
 			});
+			children.length=0;
 		});
+		// this.children={};
 	}
 
 	// Метод получения пропса из DOM-дерева

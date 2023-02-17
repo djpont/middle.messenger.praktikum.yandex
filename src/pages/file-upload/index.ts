@@ -2,29 +2,59 @@ import tpl from './tpl.hbs';
 import './style.scss';
 import Window from "~src/components/window";
 import Content from "~src/components/content";
+import {Fn} from "~src/modules/functions";
+import Button from "~src/components/button";
+import {ComponentPropsData} from "~src/components/components";
 
 // Страничка загрузки файла. Возвращает окно.
 
-export default (): Window => {
+export default class FileUpload extends Window {
 
-	// Создаём содержимое окна по шаблону
-	const content = new Content({template: tpl});
+	constructor(data: {callback?: Fn<void, File>} & ComponentPropsData = {}) {
+		// Создаём содержимое окна по шаблону
+		const content = new Content({template: tpl});
 
-	// Создаём окно с созданным выше содержимым
-	const window = new Window({
-		className: 'fileUpload',
-		title: 'Загрузка файла',
-		controls: {
-			close: true
-		},
-		children: {
-			content: [content]  // Передаем содержимое в чилдрены
+		// Создаём окно с созданным выше содержимым
+		super({
+			className: 'fileUpload',
+			title: 'Загрузка файла',
+			controls: {
+				close: true
+			},
+			children: {
+				content: [content]  // Передаем содержимое в чилдрены
+			}
+		});
+
+		if(data.callback){
+			this.props.callback = data.callback;
 		}
-	});
 
-	// Вызываем обновление чилдренов окна, в аргументах true - для рекурсии, чтобы вложенные
-	// дочерние элементы тоже обновились
-	window.updateChildren(true);
+		// Задаем кнопке и инпуту каллбек
+		const fileElement = content.subElement("input[type='file']") as HTMLInputElement;
+		fileElement.addEventListener('change', () => {
+			if (fileElement.files) {
+				const file = fileElement.files[0];
+				if (this.props.callback) {
+					(this.props.callback as Fn<void, File>)(file);
+				}
+				this.close();
+			}
+		})
+		const button = Button.makeButton(content.subElement("button"));
+		button.props.events = {
+			'click': () => {
+				fileElement.click();
+			}
+		}
 
-	return window;
+
+		// Вызываем обновление чилдренов окна, в аргументах true - для рекурсии, чтобы вложенные
+		// дочерние элементы тоже обновились
+		this.updateChildren(true);
+
+		// Вызываем нажатие на инпут файла (в некоторых браузерах сработает)
+		fileElement.click();
+
+	}
 }

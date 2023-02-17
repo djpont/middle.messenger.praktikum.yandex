@@ -1,30 +1,61 @@
 import tpl from './tpl.hbs';
+import tpl_message from './tpl_message.hbs';
+import tpl_dateString from './tpl_datestring.hbs';
 import './style.scss';
-import Component, {ComponentPropsData} from "~src/components/components";
-import Message from "~src/components/message";
-import Chat, {chatData} from "~src/modules/chat";
-import {fetchDataFromInputs, generateDom} from "~src/modules/functions";
+import BaseComponent, {ComponentPropsData} from "~src/components/components";
+import {Fn, generateDom} from "~src/modules/functions";
 import Button from "~src/components/button";
 import Input from "~src/components/input";
-import fileUpload from "~src/pages/file-upload";
-import Alert from "~src/components/window/alert";
+// import fileUpload from "~src/pages/file-upload";
+// import Alert from "~src/components/window/alert";
 import Validator from "~src/modules/validator";
-import Fetch from "~src/modules/fetch";
 import Form from "~src/components/form";
+// import Message from "~src/components/chatfeed/message";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 
+type messageData = {
+	content: string,
+	timeShort: string,
+	displayName: string,
+	way: string
+}
+
+const message = (data: messageData): string => {
+	const {
+		content,
+		timeShort: time,
+		displayName,
+		way: className
+	} = data;
+	return tpl_message({content, displayName, time, className});
+};
+
+const dateString = (date: string): string => {
+	return tpl_dateString({date});
+}
+
 // Тип данных для компонента chatFeed (пока не отличается от типа базового компонента)
-type chatFeedData = ComponentPropsData;
+type chatFeedData = {
+	callback?: Fn<void, string>,
+	optionsCallback?: Fn<void>
+} & ComponentPropsData;
 
 // Класс ленты сообщений
-export default class ChatFeed extends Component {
+export default class ChatFeed extends BaseComponent<chatFeedData> {
 
 	constructor(props: chatFeedData) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(props);
 		// Делаем кнопки управляемыми
 		this._makeNewMessageFormActive();
+		// Делаем активной кнопку открытия опций чата
+		if (this.props.optionsCallback) {
+			Button.makeButton(
+				this.subElement('div.header button.options'),
+				{'click': this.props.optionsCallback}
+				);
+		}
 	}
 
 	// Метод рендера DOM-дерева ленты сообщений по шаблону
@@ -47,25 +78,23 @@ export default class ChatFeed extends Component {
 			this.subElement('div.newMessage button.attach'),
 			{
 				'click': [
-					() => Alert.lastAlert().alertWindow(fileUpload())
+					//() => Alert.alertWindow(fileUpload(() => console.log('yopyoypyp!')))
 				]
 			}
 		);
 		// Превращаем форму в экземпляр Form и вешаем событие на submit
 		const form = Form.makeForm(this.subElement('form'));
-		form.props.events={
+		form.props.events = {
 			'submit': (e: SubmitEvent) => {
 				e.preventDefault();
 				// Сначала проверяем валидацию инпута
 				const valid = Validator.validateInputWithAlert(inputMessage);
 				// Если успешно, то выполянем запрос
 				if (valid) {
-					const data = fetchDataFromInputs(inputMessage);
-					console.log(data);
-					Fetch.post({
-						path: '/message',
-						data
-					});
+					if (this.props.callback && inputMessage.props.value) {
+						this.props.callback(inputMessage.props.value);
+					}
+					inputMessage.reset();
 				}
 			}
 		}
@@ -73,15 +102,33 @@ export default class ChatFeed extends Component {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(prop: string): void {
-		switch (prop) {
-			case 'title':
-				this.subElement('div.header div.chatName').textContent = this.props[prop] as string;
-				break;
-			case 'avatar':
+	protected override _updateProp(prop: string): void {
+		if (prop === 'chat') {
+			this.document().style.display = 'none';
+			if (this.props.chat && Object.keys(this.props.chat).length > 0) {
+				this.document().style.display = 'flex';
+				this.subElement('div.header div.chatName').textContent
+					= this.props.chat['title'];
 				this.subElement('div.header div.avatar').style.backgroundImage =
-					`url('${this.props[prop]}')`;
-				break;
+					`url('${this.props.chat['avatar']}')`;
+				this.subElement('div.header div.avatar').textContent =
+					this.props.chat['avatarText'];
+			}
+
+		} else if (prop === 'messages') {
+			const feedBlock = this.subElement('div.feed div.feedBlockContainer');
+			feedBlock.innerHTML = '';
+			let prevDateString = '';
+			if (this.props.messages && Object.keys(this.props.messages).length > 0) {
+				Object.values(this.props.messages).forEach((msg) => {
+					if (prevDateString !== msg.dateShort) {
+						prevDateString = msg.dateShort;
+						feedBlock.append(generateDom((dateString(msg.dateShort))));
+					}
+					feedBlock.append(generateDom(message(msg)));
+				});
+			}
+			feedBlock.scrollIntoView(false);
 		}
 	}
 
@@ -92,35 +139,5 @@ export default class ChatFeed extends Component {
 			value: ''
 		}
 		return result;
-	}
-
-	// Метод рендера ленты сообщений конкретного чата
-	// (вызывается при клике на превью чата в списке чатов)
-	public attachChat(chat: Chat): void {
-		this._setChatProps(chat.data());
-		this._clearMessages();
-		chat.data().messages.forEach(message => {
-			this.children.messages.push(new Message(message.data()));
-		});
-		this.updateChildren(true);
-	}
-
-	// Метод очистки ленты сообщений
-	private _clearMessages() {
-		// Очищаем чилдренов
-		this.children.messages = [];
-		this.updateChildren();
-		// Убираем набранный текст из поля нового сообщения
-		(this.subElement('div.newMessage input.text') as HTMLInputElement).value = '';
-	}
-
-	// Делаем пропсы равными данным из переданного чата (заголовок и аватар)
-	private _setChatProps(data: chatData): void {
-		const {
-			title,
-			avatar
-		} = data;
-		this.props.title = title;
-		this.props.avatar = avatar;
 	}
 }

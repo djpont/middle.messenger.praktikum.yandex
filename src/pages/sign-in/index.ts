@@ -1,6 +1,5 @@
 import tpl from './tpl.hbs';
 import "./style.scss";
-import View from "~src/components/view";
 import Window from "~src/components/window";
 import Content from "~src/components/content";
 import Alert from "~src/components/window/alert";
@@ -8,115 +7,124 @@ import Input from "~src/components/input";
 import Button from "~src/components/button";
 import Routing from "~src/modules/routing";
 import Validator from "~src/modules/validator";
-import Fetch from "~src/modules/fetch";
+// import Fetch from "~src/modules/fetch";
 import {fetchDataFromInputs} from "~src/modules/functions";
 import Form from "~src/components/form";
+import Auth from "~src/modules/auth";
+import {PATHS} from "~src";
+// import Component from "~src/components/components";
+import {validate} from "~src/modules/functions";
 
 // Страничка входа. Возвращает окно.
 
-export default (rootElement: View): Window => {
+export default class PageSignIn extends Window{
 
-	// Создаём экземпляр класса отображения окон с сообщениями или ошибками
-	// const alert =
-	new Alert({rootElement});
+	constructor() {
+		// Создаём содержимое окна по шаблону
+		const content = new Content({template: tpl});
 
-	// Создаём содержимое окна по шаблону
-	const content = new Content({template: tpl});
-
-	// Создаём окно с созданным выше содержимым
-	const window = new Window({
-		className: 'signIn',
-		title: 'WinChat 98 - Электронные диалоги',
-		controls: {
-			close: false
-		},
-		children: {
-			content: [content]  // Передаем содержимое в чилдрены
-		}
-	});
-	rootElement.children.main.push(window); // Добавляем окно в корневой элемент
-	rootElement.updateChildren();	// Вызываем обновление чилдов корневого элемента
-
-	// Метод для валидации инпутов
-	function validate(input: Input) {
-		Validator.validateInputWithAlert(input);
-	}
-
-	// Создаём экземпляры инпутов
-	const inputLogin = new Input({
-		name: 'login',
-		type: 'text',
-		label: 'Логин:',
-		isStacked: false,
-		events: {
-			'focusout': () => {
-				validate(inputLogin);
+		super({
+			className: 'signIn',
+			title: 'WinChat 98 - Электронные диалоги',
+			controls: {
+				close: false
+			},
+			children: {
+				content: [content]  // Передаем содержимое в чилдрены
 			}
-		}
-	});
-	const inputPassword = new Input({
-		name: 'password',
-		type: 'password',
-		label: 'Пароль:',
-		isStacked: false,
-		events: {
-			'focusout': () => {
-				validate(inputPassword);
-			}
-		}
-	});
-	// Вставляем инпуты в контент
-	content.children.inputs = [inputLogin, inputPassword];
+		});
 
-	// Находим форму, превращаем в экземпляр Form и вешаем события
-	const form = Form.makeForm(content.document());
-	form.props.events={
-		'submit': (e: SubmitEvent) => {
-			e.preventDefault();
-			// Сначала првоеряем, что нет показанных сообщений после change input
-			if(rootElement.children.alert.length>0){
-				return;
+		// Создаём экземпляры инпутов
+		const inputLogin = new Input({
+			name: 'login',
+			type: 'text',
+			label: 'Логин:',
+			isStacked: false,
+			events: {
+				'focusout': () => {
+					validate(inputLogin);
+				}
 			}
-			// Проверяем валидацию инпутов
-			const formValid = Validator.validateInputWithAlert(
-				inputLogin,
-				inputPassword
-			);
-			// Если успешно, то выполянем запрос
-			if(formValid){
-				const data = fetchDataFromInputs(
+		});
+		const inputPassword = new Input({
+			name: 'password',
+			type: 'password',
+			label: 'Пароль:',
+			isStacked: false,
+			events: {
+				'focusout': () => {
+					validate(inputPassword);
+				}
+			}
+		});
+		// Вставляем инпуты в контент
+		content.children.inputs = [inputLogin, inputPassword];
+
+		// Создаём экземпляры кнопок и ставляем кноки в контент
+		const buttons = [
+			new Button({
+				name: 'submit',
+				type: 'submit',
+				text: 'Вход'
+			}),
+			new Button({
+				name: 'registration',
+				type: 'button',
+				text: 'Регистрация',
+				events: {
+					'click': () => Routing.go('/sign-up')
+				}
+			})
+		];
+		content.children.buttons = buttons;
+
+		// Находим форму, превращаем в экземпляр Form и вешаем события
+		const form = Form.makeForm(content.document());
+		form.props.events = {
+			'submit': (e: SubmitEvent) => {
+				e.preventDefault();
+				// Сначала првоеряем, что нет показанных сообщений после change input
+				if (!Alert.isEmpty()) {
+					return;
+				}
+				// Проверяем валидацию инпутов
+				const formValid = Validator.validateInputWithAlert(
 					inputLogin,
 					inputPassword
-				)
-				console.log(data);
-				Fetch.get({
-					path: '/authorize',
-					data
-				});
+				);
+				// Если успешно, то выполянем запрос
+				if (formValid) {
+					const data = fetchDataFromInputs(
+						inputLogin,
+						inputPassword
+					)
+					buttons.forEach(button => button.target().disabled = true);
+					Auth.signIn(data)
+						.then(() => {
+							Auth.getMyUserInfo()
+								.then(() => {
+									Routing.go(PATHS.messenger);
+								})
+								.catch(() => {
+									Alert.fatal([
+										'Ошибка авторизации',
+										'Проверьте, что в браузере включены куки'
+									]);
+								})
+						})
+						.catch(res => {
+							if (res.reason === 'Login or password is incorrect') {
+								res.reason = 'Неверный логин или пароль';
+							}
+							Alert.error([res.reason]);
+							buttons.forEach(button => button.target().disabled = false);
+						});
+				}
 			}
-		}
-	};
+		};
 
-	// Создаём экземпляры кнопок
-	const buttonSubmit = new Button({
-		name: 'submit',
-		type: 'submit',
-		text: 'Вход'
-	});
-	const buttonRegister = new Button({
-		name: 'registration',
-		type: 'button',
-		text: 'Регистрация',
-		events: {
-			'click': () => Routing('/sign-up', rootElement)
-		}
-	});
-	// Вставляем кноки в контент
-	content.children.buttons = [buttonSubmit, buttonRegister];
-
-	// Вызываем обновление чилдренов окна
-	// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
-	window.updateChildren(true);
-
-	return window;
+		// Вызываем обновление чилдренов окна
+		// В аргументах true - для рекурсии, чтобы вложенные дочерние элементы тоже обновились
+		this.updateChildren(true);
+	}
 }

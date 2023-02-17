@@ -1,27 +1,19 @@
 @import '/static/index';
 
-div.chatlist {
+div.userlist {
 	margin-top: 4px;
 	flex-grow: 1;
 	overflow-y: auto;
 	height: calc(100% - 20px);
 
-	button.chatPreview {
+	button.userPreview {
 		display: block;
 		text-align: left;
 		position: relative;
 		width: 100%;
 
-		&.active {
-			@include has3dBorder;
-		}
-
 		&:not(:last-child) {
 			margin-bottom: 3px;
-		}
-
-		&.hasUnread {
-			font-weight: bold;
 		}
 
 		div.container {
@@ -50,15 +42,7 @@ div.chatlist {
 				white-space: nowrap;
 
 				div.name {
-					span.unreadCount {
-						color: var(--chatUnreadCounter);
-					}
-				}
-
-				div.lastMessage {
-					width: 100%;
-					overflow: hidden;
-					text-overflow: ellipsis;
+					font-weight: bold;
 				}
 			}
 		}

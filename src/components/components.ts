@@ -8,11 +8,11 @@ export const EVENTS = {
 	init: "component:init", // Инициализация
 	render: "component:render", // Рендер
 	updateProp: "component:update", // Обновление пропсов
-	updateChildren: "component:updateChildren", // Обновление чилдренов
+	updateChildren: "component:updateChildren" // Обновление чилдренов
 } as const;
 
 // Тип данных для чилдренов
-export type ComponentChildrenData = Record<string, Component[]>;
+export type ComponentChildrenData = Record<string, BaseComponent[]>;
 
 export type EventsType = Record<string, Fn<unknown> | Fn<unknown>[]>
 
@@ -20,17 +20,18 @@ export type EventsType = Record<string, Fn<unknown> | Fn<unknown>[]>
 export type ComponentPropsData = {
 	children?: ComponentChildrenData;
 	events?: EventsType;
+	destroyable?: boolean;
 	[key: string]: unknown;
 };
 
 // Класс базового компонента
-export default abstract class Component<PropsType extends ComponentPropsData = ComponentPropsData> {
+export default class BaseComponent<PropsType extends ComponentPropsData = ComponentPropsData> {
 
 	// Делаем действия публичными
 	public static readonly EVENTS = EVENTS;
 
 	// Список всех компонентов - используется для поиска родителя при уничтожении
-	private static readonly _allComponents: Component[] = [];
+	private static readonly _allComponents: BaseComponent[] = [];
 
 	private _document: HTMLElement; // Тут хранится DOM-дерево компонента
 	public readonly eventBus: EventBus;
@@ -43,7 +44,11 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 
 	protected constructor(props: PropsType) {
 		// Добавляем экземпляр в список всех компонентов
-		Component._allComponents.push(this);
+		BaseComponent._allComponents.push(this);
+
+		if(props.destroyable===undefined){
+			props.destroyable=true
+		}
 
 		// Добавляем EventBus и регистрируем базовые события
 		this.eventBus = new EventBus();
@@ -57,7 +62,7 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 		this.props = this._makePropsProxy(props) as PropsType;
 
 		// Вызываем инициализацию компонента
-		this.eventBus.emit(Component.EVENTS.init);
+		this.eventBus.emit(BaseComponent.EVENTS.init);
 
 		// Вырезаем чилдренов из пропсов и вставляем  чилдрены в элемент
 		Object.assign(this.children, this._getChildrenFromProps(props));
@@ -66,7 +71,7 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 		this._addEvents(this.props.events as EventsType);
 	}
 
-	private _addEvents(events: EventsType = {}){
+	private _addEvents = (events: EventsType = {}) => {
 		Object.entries(events).forEach(([HtmlAction, eventsArray])=>{
 			if(!(eventsArray instanceof Array)){
 				eventsArray=[eventsArray];
@@ -97,10 +102,10 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 
 	// Регистрируем базовые события для Event Bus
 	private _registerEvents(): void {
-		this.eventBus.on(Component.EVENTS.init, this._init.bind(this));
-		this.eventBus.on(Component.EVENTS.render, this._render.bind(this));
-		this.eventBus.on(Component.EVENTS.updateProp, this.updateProp.bind(this));
-		this.eventBus.on(Component.EVENTS.updateChildren, this.updateChildren.bind(this));
+		this.eventBus.on(BaseComponent.EVENTS.init, this._init.bind(this));
+		this.eventBus.on(BaseComponent.EVENTS.render, this._render.bind(this));
+		this.eventBus.on(BaseComponent.EVENTS.updateProp, this._updateProp.bind(this));
+		this.eventBus.on(BaseComponent.EVENTS.updateChildren, this._updateChildren.bind(this));
 	}
 
 	// Метод инициализации элемента
@@ -119,7 +124,7 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 			return holders;
 		}
 		// Вызываем рендер и собираем холдеры для будущего размещения чилдренов
-		this.eventBus.emit(Component.EVENTS.render);
+		this.eventBus.emit(BaseComponent.EVENTS.render);
 		this._childrenHolders = getTemplateHolders();
 	}
 
@@ -129,20 +134,32 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 	}
 
 	// Метод генерации HTML дерева по шаблону, должен быть описан в дочернем классе
-	protected abstract render(data: ComponentPropsData): HTMLElement
+	protected render(data: ComponentPropsData): HTMLElement{
+		console.log(data);
+		throw new Error('Не реализован метод render');
+	}
 
 	// Метод обновления пропса элемента, должен быть описан в дочернем классе
-	protected abstract updateProp(prop: string): void
+	protected _updateProp(prop: string): void{
+		console.log(prop);
+	}
 
 	// Метод получения пропса элемента, должен быть описан в дочернем классе
-	protected abstract getProp(prop: string): { fromDom: boolean, value: unknown }
+	protected getProp(prop: string): { fromDom: boolean, value: unknown }{
+		return {
+			fromDom: false,
+			value: prop
+		}
+	}
 
 	// Метод обновления дочерних элементов
 	public updateChildren(nestedUpdatesToo: boolean = false): void {
+		this.eventBus.emit(BaseComponent.EVENTS.updateChildren, nestedUpdatesToo);
+	}
+	private _updateChildren(nestedUpdatesToo: boolean = false): void {
 		// Сначала проверяем чилдренов на ошибки
 		Object.entries(this.children).forEach(([holder]) => {
 			if (this._childrenHolders[holder] === undefined) {
-				console.error(this);
 				throw new Error(`Неверный холдер ${holder}`);
 			}
 		})
@@ -191,19 +208,20 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 				}
 			},
 			set: (target: ComponentPropsData, prop: string, value: unknown): boolean => {
-				if (target[prop] !== value) {
+				if (target[prop] !== value || typeof value==='object') {
 					if(prop==='events'){
 						this._removeEvents(this.props.events as EventsType);
 						this._addEvents(value as EventsType);
 					}
 					target[prop] = value;
-					this.eventBus.emit(Component.EVENTS.updateProp, prop);
+					this.eventBus.emit(BaseComponent.EVENTS.updateProp, prop);
+
 				}
 				return true;
 			},
 			deleteProperty: (target: ComponentPropsData, prop: string): boolean => {
 				delete target[prop];
-				this.eventBus.emit(Component.EVENTS.updateProp, prop);
+				this.eventBus.emit(BaseComponent.EVENTS.updateProp, prop);
 				return true;
 			}
 		};
@@ -225,7 +243,7 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 			set: (
 				target: ComponentChildrenData,
 				prop: string,
-				value: Component[]
+				value: BaseComponent[]
 			): boolean => {
 				// Значение превращаем в прокси
 				target[prop] = this._makeChildrenArrayProxy(value);
@@ -241,16 +259,16 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 
 	// Прокси для массивов внутри children элемента
 	// Отличия: после изменения ничего не вызывается и значения хранятся как есть
-	private _makeChildrenArrayProxy(props: Component[]): Component[] {
-		const proxySetting: ProxyHandler<Component[]> = {
-			get: (target: Component[], prop: string): unknown => {
+	private _makeChildrenArrayProxy(props: BaseComponent[]): BaseComponent[] {
+		const proxySetting: ProxyHandler<BaseComponent[]> = {
+			get: (target: BaseComponent[], prop: string): unknown => {
 				return target[prop];
 			},
-			set: (target: Component[], prop: string, value: unknown): boolean => {
+			set: (target: BaseComponent[], prop: string, value: unknown): boolean => {
 				target[prop] = value;
 				return true;
 			},
-			deleteProperty: (target: Component[], prop: string): boolean => {
+			deleteProperty: (target: BaseComponent[], prop: string): boolean => {
 				delete target[prop];
 				return true;
 			}
@@ -274,38 +292,40 @@ export default abstract class Component<PropsType extends ComponentPropsData = C
 
 	// Метод уничтожения экземпляра
 	public destroy(): void {
-		// Убираем слушателей
-		this.props.events={};
-		// Рекурсивно вызываем уничтожение всех чилдренов
-		Object.values(this.children).forEach(children => {
-			for (const child of children) {
-				child.destroy();
+		if(this.props.destroyable){
+			// Убираем слушателей
+			this.props.events={};
+			// Рекурсивно вызываем уничтожение всех чилдренов
+			Object.values(this.children).forEach(children => {
+				for (const child of children) {
+					child.destroy();
+				}
+			});
+			// Удаляем дом из родителя
+			this.document().remove();
+			// Находим родителя и удаляем компонент из его чилдренов
+			const parent = this.parent();
+			if (parent.parent instanceof BaseComponent) {
+				parent.parent.children[parent.holder].splice(parent.index, 1);
+				// Удаляем компонент их списка всех компонентов
+				BaseComponent._allComponents.splice(BaseComponent._allComponents.indexOf(this), 1);
+				// Вызываем обновление чилдренов родителя
+				parent.parent.updateChildren();
 			}
-		});
-		// Очищаем дом-дерево
-		this.document().remove();
-		// Находим родителя и удаляем компонент из его чилдренов
-		const parent = this.parent();
-		if (parent.parent instanceof Component) {
-			parent.parent.children[parent.holder].splice(parent.index, 1);
-			// Удаляем компонент их списка всех компонентов
-			Component._allComponents.splice(Component._allComponents.indexOf(this), 1);
-			// Вызываем обновление чилдренов родителя
-			parent.parent.updateChildren();
 		}
 	}
 
 	// Метод поиска родительского компонента
 	// Можно было бы хранить родителя в пропсах, но не хотелось связки в обе стороны делать
 	public parent(): {
-		parent: Component | boolean,
+		parent: BaseComponent | boolean,
 		holder: string,
 		index: number
 	} {
-		let parentComponent: Component | boolean = false;
+		let parentComponent: BaseComponent | boolean = false;
 		let parentChildrenHolder: string | boolean = '';
 		let parentChildrenIndex: number = -1;
-		Component._allComponents.forEach(component => {
+		BaseComponent._allComponents.forEach(component => {
 			Object.entries(component.children).forEach(([holder, children]) => {
 				children.forEach(child => {
 					if (child === this) {

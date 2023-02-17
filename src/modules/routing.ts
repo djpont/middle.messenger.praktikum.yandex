@@ -1,49 +1,118 @@
-import pageSignIn from '../pages/sign-in';
-import pageSignUp from '../pages/sign-up';
-import page404 from '../pages/error/404'; // тут нужно вызывать обычный Window с рабочей кнопкой
-import page500 from '../pages/error/500'; // , а содержимое по своему шаблону генерировать
-import messenger from "../pages/messenger";
-import profile from "../pages/profile";
-import fileUpload from "../pages/file-upload";
 import View from "~src/components/view";
 import Window from "~src/components/window";
+// import {Fn} from "~src/modules/functions";
 
 // Роутинг
-export default (route: string, rootElement: View):void => {
 
-	// Очистка корневого элемента
-	rootElement.clear();
+// type routeFnType = Fn<Window> | Window;
+type checkFunctionType = (nextRoute: Route) => Promise<Route>;
 
-	// Для роутинга. Если адрес отличается от роута, то вставляем его в историю браузера
-	if(document.location.pathname!==route){
-		history.pushState(null, '', route);
+type routeType = {
+	path: string,
+	// page: routeFnType;
+	window: Window | typeof Window,
+	layer: string,
+	checkFunction?: checkFunctionType
+}
+
+// Дефолтная функция проверки роута, всегда успеша
+function checkNextRouteDefaultFunction(nextRoute: Route): Promise<Route>{
+	return new Promise((resolve) => {
+		resolve(nextRoute);
+	})
+}
+
+// Класс роута - одного пути для роутинга
+export class Route{
+	private _path: string; // путь
+	// private _page: routeFnType; // вызываемая страничка
+	private _window: Window | typeof Window;
+	private _layer: string; // слой для вью, куда показывать страничку
+	private _checkNextRouteFunction: checkFunctionType; // функция проверки доступности роута
+
+	constructor(data: routeType) {
+		const {path, window, layer} = data;
+		this._path=path;
+		// this._page=page;
+		this._window=window;
+		this._layer=layer;
+		this._checkNextRouteFunction = data.checkFunction || checkNextRouteDefaultFunction;
 	}
 
-	// Возможные направления роутинга
-	const pages = {
-		'/sign-in': pageSignIn,
-		'/sign-up': pageSignUp,
-		'/404': page404,
-		'/500': page500,
-		'/messenger': messenger,
-		'/profile': profile,
-		'/file-upload': fileUpload
+	public beforeRoute(): Promise<Route> {
+		return this._checkNextRouteFunction(this);
 	}
 
-	// Роутинг, а если не нашёл - ошибка 404
-	if (Object.keys(pages).includes(route)) {
-		const routeVoid = Object.entries(pages).find(([thisRoute]) => thisRoute === route);
-		if (routeVoid === undefined) {
-			throw new Error(`Роут ${route} не найден`);
+	public getData(): {
+		path: string;
+		// page: routeFnType;
+		window: Window | typeof Window;
+		layer: string
+	}{
+		return{
+			path: this._path,
+			// page: this._page,
+			window: this._window,
+			layer: this._layer,
 		}
-		const routeResult = routeVoid[1](rootElement);
-		// Есть страница вернула окно, то добавляем его во view, иначе ничего не делаем, т.к. если
-		// роутинг был методом void, то он сам должен позаботиться о рендере окон
-		if (routeResult instanceof Window){
-			rootElement.children.main=[routeResult];
-			rootElement.updateChildren();
+	}
+}
+
+export default class Routing {
+	private static _view: View;
+	private static _routes: Route[] = [];
+	private static _404: Route;
+
+	public static setView(rootElement: View): void {
+		Routing._view = rootElement;
+	}
+
+	public static set404(route: Route): void {
+		Routing._404=route;
+	}
+
+	private static getView(): View {
+		if (!Routing._view) {
+			throw new Error('Не установлен _view для Routing');
 		}
-	} else {
-		page404(rootElement);
+		return Routing._view;
+	}
+
+	public static use(data: routeType): Route{
+		const route = new Route(data);
+		this._routes.push(route);
+		return route;
+	}
+
+	public static go(urlPath:string): void{
+		// Сначала ищем роут по urlPath
+		let route = Routing._routes.find(route => route.getData().path===urlPath);
+		// Если не нашли - перенаправляем на 404
+		if(route===undefined){
+			if(Routing._404){
+				route=Routing._404;
+			}else{
+				throw new Error('Не указан роут ошибки 404');
+			}
+		}
+		route.beforeRoute()
+			.then((route: Route) => {
+				const view = Routing.getView();
+				const {path, window, layer} = route.getData();
+				// Если роут на main слой, то очищаем вью и добавляем путь в историю
+				if(layer===View.LAYERS.main){
+					view.clear();
+					if (document.location.pathname !== path) {
+						history.pushState(null, '', path);
+					}
+				}
+				// view.children[layer].push(page());
+				if(window instanceof Window){
+					view.children[layer].push(window);
+				}else{
+					view.children[layer].push(new window({}));
+				}
+				view.updateChildren();
+			});
 	}
 }

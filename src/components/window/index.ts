@@ -1,12 +1,12 @@
 import tpl from './tpl.hbs';
-import Component, {ComponentPropsData} from "~src/components/components";
+import BaseComponent, {ComponentPropsData} from "~src/components/components";
 import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Window отвечает за окно - шапка с заголовком и кнопкой закрытия,
 // а так же рамка и пространство для содержимого (для экземпляра класса Content)
 
 // Тип данных для окна
-type windowData = {
+export type windowData = {
 	className?: string,
 	title?: string,
 	controls?: Record<string, boolean>,
@@ -30,20 +30,16 @@ const WindowEVENTS = {
 }
 
 // Класс окна
-export default class Window extends Component<windowData> {
+export default class Window extends BaseComponent<windowData> {
 
 	// Делаем действия публичными
-	public static override readonly EVENTS = Object.assign(Component.EVENTS, WindowEVENTS);
+	public static override readonly EVENTS = Object.assign(BaseComponent.EVENTS, WindowEVENTS);
 
 	constructor(data: windowData) {
 		// Сначала создаём базовый компонент  и рендерим его
 		super(data);
 		// Регистрация кнопок из шапки окна
 		this._registerWindowControls();
-		// Добавляем к окну переданное действие и действие _close при закрытии окна
-		if (this.props.close) {
-			this.eventBus.on(Window.EVENTS.close, this.props.close);
-		}
 		this.eventBus.on(Window.EVENTS.close, this._close);
 	}
 
@@ -53,7 +49,7 @@ export default class Window extends Component<windowData> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(prop: string): void {
+	protected override _updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop] as string;
 		switch (prop) {
@@ -104,6 +100,14 @@ export default class Window extends Component<windowData> {
 
 	// Метод закрытия окна - непосредственно уничтожение экземпляра окна
 	private readonly _close = (): void => {
+		if(this.props.close){
+			(this.props.close.bind(this))();
+		}
 		this.destroy();
+	}
+	public readonly focusOnFocusElement = ():void => {
+		if(this.props.focusElement instanceof BaseComponent){
+			this.props.focusElement.target().focus();
+		}
 	}
 }

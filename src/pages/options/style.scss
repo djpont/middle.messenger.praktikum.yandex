@@ -1,4 +1,4 @@
-div.window.profile {
+div.window.options {
 	width: 360px;
 	margin: auto;
 
@@ -7,7 +7,7 @@ div.window.profile {
 		padding: 5px 5px 10px;
 		/* stylelint-enable selector-class-pattern */
 
-		div.profileContainer {
+		div.optionsContainer {
 			display: flex;
 			flex-flow: row nowrap;
 			justify-content: start;
@@ -18,6 +18,7 @@ div.window.profile {
 				width: 128px;
 				min-height: 128px;
 				padding-top: 11px;
+				text-align: center;
 
 				div.avatarImage {
 					display: block;
@@ -46,13 +47,13 @@ div.window.profile {
 		div.buttons {
 			text-align: center;
 			padding-top: 11px;
+		}
 
-			button {
-				margin-bottom: 7px;
+		button {
+			margin-bottom: 7px;
 
-				&:not(:last-child) {
-					margin-right: 7px;
-				}
+			&:not(:last-child) {
+				margin-right: 7px;
 			}
 		}
 	}

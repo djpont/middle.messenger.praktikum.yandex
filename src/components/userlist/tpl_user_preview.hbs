@@ -1,4 +1,4 @@
-<button class="chatPreview {{#if unreadCount}}hasUnread{{/if}}">
+<button class="userPreview">
 	<div class="container">
 		<div class="avatar has3dBorder"
 			{{#if avatar}}
@@ -9,11 +9,9 @@
 		</div>
 		<div class="text">
 			<div class="name">
-				{{title}}
-				{{#if unreadCount}}
-					<span class="unreadCount">({{unreadCount}})</span>
-				{{/if}}
+				{{displayName}}
 			</div>
+			<!--div class="additional">Добавить в текущий чат</div-->
 		</div>
 	</div>
 </button>

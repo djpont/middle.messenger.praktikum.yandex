@@ -1,11 +1,11 @@
 import tpl from "./tpl.hbs";
-import Component, {ComponentPropsData, EventsType} from "~src/components/components";
+import BaseComponent, {ComponentPropsData, EventsType} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 
 // Компонент Button отвечает за кнопки
 
 // Тип данных для кнопки
-type buttonData = {
+export type buttonData = {
 	name?: string,
 	type?: string,
 	text?: string,
@@ -24,7 +24,7 @@ const button = (data: buttonData): string => {
 };
 
 // Класс кнопки
-export default class Button extends Component<buttonData> {
+export default class Button extends BaseComponent<buttonData> {
 
 	constructor(props: buttonData) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -37,7 +37,7 @@ export default class Button extends Component<buttonData> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(prop: string): void {
+	protected override _updateProp(prop: string): void {
 		let element: HTMLElement | null = null;
 		const value = this.props[prop] as string;
 		switch (prop) {
@@ -60,6 +60,11 @@ export default class Button extends Component<buttonData> {
 			value: ''
 		}
 		return result;
+	}
+
+	// Возвращаем активный элемент кнопки
+	public target(): HTMLButtonElement {
+		return this.document() as HTMLButtonElement;
 	}
 
 	// Метод превращения DOM-элемента в экземпляр Button

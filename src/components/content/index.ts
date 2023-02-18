@@ -1,4 +1,4 @@
-import Component, {ComponentPropsData} from "~src/components/components";
+import BaseComponent, {ComponentPropsData} from "~src/components/components";
 import {Fn, generateDom} from "~src/modules/functions";
 
 // Компонент Content отвечат за содержимое окна
@@ -10,7 +10,7 @@ type contentType = {
 } & ComponentPropsData;
 
 // Класс контента
-export default class Content extends Component {
+export default class Content extends BaseComponent {
 
 	constructor(data: contentType) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -23,7 +23,7 @@ export default class Content extends Component {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса (пока таких нет)
-	protected override updateProp(): void {
+	protected override _updateProp(): void {
 		return;
 	}
 

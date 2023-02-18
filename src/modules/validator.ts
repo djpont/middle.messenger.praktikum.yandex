@@ -21,13 +21,13 @@ const regexpsRules: Record<string, { regexp: RegExp, description: string }> = {
 			"но перед точкой обязательно должны быть буквы."
 	},
 	phone: {
-		regexp: /^\+?[0-9]{10,15}$/,
+		regexp: /^(8|\+7)[0-9]{10,15}$/,
 		description: "От 10 до 15 символов, состоит из цифр, может начинается с плюса."
 	},
 	login: {
-		regexp: /^(?=.*[a-zA-Z])([a-zA-Z0-9-_]{3,20})$/,
-		description: "От 3 до 20 символов, латиница, может содержать цифры,но не состоять из них," +
-			"без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)."
+		regexp: /^(?=.*[a-zA-Z])([\w-_]{3,20})$/,
+		description: "От 3 до 20 символов, латиница, может содержать цифры, но не состоять " +
+			"из них,без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание)."
 	},
 	password: {
 		regexp: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
@@ -36,6 +36,10 @@ const regexpsRules: Record<string, { regexp: RegExp, description: string }> = {
 	message: {
 		regexp: /^.+$/,
 		description: "Сообщение не должно быть пустым."
+	},
+	title: {
+		regexp: /^.+$/,
+		description: "Название не должно быть пустым."
 	}
 }
 export default class Validator {
@@ -70,7 +74,7 @@ export default class Validator {
 		});
 		// Если валитация не прошла, то показываем пользователю ошибку
 		if(!result){
-			Alert.lastAlert().error(errorTexts);
+			Alert.error(errorTexts);
 		}
 		return result;
 	}

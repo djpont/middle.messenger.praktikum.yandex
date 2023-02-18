@@ -1,5 +1,5 @@
 import tpl from "./tpl.hbs";
-import Component, {ComponentPropsData} from "~src/components/components";
+import BaseComponent, {ComponentPropsData} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 
 // Компонент Text отвечает за элемент, содержащий текстовую строку
@@ -22,7 +22,7 @@ const text = (data: textData): string => {
 };
 
 // Класс текста
-export default class Text extends Component<textData> {
+export default class Text extends BaseComponent<textData> {
 
 	constructor(props: textData) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -35,16 +35,11 @@ export default class Text extends Component<textData> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(prop: string): void {
-		let element: HTMLElement | null = null;
-		const value = this.props[prop] as string;
+	protected override _updateProp(prop: string): void {
 		switch (prop) {
 			case 'text':
-				element = this.target();
+				this.target().textContent = this.props[prop] as string;
 				break;
-		}
-		if (element) {
-			element.textContent = value;
 		}
 	}
 

@@ -9,6 +9,15 @@ main {
 		height: 100%;
 		width: 100%;
 
+		&.secondWindows {
+			z-index: 1000;
+		}
+
+		&.alertWindows {
+			z-index: 2000;
+		}
+
+		&.secondWindows,
 		&.alertWindows {
 			position: fixed;
 			background: #00000059;

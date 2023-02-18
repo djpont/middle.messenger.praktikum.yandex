@@ -10,11 +10,6 @@ import Button from "~src/components/button";
 // По сути он является связущим звеном между view и window,
 // вынесен в отдельный компонент, чтобы не создавать взаимосвязь между view и window
 
-// Тип данных для алерта
-type alertData = {
-	rootElement: View
-}
-
 // Тип для указания типа алерта
 enum alertType {
 	message,	// Сообщение с возможностью закрыть
@@ -25,43 +20,64 @@ enum alertType {
 // Класс алерта
 export default class Alert {
 
+	// Приватно сохраняем вью, в котором будем рендерить окна с сообщениями
+	private static _view: View;
+
 	// Детаем типы алертов публичными
 	public static readonly TYPE = alertType;
 
-	// Сохраняем последний view для инпользования внутри компонентов
-	private static _lastAlert:Alert;
-
-	// Приватно сохраняем вью, в котором будем рендерить окна с сообщениями
-	private readonly _view: View;
-
-	constructor(data: alertData) {
-		this._view = data.rootElement;
-		Alert._lastAlert=this;
+	public static setView(view: View): void {
+		Alert._view = view;
 	}
 
 	// Получаем последний использованный view для инпользования внутри компонентов
-	public static lastAlert():Alert{
-		return Alert._lastAlert;
+	private static getView(): View {
+		if (!Alert._view) {
+			throw new Error('Не установлен _view для Alert');
+		}
+		return Alert._view;
 	}
 
 	// Метод отобржения сообщения в заренее указанном view
-	public message(text: string[]): void {
-		this._showAlertWindow(alertType.message, 'Сообщение', text);
+	public static message(text: string[], render: boolean = true): Window {
+		const window = Alert.generateAlertWindow(alertType.message, 'Сообщение', text);
+		if(render){
+			Alert.showGeneratedAlertWindow(window);
+		}
+		return window;
 	}
 
 	// Метод отобржения ошибки в заренее указанном view
-	public error(text: string[]): void {
-		this._showAlertWindow(alertType.error, 'Ошибка', text);
+	public static error(text: string[], render: boolean = true): Window {
+		const window = Alert.generateAlertWindow(alertType.error, 'Ошибка', text);
+		if(render){
+			Alert.showGeneratedAlertWindow(window);
+		}
+		return window;
 	}
 
 	// Метод отобржения критической ошибки в заренее указанном view
-	public fatal(text: string[]): void {
+	public static fatal(text: string[], render: boolean = true): Window {
 		text.push('<br>Выполнение программы не может быть продолжено.')
-		this._showAlertWindow(alertType.fatal, 'Критическая ошибка', text);
+		const window = Alert.generateAlertWindow(alertType.fatal, 'Критическая ошибка', text);
+		if(render){
+			Alert.showGeneratedAlertWindow(window);
+		}
+		return window;
 	}
 
-	// Метод рендера окна с сообщением или ошибкой
-	private _showAlertWindow(type:alertType, title:string, text:string[]){
+	// Метод добавления сгенерированного окна на view
+	private static showGeneratedAlertWindow(window: Window): void{
+		// Добавляем окно в view
+		Alert.getView().children[View.LAYERS.alert].push(window);
+		// Обновляем чилдренов view (без рекурсии)
+		Alert.getView().updateChildren();
+		// Фокус на кнопку
+		window.focusOnFocusElement();
+	}
+
+	// Метод генерации окна с сообщением или ошибкой
+	private static generateAlertWindow(type:alertType, title:string, text:string[]): Window{
 		let className = 'alert' // Стандартный класс
 		const controls = {close: true}	// Стандартный список кнопок контроля окна в шапке
 
@@ -102,22 +118,28 @@ export default class Alert {
 			content.children.buttons=[button];
 		}
 
-		// Добавляем окно в view
-		this._view.children.alert.push(window);
-		// Обновляем чилдренов view (без рекурсии)
-		this._view.updateChildren();
-		// Обновляем чилдренов окна (без рекурсии)
+		// Добавляем кнопку в пропсы для фокуса
+		if(button) {
+			window.props.focusElement = button;
+		}
+
+		// Обновляем чилдренов окна (с рекурсией)
 		window.updateChildren(true);
 
-		if(button){
-			button.target().focus();
-		}
+		return window;
 	}
 
 	// Метод отобожения переданного окна на слой alert.
 	// На случай, если окно не является сообщением, например file upload
-	public alertWindow(window: Window){
-		this._view.children.alert.push(window);
-		this._view.updateChildren();
+	public static alertWindow(window: Window){
+		const view=Alert.getView();
+		view.children[View.LAYERS.alert].push(window);
+		view.updateChildren();
+	}
+
+	// Метод проверки, есть ли открытые окна с сообщениями
+	public static isEmpty():boolean{
+		const view=Alert.getView();
+		return view.children[View.LAYERS.alert].length===0;
 	}
 }

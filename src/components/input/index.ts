@@ -1,6 +1,6 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
-import Component, {ComponentPropsData, EventsType} from "~src/components/components";
+import BaseComponent, {ComponentPropsData, EventsType} from "~src/components/components";
 import {generateDom} from "~src/modules/functions";
 import {Fn} from "~src/modules/functions";
 
@@ -47,7 +47,7 @@ const inputWithLabel = (data: inputDataWithLabel): string => {
 };
 
 // Класс инпута
-export default class Input extends Component<inputDataWithLabel> {
+export default class Input extends BaseComponent<inputDataWithLabel> {
 
 	constructor(data: inputData | inputDataWithLabel) {
 		// Сначала создаём базовый компонент  и рендерим его
@@ -67,8 +67,8 @@ export default class Input extends Component<inputDataWithLabel> {
 	}
 
 	// Метод обновления DOM-дерева после обновления пропса
-	protected override updateProp(): void {
-		return;
+	protected override _updateProp(): void {
+		return
 	}
 
 	// Метод получения пропса из DOM-дерева
@@ -96,6 +96,11 @@ export default class Input extends Component<inputDataWithLabel> {
 		}else{
 			return this.document() as HTMLInputElement;
 		}
+	}
+
+	// Сброс значения
+	public reset(): void{
+		this.target().value='';
 	}
 
 	// Метод превращения DOM-элемента в экземпляр  Input

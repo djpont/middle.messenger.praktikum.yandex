@@ -8,7 +8,7 @@ export class EventBus {
 	}
 
 	// Метод добавляения событий в EventBus
-	on(event: string, callback: Fn<unknown>, insertBeforeLastListener: boolean = false) {
+	public on(event: string, callback: Fn<unknown>, insertBeforeLastListener: boolean = false) {
 		if (this._listeners[event] === undefined) {
 			this._listeners[event] = [];
 		}
@@ -22,7 +22,7 @@ export class EventBus {
 	}
 
 	// Метод удаления событий из EventBus
-	off(event: string, callback: Fn<unknown>) {
+	public off(event: string, callback: Fn<unknown>) {
 		if (this._listeners[event] === undefined) {
 			this.error(event);
 		}
@@ -32,7 +32,7 @@ export class EventBus {
 	}
 
 	// Метод вызова цепочки событий из EventBus
-	emit(event: string, ...args: unknown[]) {
+	public emit(event: string, ...args: unknown[]) {
 		if (this._listeners[event] === undefined) {
 			// this.error(event);
 		} else {
@@ -45,7 +45,7 @@ export class EventBus {
 	}
 
 	// Метод в случае ошибки
-	error(event: string) {
+	private error(event: string) {
 		console.error(`Нет события: ${event}`);
 	}
 }

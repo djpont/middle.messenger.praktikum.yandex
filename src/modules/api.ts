@@ -15,7 +15,7 @@ export default class Api {
 	private static _avatarUrlPrefix = 'https://ya-praktikum.tech/api/v2/resources';
 
 	// Регистрация
-	public static signUp(data: apiType): Promise<Record<string, unknown>> {
+	public static async signUp(data: apiType): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.post({path: '/auth/signup', data})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -38,14 +38,14 @@ export default class Api {
 	}
 
 	// Авторизация
-	public static signIn(data: apiType): Promise<Record<string, unknown>> {
+	public static async signIn(data: apiType): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.post({path: '/auth/signin', data})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
-				.then(res => {
+				.then(async (res) => {
 					if (res.status && res.response.text === 'OK') {
 						resolve(res.response);
-						Api.getChats({});
+						await Api.getChats({});
 					} else {
 						reject(res.response);
 					}
@@ -57,7 +57,7 @@ export default class Api {
 	}
 
 	// Выход
-	public static logout(): Promise<Record<string, unknown>> {
+	public static async logout(): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Api.closeChat();
 			Fetch.post({path: '/auth/logout'})
@@ -77,7 +77,7 @@ export default class Api {
 	}
 
 	// Получение данных о текущем пользователе
-	public static getMyUserInfo(): Promise<Record<string, unknown>> {
+	public static async getMyUserInfo(): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.get({path: '/auth/user'})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -108,7 +108,7 @@ export default class Api {
 	}
 
 	// Проверка есть ли пользователь в store
-	public static isAuthorized(): Promise<Record<string, unknown>> {
+	public static async isAuthorized(): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			const currentUser = store.getState().currentUser;
 			if (currentUser) {
@@ -119,9 +119,9 @@ export default class Api {
 				}
 			} else {
 				Api.getMyUserInfo()
-					.then(res => {
+					.then(async (res) => {
 						resolve(res);
-						Api.getChats({});
+						await Api.getChats({});
 					})
 					.catch(res => reject(res));
 			}
@@ -131,7 +131,7 @@ export default class Api {
 	}
 
 	// Изменение данных пользователя
-	public static editProfile(data: apiType): Promise<Record<string, unknown>> {
+	public static async editProfile(data: apiType): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.put({path: '/user/profile', data})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -150,7 +150,7 @@ export default class Api {
 	}
 
 	// Изменение данных пользователя
-	public static editAvatar(file: File): Promise<Record<string, unknown>> {
+	public static async editAvatar(file: File): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			const data = new FormData();
 			data.append('avatar', file);
@@ -174,7 +174,7 @@ export default class Api {
 	}
 
 	// Изменение пароля
-	public static changePassword(data: apiType): Promise<Record<string, unknown>> {
+	public static async changePassword(data: apiType): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.put({path: '/user/password', data})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -190,8 +190,8 @@ export default class Api {
 	}
 
 	// Получаем список чатов
-	public static getChats(data: apiType): void {
-		Fetch.get({path: '/chats', data})
+	public static async getChats(data: apiType): Promise<void> {
+		await Fetch.get({path: '/chats', data})
 			.then(res => Api.handleResponse(res as XMLHttpRequest))
 			.then(res => {
 				store.unset('chats');
@@ -210,7 +210,7 @@ export default class Api {
 	}
 
 	// Поиск пользователя
-	public static findUser(data: apiType): Promise<Record<string, unknown> | unknown[]> {
+	public static async findUser(data: apiType): Promise<Record<string, unknown> | unknown[]> {
 		return new Promise((resolve, reject) => {
 			Fetch.post({path: '/user/search', data})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -249,13 +249,13 @@ export default class Api {
 	}
 
 	// Новый чат
-	public static createChat(title: string): Promise<Record<string, unknown> | unknown[]> {
+	public static async createChat(title: string): Promise<Record<string, unknown> | unknown[]> {
 		return new Promise((resolve, reject) => {
 			Fetch.post({path: '/chats', data: {title}})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
-				.then(res => {
+				.then(async (res) => {
 					if (res.status && res.response.id) {
-						Api.getChats({});
+						await Api.getChats({});
 						resolve(res.response);
 					} else {
 						reject(res.response);
@@ -268,13 +268,13 @@ export default class Api {
 	}
 
 	// Удалить чат
-	public static deleteChat(): void {
+	public static async deleteChat(): Promise<void> {
 		const chatId = Api.getCurrentChatId();
 		if (chatId > 0 && Api._socket) {
-			Fetch.delete({path: '/chats', data: {chatId}})
-				.then(() => {
+			await Fetch.delete({path: '/chats', data: {chatId}})
+				.then(async () => {
 					Api.closeChat();
-					Api.getChats({});
+					await Api.getChats({});
 				})
 				.catch(error => {
 					Api.catchError(error)
@@ -291,7 +291,7 @@ export default class Api {
 	}
 
 	// Пользователи чата
-	public static getChatUsers(id: number | string): Promise<Record<string, unknown> | unknown[]> {
+	public static async getChatUsers(id: number | string): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
 			Fetch.get({path: `/chats/${id}/users`})
 				.then(res => Api.handleResponse(res as XMLHttpRequest))
@@ -325,11 +325,11 @@ export default class Api {
 	}
 
 	// Загрузка сообщений из чата
-	public static openChat(chatId: string): void {
+	public static async openChat(chatId: string): Promise<void> {
 		Api.closeChat();
-		Api.getChatUsers(chatId)
-			.then(() => {
-				Fetch.post({path: `/chats/token/${chatId}`})
+		await Api.getChatUsers(chatId)
+			.then(async () => {
+				await Fetch.post({path: `/chats/token/${chatId}`})
 					.then(res => Api.handleResponse(res as XMLHttpRequest))
 					.then(res => {
 						store.set('currentChatId', chatId);
@@ -339,11 +339,11 @@ export default class Api {
 							`/${userId}/${chatId}/${token}`);
 						Api._socket = socket;
 
-						socket.addEventListener('open', () => {
+						socket.addEventListener('open', async () => {
 							console.log('Соединение установлено');
 							store.unset('messages');
 							Api.loadOldMessages();
-							Api.getChats({});
+							await Api.getChats({});
 							Api._socketPingInterval = setInterval(function () {
 								socket.send(JSON.stringify({type: "ping"}));
 							}, 20000);
@@ -425,13 +425,13 @@ export default class Api {
 	}
 
 	// Добавление пользователя в чат
-	public static addUserToChat(userId: string): void {
+	public static async addUserToChat(userId: string): Promise<void> {
 		const chatId = Api.getCurrentChatId();
-		Fetch.put({path: '/chats/users', data: {users: [userId], chatId: chatId}})
+		await Fetch.put({path: '/chats/users', data: {users: [userId], chatId: chatId}})
 			.then(res => Api.handleResponse(res as XMLHttpRequest))
-			.then(res => {
+			.then(async (res) => {
 				if (res.status) {
-					Api.getChatUsers(chatId);
+					await Api.getChatUsers(chatId);
 				}
 			})
 			.catch(error => {
@@ -440,13 +440,13 @@ export default class Api {
 	}
 
 	// Удаление пользователя из чата
-	public static deleteUserFromChat(userId: string): void {
+	public static async deleteUserFromChat(userId: string): Promise<void> {
 		const chatId = Api.getCurrentChatId();
-		Fetch.delete({path: '/chats/users', data: {users: [userId], chatId: chatId}})
+		await Fetch.delete({path: '/chats/users', data: {users: [userId], chatId: chatId}})
 			.then(res => Api.handleResponse(res as XMLHttpRequest))
-			.then(res => {
+			.then(async (res) => {
 				if (res.status) {
-					Api.getChatUsers(chatId);
+					await Api.getChatUsers(chatId);
 				}
 			})
 			.catch(error => {
@@ -455,13 +455,13 @@ export default class Api {
 	}
 
 	// Изменить аватар чата
-	public static changeChatAvatar(file: File): void {
+	public static async changeChatAvatar(file: File): Promise<void> {
 		const chatId = Api.getCurrentChatId().toString();
 		const data = new FormData();
 		data.append('avatar', file);
 		data.append('chatId', chatId);
-		Fetch.put({path: '/chats/avatar', data})
-			.then(() => Api.getChats({}))
+		await Fetch.put({path: '/chats/avatar', data})
+			.then(async () => await Api.getChats({}))
 			.catch(error => {
 				Api.catchError(error)
 			});

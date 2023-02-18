@@ -169,10 +169,10 @@ export default class Messenger extends Window {
 		const userlist = new UserlistCurrentChatConnected({callback: deleteUserFromCurrentChat});
 		content.children.userlist = [userlist];
 
-		function deleteUserFromCurrentChat(userId: string):void {
+		async function deleteUserFromCurrentChat(userId: string): Promise<void> {
 			const currentChatId = Api.getCurrentChatId();
 			if (currentChatId > 0) {
-				Api.deleteUserFromChat(userId);
+				await Api.deleteUserFromChat(userId);
 			}
 		}
 

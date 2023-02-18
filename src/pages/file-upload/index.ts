@@ -32,11 +32,11 @@ export default class FileUpload extends Window {
 
 		// Задаем кнопке и инпуту каллбек
 		const fileElement = content.subElement("input[type='file']") as HTMLInputElement;
-		fileElement.addEventListener('change', () => {
+		fileElement.addEventListener('change', async () => {
 			if (fileElement.files) {
 				const file = fileElement.files[0];
 				if (this.props.callback) {
-					(this.props.callback as Fn<void, File>)(file);
+					(await this.props.callback as Fn<void, File>)(file);
 				}
 				this.close();
 			}

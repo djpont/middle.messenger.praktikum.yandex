@@ -48,27 +48,27 @@ type optionsType = {
 
 // Класс для работы с запросами
 export default class Fetch {
-	public static get(options: optionsType = {}) {
+	public static async get(options: optionsType = {}): Promise<unknown> {
 		if (options.data && typeof options.data!=='string') {
 			options.data = queryStringify(options.data);
 		}
 		return Fetch._request(messengerServer, {...options, method: METHODS.GET});
 	}
 
-	public static post = (options: optionsType = {}) => {
+	public static async post(options: optionsType = {}): Promise<unknown> {
 		return Fetch._request(messengerServer, {...options, method: METHODS.POST});
 	}
 
-	public static put = (options: optionsType = {}) => {
+	public static async put(options: optionsType = {}): Promise<unknown>{
 		return Fetch._request(messengerServer, {...options, method: METHODS.PUT});
 	}
 
-	public static delete = (options: optionsType = {}) => {
+	public static async delete(options: optionsType = {}): Promise<unknown> {
 		return Fetch._request(messengerServer, {...options, method: METHODS.DELETE});
 	}
 
 	// Метод отправки запроса
-	private static _request = (url: string, options: optionsType) => {
+	private static async _request(url: string, options: optionsType): Promise<unknown> {
 		const {
 			path,
 			method = METHODS.GET,
@@ -111,5 +111,5 @@ export default class Fetch {
 				xhr.send(data as XMLHttpRequestBodyInit);
 			}
 		});
-	};
+	}
 }

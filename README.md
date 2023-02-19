@@ -1,5 +1,5 @@
 
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/djpont/middle.messenger.praktikum.yandex/tests.yml?branch=sprint_1)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/djpont/middle.messenger.praktikum.yandex/tests.yml)](https://github.com/djpont/middle.messenger.praktikum.yandex/actions/runs/4210185536/jobs/7307688278)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/b32e09ac-0be1-44f2-ac50-b754434586f1/deploy-status)](https://app.netlify.com/sites/dreamy-capybara-f77156/deploys)
 
 ### Ссылка на pull request

@@ -46,7 +46,7 @@ Routing.use({
 		}
 	}),
 	layer: View.LAYERS.main,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница регистрации
 Routing.use({
@@ -66,7 +66,7 @@ Routing.use({
 	path: PATHS.profile,
 	window: new Profile({}),
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница опций чата (слой второй)
 Routing.use({
@@ -78,14 +78,14 @@ Routing.use({
 		}
 	}),
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница загрузки файла (слой второй)
 Routing.use({
 	path: PATHS.fileUpload,
 	window: FileUpload,
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница 500 (слой сообщений)
 Routing.use({
@@ -102,7 +102,7 @@ window.addEventListener('popstate', () => {
 });
 
 // Функция проверки доступа - если неавторизован, то перенаправляет на страничку авторизации
-async function checkIfNeedAutorize(nextPath: string): Promise<string> {
+async function checkIfNeedAuthorize(nextPath: string): Promise<string> {
 	return new Promise((resolve) => {
 		Api.isAuthorized()
 			.then(() => {

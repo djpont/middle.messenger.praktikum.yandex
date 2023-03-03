@@ -2,36 +2,43 @@
 	"name": "messenger",
 	"version": "0.1",
 	"description": "",
+	"main": "index.js",
+	"private": true,
 	"scripts": {
-		"start": "npm run clear > /dev/null && parcel static/index.html -p 3000 --no-cache",
-		"build": "parcel build static/index.html",
+		"serve": "webpack serve",
+		"build": "webpack --mode=production --node-env=production",
+		"build:dev": "webpack --mode=development",
+		"build:prod": "webpack --mode=production --node-env=production",
+		"watch": "webpack --watch",
 		"eslint": "eslint . --ext .ts",
 		"stylelint": "stylelint '**/*.scss' && stylelint **/*.scss",
-		"clear": "rm -rf dist/* && rm -rf .parcel-cache/*"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@parcel/transformer-inline-string": "2.8.3",
-		"@parcel/transformer-sass": "2.8.3",
 		"@typescript-eslint/eslint-plugin": "5.48.2",
 		"@typescript-eslint/parser": "5.48.2",
+		"@webpack-cli/generators": "3.0.1",
+		"css-loader": "6.7.3",
 		"eslint": "8.32.0",
-		"express": "4.18.2",
-		"parcel": "2.8.3",
-		"parcel-transformer-hbs": "1.0.4",
+		"handlebars-loader": "1.7.3",
+		"html-webpack-plugin": "5.5.0",
+		"mini-css-extract-plugin": "2.7.2",
+		"sass": "1.58.3",
+		"sass-loader": "13.2.0",
+		"style-loader": "3.3.1",
 		"stylelint": "14.16.1",
 		"stylelint-config-sass-guidelines": "9.0.1",
 		"stylelint-config-standard": "29.0.0",
 		"stylelint-config-standard-scss": "6.1.0",
 		"stylelint-scss": "4.3.0",
-		"typescript": "4.9.4"
-	},
-	"@parcel/transformer-css": {
-		"drafts": {
-			"nesting": true
-		}
+		"ts-loader": "9.4.2",
+		"typescript": "4.9.4",
+		"webpack": "5.75.0",
+		"webpack-cli": "5.0.1",
+		"webpack-dev-server": "4.11.1"
 	},
 	"engine": {
 		"node": ">=12.0.0"

@@ -1,17 +1,17 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import Input from "~src/components/input";
-import Button from "~src/components/button";
-import Form from "~src/components/form";
-import Api from "~src/modules/api";
-import {ComponentPropsData} from "~src/components/components";
-import Alert from "~src/components/window/alert";
-import {UserlistSearchConnected, UserlistCurrentChatConnected} from "~src/components/userlist";
-import Chatlist from "~src/components/chatlist";
-import ChatFeedConnected from "~src/components/chatfeed";
-import {Fn, activateTabs} from "~src/modules/functions";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import Input from "../../components/input";
+import Button from "../../components/button";
+import Form from "../../components/form";
+import Api from "../../modules/api";
+import {ComponentPropsData} from "../../components/components";
+import Alert from "../../components/window/alert";
+import Chatlist from "../../components/chatlist";
+import ChatFeedConnected from "../../components/chatfeed";
+import {UserlistSearchConnected, UserlistCurrentChatConnected} from "../../components/userlist";
+import {Fn, activateTabs} from "../../modules/functions";
 
 // Страничка Мессенджера.
 // Состоит из двух больших компонентов: Списка чатов (Chatlist) и Ленты сообщений (ChatFeed).

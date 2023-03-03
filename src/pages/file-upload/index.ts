@@ -1,10 +1,10 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import {Fn} from "~src/modules/functions";
-import Button from "~src/components/button";
-import {ComponentPropsData} from "~src/components/components";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import {Fn} from "../../modules/functions";
+import Button from "../../components/button";
+import {ComponentPropsData} from "../../components/components";
 
 // Страничка загрузки файла. Возвращает окно.
 

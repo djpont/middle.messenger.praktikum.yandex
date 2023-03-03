@@ -1,5 +1,5 @@
-import Chatlist from "~src/components/chatlist/chatlist";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import Chatlist from "./chatlist";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const ChatlistConnected = connect<typeof Chatlist>(Chatlist, mapping);
 

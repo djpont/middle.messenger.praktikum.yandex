@@ -1,12 +1,12 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
-import BaseComponent, {ComponentPropsData, EventsType} from "~src/components/components";
-import {generateDom} from "~src/modules/functions";
-import {Fn} from "~src/modules/functions";
+import BaseComponent, {ComponentPropsData, EventsType} from "../components";
+import {generateDom} from "../../modules/functions";
+import {Fn} from "../../modules/functions";
 
 // Регистрируем инпут как Partial (используется в шаблоне tpl_full)
-import * as handlebars from "handlebars";
-handlebars.registerPartial('input', tpl_only_input);
+// import * as handlebars from "handlebars";
+// handlebars.registerPartial('input', tpl_only_input);
 
 // Тип данных для инпута
 type inputData = {

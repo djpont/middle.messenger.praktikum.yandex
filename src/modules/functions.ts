@@ -1,6 +1,6 @@
-import BaseComponent from "~src/components/components";
-import Input from "~src/components/input";
-import Validator from "~src/modules/validator";
+import BaseComponent from "../components/components";
+import Input from "../components/input";
+import Validator from "./validator";
 
 // В этом файле находятся мелкие полезные функции
 

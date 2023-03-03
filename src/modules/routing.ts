@@ -1,5 +1,5 @@
-import View from "~src/components/view";
-import Window from "~src/components/window";
+import View from "../components/view";
+import Window from "../components/window";
 
 // Роутинг
 

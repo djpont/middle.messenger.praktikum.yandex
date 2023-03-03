@@ -1,5 +1,5 @@
-import ChatFeed from "~src/components/chatfeed/chatfeed";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import ChatFeed from "./chatfeed";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const ChatFeedConnected = connect<typeof ChatFeed>(ChatFeed, mapping);
 

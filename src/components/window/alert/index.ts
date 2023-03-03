@@ -1,9 +1,9 @@
 import tpl from './tpl.hbs';
 import "./style.scss";
-import View from "~src/components/view";
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import Button from "~src/components/button";
+import View from "../../view";
+import Window from "../index";
+import Content from "../../content";
+import Button from "../../button";
 
 // Компонент Alert отвечает за рендер окон с сообщениями.
 // Отличия от других компонентов: Данный компонент не является наследником базового Компонента.

@@ -1,5 +1,5 @@
-import BaseComponent, {ComponentPropsData} from "~src/components/components";
-import {Fn, generateDom} from "~src/modules/functions";
+import BaseComponent, {ComponentPropsData} from "../components";
+import {Fn, generateDom} from "../../modules/functions";
 
 // Компонент Content отвечат за содержимое окна
 

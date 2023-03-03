@@ -2,5 +2,10 @@
 	{{#if label}}
 		<label>{{label}}</label>
 	{{/if}}
-	{{>input}}
+	<input
+		{{#if type}} type="{{type}}" {{/if}}
+		{{#if className}} class="{{className}}" {{/if}}
+		{{#if name}} name="{{name}}" {{/if}}
+		{{#if value}} value="{{value}}" {{/if}}
+	>
 </div>

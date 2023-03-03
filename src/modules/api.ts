@@ -1,6 +1,6 @@
-import Fetch from "~src/modules/fetch";
-import Alert from "~src/components/window/alert";
-import {store} from "~src/modules/store";
+import Fetch from "./fetch";
+import Alert from "../components/window/alert";
+import {store} from "./store";
 
 // Модуль Авторизации.
 
@@ -9,7 +9,7 @@ type apiType = Record<string, string>;
 export default class Api {
 
 	private static _socket: WebSocket;
-	private static _socketPingInterval: number;
+	private static _socketPingInterval: NodeJS.Timer;
 
 	// Префикс для аватарок
 	private static _avatarUrlPrefix = 'https://ya-praktikum.tech/api/v2/resources';
@@ -17,23 +17,23 @@ export default class Api {
 	// Регистрация
 	public static async signUp(data: apiType): Promise<Record<string, unknown>> {
 		return new Promise((resolve, reject) => {
-			Fetch.post({path: '/auth/signup', data})
-				.then(res => Api.handleResponse(res as XMLHttpRequest))
-				.then(res => {
-					if (res.status) {
-						store.reset();
-						Api.isAuthorized()
-							.then(() => resolve(res.response))
-							.catch(error => {
-								Api.catchError(error)
-							});
-					} else {
-						reject(res.response);
-					}
-				})
-				.catch(error => {
-					Api.catchError(error)
-				});
+		Fetch.post({path: '/auth/signup', data})
+			.then(res => Api.handleResponse(res as XMLHttpRequest))
+			.then(res => {
+				if (res.status) {
+					store.reset();
+					Api.isAuthorized()
+						.then(() => resolve(res.response))
+						.catch(error => {
+							Api.catchError(error)
+						});
+				} else {
+					reject(res.response);
+				}
+			})
+			.catch(error => {
+				Api.catchError(error)
+			});
 		});
 	}
 
@@ -126,8 +126,6 @@ export default class Api {
 					.catch(res => reject(res));
 			}
 		});
-
-
 	}
 
 	// Изменение данных пользователя
@@ -404,8 +402,8 @@ export default class Api {
 
 	// Получение старых сообщений чата
 	public static loadOldMessages(offset: number = 0): void {
-		const chatId = Api.getCurrentChatId();
-		if (chatId > 0 && Api._socket) {
+		const chatId = Api.getCurrentChatId() ?? 0;
+		if (chatId >0 && Api._socket) {
 			Api._socket.send(JSON.stringify({
 				content: `${offset}`,
 				type: "get old"

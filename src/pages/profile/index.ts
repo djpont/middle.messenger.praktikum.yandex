@@ -1,5 +1,5 @@
-import Profile from "~src/pages/profile/profile";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import Profile from "./profile";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const profileConnected = connect<typeof Profile>(Profile, mapping);
 

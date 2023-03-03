@@ -1,5 +1,7 @@
-import Alert from "~src/components/window/alert";
-import Window from "~src/components/window";
+// import Alert from "./components/window/alert";
+// import Window from "./components/window";
+import Alert from "../../components/window/alert";
+import Window from "../../components/window";
 
 // Страничка ошибки 404. Возвращает окно.
 

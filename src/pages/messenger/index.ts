@@ -1,5 +1,5 @@
-import Messenger from "~src/pages/messenger/messenger";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import Messenger from "./messenger";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const MessengerConnected = connect<typeof Messenger>(Messenger, mapping);
 

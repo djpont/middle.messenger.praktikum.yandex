@@ -1,17 +1,18 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import Alert from "~src/components/window/alert";
-import Button from "~src/components/button";
-import Input from "~src/components/input";
-import Text from "~src/components/text";
-import {ComponentChildrenData, ComponentPropsData} from "~src/components/components";
-import fileUpload from "~src/pages/file-upload";
-import Validator from "~src/modules/validator";
-import Form from "~src/components/form";
-import Api from "~src/modules/api";
-import {Fn, validate, fetchDataFromInputs} from "~src/modules/functions";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import Alert from "../../components/window/alert";
+import Button from "../../components/button";
+import Input from "../../components/input";
+import Text from "../../components/text";
+import {ComponentChildrenData, ComponentPropsData} from "../../components/components";
+import FileUpload from "../file-upload";
+import Validator from "../../modules/validator";
+import Form from "../../components/form";
+import Api from "../../modules/api";
+import {Fn, validate, fetchDataFromInputs} from "../../modules/functions";
+
 
 // Страничка профиля. Возвращает окно.
 
@@ -159,7 +160,7 @@ export default class Profile extends Window{
 			type: 'button',
 			text: 'Изменить аватар',
 			events: {
-				'click': () => Alert.alertWindow(new fileUpload({callback: avatarUpload}))
+				'click': () => Alert.alertWindow(new FileUpload({callback: avatarUpload}))
 			}
 		});
 		const avatar = [buttonAvatar];

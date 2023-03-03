@@ -1,5 +1,5 @@
-import Options from "~src/pages/options/options";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import Options from "./options";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const optionsConnected = connect<typeof Options>(Options, mapping);
 

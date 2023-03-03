@@ -1,6 +1,7 @@
-import {EventBus} from "~src/modules/event-bus";
-import BaseComponent, {ComponentPropsData} from "~src/components/components";
-// import {isEqual} from "~src/modules/functions";
+import {EventBus} from "./event-bus";
+import BaseComponent, {ComponentPropsData} from "../components/components";
+// import {isEqual} from "./modules/functions";
+
 
 const StoreEVENTS = {
 	updated: 'updated',
@@ -81,8 +82,7 @@ class Store extends EventBus {
 	}
 }
 
-const store: Store = new Store();
-export {store};
+export const store: Store = new Store();
 
 function set(object: Indexed, path: string, value: unknown): Indexed {
 	const object2: Indexed = {};

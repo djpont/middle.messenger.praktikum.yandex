@@ -1,5 +1,5 @@
-import {EventBus} from "~src/modules/event-bus";
-import {Fn} from "~src/modules/functions";
+import {EventBus} from "../modules/event-bus";
+import {Fn} from "../modules/functions";
 
 // Базовый компонент (аналог Block из теории Практикума)
 

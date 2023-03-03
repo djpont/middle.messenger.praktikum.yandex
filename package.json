@@ -12,7 +12,8 @@
 		"watch": "webpack --watch",
 		"eslint": "eslint . --ext .ts",
 		"stylelint": "stylelint '**/*.scss' && stylelint **/*.scss",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"clear": "rm -rf dist/*"
 	},
 	"keywords": [],
 	"author": "",

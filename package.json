@@ -21,7 +21,6 @@
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.48.2",
 		"@typescript-eslint/parser": "5.48.2",
-		"@webpack-cli/generators": "3.0.1",
 		"css-loader": "6.7.3",
 		"eslint": "8.32.0",
 		"handlebars-loader": "1.7.3",

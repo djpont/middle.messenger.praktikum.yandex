@@ -1,6 +1,6 @@
 {
 	"name": "messenger",
-	"version": "0.1",
+	"version": "1.0",
 	"description": "",
 	"main": "index.js",
 	"private": true,
@@ -13,7 +13,8 @@
 		"eslint": "eslint . --ext .ts",
 		"stylelint": "stylelint '**/*.scss' && stylelint **/*.scss",
 		"test": "jest",
-		"clear": "rm -rf dist/*"
+		"clear": "rm -rf dist/*",
+		"prepare": "husky install"
 	},
 	"keywords": [],
 	"author": "",

@@ -3,12 +3,21 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/b32e09ac-0be1-44f2-ac50-b754434586f1/deploy-status)](https://app.netlify.com/sites/dreamy-capybara-f77156/deploys)
 
 ### Ссылка на pull request
-[Sprint 3](https://github.com/djpont/middle.messenger.praktikum.yandex/pull/4)
+[Sprint 4](https://github.com/djpont/middle.messenger.praktikum.yandex/pull/5)
 
 
-### Запуск проекта
-* `npm run start`
+### Сборка и запуск проекта
 * `npm run build`
+* `npm run serve`
+
+### Тест и проверка проекта
+* `npm run test`
+* `npm run eslint`
+* `npm run stylelint`
+
+### Сборка и запусе Docker
+* `docker build -t messenger .`
+* `docker run -d -p 3000:3000 messenger`
 
 
 ### Проект на Netlify

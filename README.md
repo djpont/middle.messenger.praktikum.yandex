@@ -8,7 +8,7 @@
 
 ### Сборка и запуск проекта
 * `npm run build`
-* `npm run serve`
+* `npm run start` - webpack serve
 
 ### Тест и проверка проекта
 * `npm run test`

@@ -46,7 +46,7 @@ describe('Component', () => {
 			}
 		});
 		test.document().click();
-		expect(testVar).toBe("test ok okokokokok");
+		expect(testVar).toBe("test ok");
 	});
 
 });

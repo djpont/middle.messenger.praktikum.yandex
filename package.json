@@ -10,7 +10,7 @@
 		"build:dev": "webpack --mode=development",
 		"build:prod": "webpack --mode=production --node-env=production",
 		"watch": "webpack --watch",
-		"eslint": "eslint . --ext .ts ",
+		"eslint": "eslint . --ext .ts",
 		"stylelint": "stylelint '**/*.scss' && stylelint **/*.scss",
 		"test": "jest",
 		"clear": "rm -rf dist/*"

@@ -47,25 +47,28 @@ type optionsType = {
 	[key: string]: unknown;
 };
 
+// Тип метода класса Fetch
+type fetchMethodType = (options: optionsType) => Promise<unknown>
+
 // Класс для работы с запросами
 export default class Fetch {
-	public static async get(options: optionsType = {}): Promise<unknown> {
+	static get: fetchMethodType = async (options = {}) => {
 		if (options.data && typeof options.data !== 'string') {
 			options.data = queryStringify(options.data);
 		}
-		return Fetch._request(messengerServer, {...options, method: METHODS.GET});
+		return this._request(messengerServer, {...options, method: METHODS.GET});
 	}
 
-	public static async post(options: optionsType = {}): Promise<unknown> {
-		return Fetch._request(messengerServer, {...options, method: METHODS.POST});
+	static post: fetchMethodType = async (options = {}) => {
+		return this._request(messengerServer, {...options, method: METHODS.POST});
 	}
 
-	public static async put(options: optionsType = {}): Promise<unknown> {
-		return Fetch._request(messengerServer, {...options, method: METHODS.PUT});
+	static put: fetchMethodType = async(options = {}) => {
+		return this._request(messengerServer, {...options, method: METHODS.PUT});
 	}
 
-	public static async delete(options: optionsType = {}): Promise<unknown> {
-		return Fetch._request(messengerServer, {...options, method: METHODS.DELETE});
+	static delete:fetchMethodType = async(options = {}) => {
+		return this._request(messengerServer, {...options, method: METHODS.DELETE});
 	}
 
 	// Метод отправки запроса

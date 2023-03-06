@@ -15,7 +15,7 @@
 * `npm run eslint`
 * `npm run stylelint`
 
-### Сборка и запусе Docker
+### Сборка и запуск Docker
 * `docker build -t messenger .`
 * `docker run -d -p 3000:3000 messenger`
 

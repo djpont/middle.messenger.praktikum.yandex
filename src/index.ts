@@ -1,16 +1,16 @@
-import View from "~src/components/view";
-import Alert from "~src/components/window/alert";
-import Api from "~src/modules/api";
-import Routing from "~src/modules/routing";
+import View from "./components/view";
+import Alert from "./components/window/alert";
+import Api from "./modules/api";
+import Routing from "./modules/routing/routing";
 
-import PageSignIn from '~src/pages/sign-in';
-import PageSignUp from '~src/pages/sign-up';
-import page404 from '~src/pages/error/404';
-import page500 from '~src/pages/error/500';
-import Messenger from "~src/pages/messenger";
-import Profile from "~src/pages/profile";
-import Options from "~src/pages/options";
-import FileUpload from "~src/pages/file-upload";
+import PageSignIn from './pages/sign-in';
+import PageSignUp from './pages/sign-up';
+import page404 from './pages/error/404';
+import page500 from './pages/error/500';
+import Messenger from "./pages/messenger";
+import Profile from "./pages/profile";
+import Options from "./pages/options";
+import FileUpload from "./pages/file-upload";
 
 // Фиксируем возможные пути для роутинга
 export const PATHS = {
@@ -33,7 +33,7 @@ Routing.use({
 	path: PATHS.signIn,
 	window: PageSignIn,
 	layer: View.LAYERS.main,
-	checkFunction: checkIfAlreadyAutorized
+	checkFunction: checkIfAlreadyAuthorized
 });
 // Страница мессенджера
 Routing.use({
@@ -46,14 +46,14 @@ Routing.use({
 		}
 	}),
 	layer: View.LAYERS.main,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница регистрации
 Routing.use({
 	path: PATHS.signUp,
 	window: PageSignUp,
 	layer: View.LAYERS.main,
-	checkFunction: checkIfAlreadyAutorized
+	checkFunction: checkIfAlreadyAuthorized
 });
 // Страница 404 (слой сообщений)
 Routing.set404(Routing.use({
@@ -66,7 +66,7 @@ Routing.use({
 	path: PATHS.profile,
 	window: new Profile({}),
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница опций чата (слой второй)
 Routing.use({
@@ -78,14 +78,14 @@ Routing.use({
 		}
 	}),
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница загрузки файла (слой второй)
 Routing.use({
 	path: PATHS.fileUpload,
 	window: FileUpload,
 	layer: View.LAYERS.second,
-	checkFunction: checkIfNeedAutorize
+	checkFunction: checkIfNeedAuthorize
 });
 // Страница 500 (слой сообщений)
 Routing.use({
@@ -102,7 +102,7 @@ window.addEventListener('popstate', () => {
 });
 
 // Функция проверки доступа - если неавторизован, то перенаправляет на страничку авторизации
-async function checkIfNeedAutorize(nextPath: string): Promise<string> {
+async function checkIfNeedAuthorize(nextPath: string): Promise<string> {
 	return new Promise((resolve) => {
 		Api.isAuthorized()
 			.then(() => {
@@ -115,7 +115,7 @@ async function checkIfNeedAutorize(nextPath: string): Promise<string> {
 }
 
 // Функция проверки доступа - если авторизован, то перенаправляет на мессенджер
-async function checkIfAlreadyAutorized(nextPath: string): Promise<string> {
+async function checkIfAlreadyAuthorized(nextPath: string): Promise<string> {
 	return new Promise((resolve) => {
 		Api.isAuthorized()
 			.then(() => {

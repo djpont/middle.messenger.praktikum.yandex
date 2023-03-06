@@ -1,5 +1,5 @@
-import Userlist from "~src/components/userlist/userlist";
-import {connect, Indexed, storeDataType} from "~src/modules/store";
+import Userlist from "./userlist";
+import {connect, Indexed, storeDataType} from "../../modules/store";
 
 const UserlistSearchConnected = connect<typeof Userlist>(Userlist, mappingFound);
 

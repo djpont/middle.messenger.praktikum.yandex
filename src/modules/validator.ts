@@ -1,5 +1,5 @@
-import Input from "~src/components/input";
-import Alert from "~src/components/window/alert";
+import Input from "../components/input";
+import Alert from "../components/window/alert";
 
 // Модуль валидации.
 

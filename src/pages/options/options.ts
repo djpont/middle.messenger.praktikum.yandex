@@ -1,12 +1,12 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import {ComponentPropsData} from "~src/components/components";
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import {Fn} from "~src/modules/functions";
-import Button from "~src/components/button";
-import Alert from "~src/components/window/alert";
-import fileUpload from "~src/pages/file-upload";
+import {ComponentPropsData} from "../../components/component/component";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import {Fn} from "../../modules/functions/functions";
+import Button from "../../components/button";
+import Alert from "../../components/window/alert";
+import FileUpload from "../file-upload";
 
 // Страничка опций открытого чата
 
@@ -66,7 +66,7 @@ export default class Options extends Window{
 			text: 'Изменить аватар',
 			events: {
 				'click': () => Alert.alertWindow(
-					new fileUpload({callback: props.callbacks.avatarChat}))
+					new FileUpload({callback: props.callbacks.avatarChat}))
 			}
 		});
 		const buttonDelete = new Button({

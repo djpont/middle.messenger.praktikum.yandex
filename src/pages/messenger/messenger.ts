@@ -1,17 +1,17 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import Input from "~src/components/input";
-import Button from "~src/components/button";
-import Form from "~src/components/form";
-import Api from "~src/modules/api";
-import {ComponentPropsData} from "~src/components/components";
-import Alert from "~src/components/window/alert";
-import {UserlistSearchConnected, UserlistCurrentChatConnected} from "~src/components/userlist";
-import Chatlist from "~src/components/chatlist";
-import ChatFeedConnected from "~src/components/chatfeed";
-import {Fn, activateTabs} from "~src/modules/functions";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import Input from "../../components/input";
+import Button from "../../components/button";
+import Form from "../../components/form";
+import Api from "../../modules/api";
+import {ComponentPropsData} from "../../components/component/component";
+import Alert from "../../components/window/alert";
+import Chatlist from "../../components/chatlist";
+import ChatFeedConnected from "../../components/chatfeed";
+import {UserlistSearchConnected, UserlistCurrentChatConnected} from "../../components/userlist";
+import {Fn, activateTabs} from "../../modules/functions/functions";
 
 // Страничка Мессенджера.
 // Состоит из двух больших компонентов: Списка чатов (Chatlist) и Ленты сообщений (ChatFeed).
@@ -20,7 +20,7 @@ type messengerPropsType = {
 	display_name?: string,
 	avatar?: string,
 	avatarText?: string,
-	callbacks: callbacksType
+	callbacks?: callbacksType
 } & ComponentPropsData;
 
 type callbacksType = {
@@ -44,7 +44,7 @@ export default class Messenger extends Window {
 						className: 'details',
 						text: 'Детали',
 						events: {
-							'click': props.callbacks.detailsCallback as Fn<void>
+							'click': props.callbacks?.detailsCallback as Fn<void>
 						}
 					})],
 				create: [
@@ -120,7 +120,7 @@ export default class Messenger extends Window {
 			close: () => {
 				Api.logout()
 					.then(() => {
-						(props.callbacks.logoutCallback as Fn<void>)();
+						(props.callbacks?.logoutCallback as Fn<void>)();
 					});
 			}
 		});
@@ -132,7 +132,7 @@ export default class Messenger extends Window {
 		// Лента сообщений чата
 		const chatfeed = new ChatFeedConnected({
 			callback: postMessageToChat,
-			optionsCallback: props.callbacks.optionsCallback as Fn<void>
+			optionsCallback: props.callbacks?.optionsCallback as Fn<void>
 		});
 		content.children.chatFeed = [chatfeed];
 

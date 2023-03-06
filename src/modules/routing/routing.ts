@@ -1,5 +1,5 @@
-import View from "~src/components/view";
-import Window from "~src/components/window";
+import View from "../../components/view";
+import Window from "../../components/window";
 
 // Роутинг
 
@@ -21,7 +21,7 @@ function checkNextRouteDefaultFunction(nextPath: string): Promise<string>{
 }
 
 // Класс роута - одного пути для роутинга
-export class Route{
+class Route{
 	private readonly _path: string; // путь
 	private readonly _window: Window | typeof Window; // Вызываемая страничка
 	private readonly _layer: string; // слой для вью, куда показывать страничку
@@ -95,9 +95,9 @@ export default class Routing {
 	}
 
 	// Переход на сраницу по url
-	public static go(urlPath:string): void{
+	public static async go(urlPath:string): Promise<void>{
 		const route = Routing.getRoute(urlPath);
-		route.beforeRoute()
+		await route.beforeRoute()
 			.then((route: Route) => {
 				const view = Routing.getView();
 				const {path, window, layer} = route.getData();
@@ -114,7 +114,7 @@ export default class Routing {
 					view.children[layer].push(new window({}));
 				}
 				view.updateChildren();
-			});
+			})
 	}
 
 	// Получаем роут по url

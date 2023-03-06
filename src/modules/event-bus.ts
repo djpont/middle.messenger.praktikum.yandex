@@ -1,4 +1,4 @@
-import {Fn} from "~src/modules/functions"; // Тип функции
+import {Fn} from "./functions/functions";
 
 export class EventBus {
 	private readonly _listeners: Record<string, Fn<unknown>[]>;

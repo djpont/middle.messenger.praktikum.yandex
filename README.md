@@ -1,15 +1,23 @@
 
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/djpont/middle.messenger.praktikum.yandex/tests.yml?branch=sprint_1)
-![Netlify](https://img.shields.io/netlify/b32e09ac-0be1-44f2-ac50-b754434586f1)
-
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/djpont/middle.messenger.praktikum.yandex/tests.yml)](https://github.com/djpont/middle.messenger.praktikum.yandex/actions)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b32e09ac-0be1-44f2-ac50-b754434586f1/deploy-status)](https://app.netlify.com/sites/dreamy-capybara-f77156/deploys)
 
 ### Ссылка на pull request
-[Sprint 3](https://github.com/djpont/middle.messenger.praktikum.yandex/pull/4)
+[Sprint 4](https://github.com/djpont/middle.messenger.praktikum.yandex/pull/6)
 
 
-### Запуск проекта
-* `npm run start`
+### Сборка и запуск проекта
 * `npm run build`
+* `npm run start` - webpack serve
+
+### Тест и проверка проекта
+* `npm run test`
+* `npm run eslint`
+* `npm run stylelint`
+
+### Сборка и запуск Docker
+* `docker build -t messenger .`
+* `docker run -d -p 3000:3000 messenger`
 
 
 ### Проект на Netlify
@@ -33,7 +41,7 @@
 * 
 
 ### Структура основных компонентов
-Все компоненты, кроме `View`, настедуются от базового класса `Component`.
+Все компоненты, кроме `View`, наследуются от базового класса `Component`.
 * `Component` - базовый класс, на основе которого пишутся остальные, вызывает рендер DOM-дерева при создании экземпляра, методы для обновления пропсов, а так же управление EventBus.
 * `View` - пространство для рендера `Window` окон, содержащих `Content`.
 * `Button`, `Input`, `Text` - базовые компоненты, могут быть созданы из пропсов или из имеющегося HTML-элемента.

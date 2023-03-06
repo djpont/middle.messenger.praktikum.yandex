@@ -1,17 +1,17 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import Window from "~src/components/window";
-import Content from "~src/components/content";
-import Alert from "~src/components/window/alert";
-import Input from "~src/components/input";
-import Button from "~src/components/button";
-import Routing from "~src/modules/routing";
-import Validator from "~src/modules/validator";
-import Api from "~src/modules/api";
-import {fetchDataFromInputs} from "~src/modules/functions";
-import Form from "~src/components/form";
-import {validate} from "~src/modules/functions";
-import {PATHS} from "~src";
+import Window from "../../components/window";
+import Content from "../../components/content";
+import Alert from "../../components/window/alert";
+import Input from "../../components/input";
+import Button from "../../components/button";
+import Routing from "../../modules/routing/routing";
+import Validator from "../../modules/validator";
+import Api from "../../modules/api";
+import Form from "../../components/form";
+import {fetchDataFromInputs} from "../../modules/functions/functions";
+import {validate} from "../../modules/functions/functions";
+import {PATHS} from "../../index";
 
 // Страничка регистрации. Возвращает окно.
 

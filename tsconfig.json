@@ -4,32 +4,30 @@
 		"declaration.d.ts"
 	],
 	"compilerOptions": {
-		"module": "CommonJS",
-		"target": "ES6",
+		"allowSyntheticDefaultImports": true,
+		"noImplicitAny": true,
+		"module": "es6",
+		"target": "es5",
+		"allowJs": true,
 		"sourceMap": true,
 		"moduleResolution": "Node",
 		"baseUrl": "./",
-		"paths": {
-			"~*": [
-				"./*"
-			]
-		},
-		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"outDir": "dist",
-		"declaration": true,
+		"declaration": false,
 		"isolatedModules": true,
 		"esModuleInterop": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"lib": [
 			"dom",
 			"ES2018"
-		]
+		],
 	},
 	"exclude": [
-		"node_modules"
-	]
+		"node_modules",
+		"**/test.ts"
+	],
+	"files": ["src/index.ts"]
 }
-

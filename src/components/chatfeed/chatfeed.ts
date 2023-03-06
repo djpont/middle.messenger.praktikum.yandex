@@ -2,12 +2,12 @@ import tpl from './tpl.hbs';
 import tpl_message from './tpl_message.hbs';
 import tpl_dateString from './tpl_datestring.hbs';
 import './style.scss';
-import BaseComponent, {ComponentPropsData} from "~src/components/components";
-import {Fn, generateDom} from "~src/modules/functions";
-import Button from "~src/components/button";
-import Input from "~src/components/input";
-import Validator from "~src/modules/validator";
-import Form from "~src/components/form";
+import BaseComponent, {ComponentPropsData} from "../component/component";
+import {Fn, generateDom} from "../../modules/functions/functions";
+import Button from "../button";
+import Input from "../input";
+import Validator from "../../modules/validator";
+import Form from "../form";
 
 // Компонент chatFeed отвечает за ленту сообщений и поля для оптравки нового сообщения
 

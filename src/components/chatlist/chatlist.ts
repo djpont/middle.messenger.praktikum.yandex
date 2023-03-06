@@ -1,8 +1,9 @@
 import tpl_chatlist from './tpl_chatlist.hbs';
 import tpl_chatPreview from './tpl_chat_preview.hbs';
 import './style.scss';
-import BaseComponent, {ComponentPropsData} from "~src/components/components";
-import {generateDom} from "~src/modules/functions";
+import BaseComponent, {ComponentPropsData} from "../component/component";
+import {generateDom} from "../../modules/functions/functions";
+
 
 // Компонент Chatlist отвечает за список чатов
 // Состоит из превью чата и списка превьюшек

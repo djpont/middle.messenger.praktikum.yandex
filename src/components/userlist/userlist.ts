@@ -1,8 +1,8 @@
 import tpl_userlist from './tpl_userlist.hbs';
 import tpl_userPreview from './tpl_user_preview.hbs';
 import './style.scss';
-import BaseComponent, {ComponentPropsData} from "~src/components/components";
-import {Fn, generateDom} from "~src/modules/functions";
+import BaseComponent, {ComponentPropsData} from "../component/component";
+import {Fn, generateDom} from "../../modules/functions/functions";
 
 // Компонент Userlist отвечает за список пользователей
 

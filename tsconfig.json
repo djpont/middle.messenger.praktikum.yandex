@@ -16,7 +16,7 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"outDir": "dist",
-		"declaration": true,
+		"declaration": false,
 		"isolatedModules": true,
 		"esModuleInterop": true,
 		"suppressImplicitAnyIndexErrors": true,
@@ -26,7 +26,8 @@
 		],
 	},
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"**/test.ts"
 	],
 	"files": ["src/index.ts"]
 }

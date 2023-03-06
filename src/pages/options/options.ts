@@ -1,9 +1,9 @@
 import tpl from './tpl.hbs';
 import './style.scss';
-import {ComponentPropsData} from "../../components/components";
+import {ComponentPropsData} from "../../components/component/component";
 import Window from "../../components/window";
 import Content from "../../components/content";
-import {Fn} from "../../modules/functions";
+import {Fn} from "../../modules/functions/functions";
 import Button from "../../components/button";
 import Alert from "../../components/window/alert";
 import FileUpload from "../file-upload";

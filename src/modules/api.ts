@@ -1,4 +1,4 @@
-import Fetch from "./fetch";
+import Fetch from "./fetch/fetch";
 import Alert from "../components/window/alert";
 import {store} from "./store";
 

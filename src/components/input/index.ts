@@ -1,8 +1,8 @@
 import tpl_full from './tpl_full.hbs';
 import tpl_only_input from './tpl_only_input.hbs';
-import BaseComponent, {ComponentPropsData, EventsType} from "../components";
-import {generateDom} from "../../modules/functions";
-import {Fn} from "../../modules/functions";
+import BaseComponent, {ComponentPropsData, EventsType} from "../component/component";
+import {generateDom} from "../../modules/functions/functions";
+import {Fn} from "../../modules/functions/functions";
 
 // Регистрируем инпут как Partial (используется в шаблоне tpl_full)
 // import * as handlebars from "handlebars";

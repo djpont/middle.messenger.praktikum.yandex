@@ -2,9 +2,9 @@ import tpl from './tpl.hbs';
 import './style.scss';
 import Window from "../../components/window";
 import Content from "../../components/content";
-import {Fn} from "../../modules/functions";
+import {Fn} from "../../modules/functions/functions";
 import Button from "../../components/button";
-import {ComponentPropsData} from "../../components/components";
+import {ComponentPropsData} from "../../components/component/component";
 
 // Страничка загрузки файла. Возвращает окно.
 

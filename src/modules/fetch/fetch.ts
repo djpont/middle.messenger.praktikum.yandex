@@ -12,29 +12,29 @@ enum METHODS {
 const messengerServer = 'https://ya-praktikum.tech/api/v2'
 
 // Метод превращения объекта с втроку
-function queryStringify(data: object, prefix: string = ''): string {
-	if(typeof data !== 'object' || data===null){
+export function queryStringify(data: object, prefix: string = ''): string {
+	if (typeof data !== 'object' || data === null) {
 		throw new Error('input must be an object');
 	}
-	let getString='';
-	for(const key in data){
-		if(typeof data[key] === 'object' && typeof data[key]!==null){
+	let getString = '';
+	for (const key in data) {
+		if (typeof data[key] === 'object' && typeof data[key] !== null) {
 			let newPrefix;
-			if(prefix.length>0){
-				newPrefix=`${prefix}[${key}]`;
-			}else{
-				newPrefix=key;
+			if (prefix.length > 0) {
+				newPrefix = `${prefix}[${key}]`;
+			} else {
+				newPrefix = key;
 			}
-			getString+=queryStringify(data[key], newPrefix)+'&';
-		}else{
-			if(prefix.length>0){
-				getString+=`${prefix}[${key}]=${data[key]}&`;
-			}else{
-				getString+=`${key}=${data[key]}&`;
+			getString += queryStringify(data[key], newPrefix) + '&';
+		} else {
+			if (prefix.length > 0) {
+				getString += `${prefix}[${key}]=${data[key]}&`;
+			} else {
+				getString += `${key}=${data[key]}&`;
 			}
 		}
 	}
-	getString=getString.substring(0, getString.length-1);
+	getString = getString.substring(0, getString.length - 1);
 	return getString;
 }
 
@@ -42,14 +42,15 @@ function queryStringify(data: object, prefix: string = ''): string {
 type optionsType = {
 	path?: string
 	timeout?: number,
-	data?: Record<string, unknown> | FormData |string,
+	data?: Record<string, unknown> | FormData | string,
+	server?: string,
 	[key: string]: unknown;
 };
 
 // Класс для работы с запросами
 export default class Fetch {
 	public static async get(options: optionsType = {}): Promise<unknown> {
-		if (options.data && typeof options.data!=='string') {
+		if (options.data && typeof options.data !== 'string') {
 			options.data = queryStringify(options.data);
 		}
 		return Fetch._request(messengerServer, {...options, method: METHODS.GET});
@@ -59,7 +60,7 @@ export default class Fetch {
 		return Fetch._request(messengerServer, {...options, method: METHODS.POST});
 	}
 
-	public static async put(options: optionsType = {}): Promise<unknown>{
+	public static async put(options: optionsType = {}): Promise<unknown> {
 		return Fetch._request(messengerServer, {...options, method: METHODS.PUT});
 	}
 
@@ -68,19 +69,23 @@ export default class Fetch {
 	}
 
 	// Метод отправки запроса
-	private static async _request(url: string, options: optionsType): Promise<unknown> {
-		const {
-			path,
-			method = METHODS.GET,
-			timeout = 5000
-		} = options;
-		let {data} = options;
+	private static async _request(url: string, {
+		data,
+		method = METHODS.GET,
+		path,
+		server,
+		timeout = 5000
+	}: optionsType): Promise<unknown> {
 
 		return new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
 
-			if(path){
-				url+=path;
+			if (server) {
+				url = server;
+			}
+
+			if (path) {
+				url += path;
 			}
 
 			if (method === METHODS.GET && data) {
@@ -98,8 +103,8 @@ export default class Fetch {
 			xhr.onerror = reject;
 			xhr.ontimeout = reject;
 
-			if(data){
-				if(!(data instanceof FormData)) {
+			if (data) {
+				if (!(data instanceof FormData)) {
 					xhr.setRequestHeader('Content-Type', 'application/json');
 					data = JSON.stringify(data);
 				}

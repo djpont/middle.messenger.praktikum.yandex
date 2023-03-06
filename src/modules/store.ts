@@ -1,5 +1,5 @@
 import {EventBus} from "./event-bus";
-import BaseComponent, {ComponentPropsData} from "../components/components";
+import BaseComponent, {ComponentPropsData} from "../components/component/component";
 // import {isEqual} from "./modules/functions";
 
 

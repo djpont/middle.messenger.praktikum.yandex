@@ -1,7 +1,7 @@
 import View from "./components/view";
 import Alert from "./components/window/alert";
 import Api from "./modules/api";
-import Routing from "./modules/routing";
+import Routing from "./modules/routing/routing";
 
 import PageSignIn from './pages/sign-in';
 import PageSignUp from './pages/sign-up';

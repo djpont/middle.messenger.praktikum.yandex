@@ -1,30 +1,10 @@
-import BaseComponent from "../components/components";
-import Input from "../components/input";
-import Validator from "./validator";
+import Input from "../../components/input";
+import Validator from "../validator";
 
 // В этом файле находятся мелкие полезные функции
 
 // Тип данных для функции
 export type Fn<T, A = unknown> = (...args: A[]) => T;
-
-// Функция совмещения компонентов в единый DOM-элемент
-export const joinDom = (components: BaseComponent[]) => {
-	const dom = document.createDocumentFragment();
-	for (const el of components) {
-		dom.append(el.document());
-	}
-	return dom;
-}
-
-// Функция объединения html кода в одну строку
-export const joinHTML = (elements: string[], addParentDiv = false) => {
-	let html = elements.join('');
-	if (addParentDiv) {
-		html = `<div>${html}</div>`;
-	}
-	return html;
-
-}
 
 // Функция генерации DOM из строки
 export const generateDom = (html_code: string): HTMLElement => {

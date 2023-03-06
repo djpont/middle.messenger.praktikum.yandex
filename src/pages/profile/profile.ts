@@ -6,12 +6,12 @@ import Alert from "../../components/window/alert";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import Text from "../../components/text";
-import {ComponentChildrenData, ComponentPropsData} from "../../components/components";
+import {ComponentChildrenData, ComponentPropsData} from "../../components/component/component";
 import FileUpload from "../file-upload";
 import Validator from "../../modules/validator";
 import Form from "../../components/form";
 import Api from "../../modules/api";
-import {Fn, validate, fetchDataFromInputs} from "../../modules/functions";
+import {Fn, validate, fetchDataFromInputs} from "../../modules/functions/functions";
 
 
 // Страничка профиля. Возвращает окно.

@@ -1,6 +1,6 @@
 import tpl from "./tpl.hbs";
-import BaseComponent, {ComponentPropsData, EventsType} from "../components";
-import {generateDom} from "../../modules/functions";
+import BaseComponent, {ComponentPropsData, EventsType} from "../component/component";
+import {generateDom} from "../../modules/functions/functions";
 
 // Компонент Button отвечает за кнопки
 

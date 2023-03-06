@@ -1,4 +1,4 @@
-import {Fn} from "./functions";
+import {Fn} from "./functions/functions";
 
 export class EventBus {
 	private readonly _listeners: Record<string, Fn<unknown>[]>;

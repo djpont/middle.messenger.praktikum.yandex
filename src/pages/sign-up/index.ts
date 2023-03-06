@@ -5,12 +5,12 @@ import Content from "../../components/content";
 import Alert from "../../components/window/alert";
 import Input from "../../components/input";
 import Button from "../../components/button";
-import Routing from "../../modules/routing";
+import Routing from "../../modules/routing/routing";
 import Validator from "../../modules/validator";
 import Api from "../../modules/api";
 import Form from "../../components/form";
-import {fetchDataFromInputs} from "../../modules/functions";
-import {validate} from "../../modules/functions";
+import {fetchDataFromInputs} from "../../modules/functions/functions";
+import {validate} from "../../modules/functions/functions";
 import {PATHS} from "../../index";
 
 // Страничка регистрации. Возвращает окно.
